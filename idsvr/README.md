@@ -85,7 +85,7 @@ To get started and test this helm chart run the following commands:
 ```console
 $ helm repo add curity https://curityio.github.io/idsvr-helm/
 $ helm repo update
-$ helm install --name <release-name> curity/idsvr --set curity.config.password=<somePassword>
+$ helm install --name <release-name> curity/idsvr --set curity.config.password=<admin_user_password>
 ```
 
 
@@ -104,8 +104,6 @@ helm upgrade <release-name> curity/idsvr \
   --set curity.config.configurationSecret=SECRET_NAME \
   --set curity.config.configurationSecretItemName=<DATE>-<TRANSACTION_ID>.xml
 ``` 
-
- 
 
 ## More Information
 
