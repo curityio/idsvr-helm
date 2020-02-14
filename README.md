@@ -12,7 +12,7 @@ $ helm repo update
 $ helm install --name <release-name> curity/idsvr --set <option>=<value>
 ```
 
-For mor information see the chart [README.md](/idsvr-helm/idsvr/README.md)
+For mor information see the chart [README.md](/idsvr/README.md)
 
 
 ## More Information
