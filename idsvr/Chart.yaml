@@ -12,8 +12,6 @@ keywords:
   - saml
   - scim
 home: https://curity.io
-urls:
-  - https://curityio.github.io/idsvr-helm/
 icon: https://curity.io/assets/images/curity-logo-landscape.svg
 
 
