@@ -14,9 +14,8 @@ The release creates the following resources:
 
 This chart depends on openssl to update the cluster from within a pod. Therefore the chart will only work with images that have openssl installed.
 
-<!-- todo update the link if needed -->
 ```console
-$ helm repo add curity 'https://curityio.github.io/idsvr-helm/' 
+$ helm repo add curity https://curityio.github.io/idsvr-helm/
 $ helm repo update
 $ helm install --name <release-name> curity/idsvr --set <option>=<value>
 ```
@@ -84,7 +83,7 @@ Parameter | Description | Default
 To get started and test this helm chart run the following commands:
 
 ```console
-$ helm repo add curity 'https://curityio.github.io/idsvr-helm/' 
+$ helm repo add curity https://curityio.github.io/idsvr-helm/
 $ helm repo update
 $ helm install --name <release-name> curity/idsvr --set curity.config.password=<somePassword>
 ```
