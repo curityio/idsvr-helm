@@ -1,0 +1,146 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "curity.fullname" . }}-admin
+  labels:
+    {{- include "curity.labels" . | nindent 4 }}
+    role: {{ include "curity.fullname" . }}-admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "curity.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        {{- include "curity.labels" . | nindent 8 }}
+        role: {{ include "curity.fullname" . }}-admin
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: {{ include "curity.metricsPort" . | quote }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-admin
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/opt/idsvr/bin/idsvr"]
+          args: ["-s", "{{ .Values.curity.admin.role }}",
+                 "-N", "{{ .Chart.Name }}-admin",
+                 {{- if .Values.curity.config.encryptionKey}}"-e","{{.Values.curity.config.encryptionKey}}",{{end -}}
+                 "--admin"]
+          env:
+            - name: STATUS_CMD_PORT
+              value: {{ .Values.curity.healthCheckPort | quote }}
+          {{- if not (or (.Values.curity.config.environmentVariableSecret) (.Values.curity.config.configurationSecret)) }}
+            - name: PASSWORD
+              value: {{ required "\n curity.config.password required! use --set curity.config.password=YOUR_PASSWORD" .Values.curity.config.password | quote }}
+          {{- end }}
+          {{- if .Values.curity.config.backup }}
+            - name: SECRET_NAME
+              value: {{ include "curity.fullname" . }}-config-backup
+          {{- end }}
+          {{- if .Values.curity.config.environmentVariableSecret -}}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.curity.config.environmentVariableSecret | quote }}
+          {{- end }}
+          ports:
+            - name: config-port
+              containerPort: {{ .Values.curity.admin.service.port }}
+              protocol: TCP
+            - name: health-check
+              containerPort: {{ .Values.curity.healthCheckPort }}
+              protocol: TCP
+            - name: metrics
+              containerPort: {{ include "curity.metricsPort" . }}
+              protocol: TCP
+          {{- if .Values.curity.config.uiEnabled }}
+            - name: admin-ui
+              containerPort: {{ .Values.curity.adminUiPort }}
+              protocol: TCP
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: health-check
+            initialDelaySeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: health-check
+            initialDelaySeconds: 30
+          volumeMounts:
+            - mountPath: /opt/idsvr/etc/init/cluster.xml
+              subPath: cluster.xml
+              name: cluster-xml
+              readOnly: true
+            {{- if .Values.curity.config.backup }}
+            - mountPath: /opt/idsvr/usr/bin/post-commit-scripts/backupConfig.sh
+              subPath: backupConfig.sh
+              name: backup-config-script
+              readOnly: false
+            {{- end }}
+            {{- if .Values.curity.config.configurationSecret }}
+            - mountPath: /opt/idsvr/etc/init/config.xml
+              subPath: config.xml
+              name: config
+              readOnly: true
+            {{- end }}
+            {{- if .Values.curity.config.configurationConfigMap }}
+            - mountPath: /opt/idsvr/etc/init/configmap-config.xml
+              subPath: {{ required "\n curity.config.configurationConfigMapItemName required when curity.config.configurationConfigMap is set. " .Values.curity.config.configurationConfigMapItemName }}
+              name: configmap-config
+              readOnly: true
+            {{- end }}
+          resources:
+                {{- toYaml .Values.resources | nindent 12 }}
+      {{- if .Values.image.pullSecret }}
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecret}}
+      {{- end }}
+      volumes:
+        - name: cluster-xml
+          secret:
+            secretName: {{ include "curity.fullname" . }}-cluster-config-xml
+            items:
+              - key: cluster-{{ .Release.Revision }}.xml
+                path: cluster.xml
+        {{- if .Values.curity.config.configurationSecret }}
+        - name: config
+          secret:
+            secretName: {{ .Values.curity.config.configurationSecret }}
+            items:
+              - key: {{ required "\n curity.config.configurationSecretItemName required when curity.config.configurationSecret is set. " .Values.curity.config.configurationSecretItemName }}
+                path: config.xml
+        {{- end }}
+        {{- if .Values.curity.config.backup }}
+        - name: backup-config-script
+          configMap:
+            name: {{ include "curity.fullname" . }}-backup-config-script
+            defaultMode: 0755
+            items:
+              - key: backupConfig.sh
+                path: backupConfig.sh
+        {{- end -}}
+        {{- if .Values.curity.config.configurationConfigMap }}
+        - name: configmap-config
+          configMap:
+            name: {{ .Values.curity.config.configurationConfigMap }}
+        {{- end }}
+            {{- with .Values.nodeSelector }}
+      {{- if .Values.curity.config.backup }}
+      serviceAccountName: {{ include "curity.fullname" . }}-service-account
+      {{- end }}
+      nodeSelector:
+            {{- toYaml . | nindent 8 }}
+            {{- end }}
+            {{- with .Values.affinity }}
+      affinity:
+            {{- toYaml . | nindent 8 }}
+            {{- end }}
+            {{- with .Values.tolerations }}
+      tolerations:
+            {{- toYaml . | nindent 8 }}
+        {{- end }}

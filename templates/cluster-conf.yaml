@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "curity.fullname" . }}-cluster-config-xml
+type: Opaque
+data:
+  placeholder: Y3VyaXR5
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "curity.fullname" . }}-cluster-conf-map
+  labels:
+        {{- include "curity.labels" . | nindent 4 }}
+data:
+  createConfigSecret.sh: |
+    #!/bin/bash
+
+    CA_CERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+    NAMESPACE=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
+
+    CLUSTER_XML=$(/opt/idsvr/bin/genclust -c ${CONFIG_SERVICE_HOST} -p ${CONFIG_SERVICE_PORT} | base64 -w 0)
+
+    REQUEST_CONTENT="[{\"op\": \"add\", \"path\": \"/data/cluster-$REVISION.xml\", \"value\": \"$CLUSTER_XML\"}]"
+    openssl 2>&1 s_client -CAfile $CA_CERT -quiet -connect kubernetes.default:443 <<EOF
+    PATCH /api/v1/namespaces/$NAMESPACE/secrets/$SECRET_NAME HTTP/1.1
+    Host: kubernetes.default
+    Authorization: Bearer $TOKEN
+    Connection: close
+    Content-Type: application/json-patch+json
+    Content-length: ${#REQUEST_CONTENT}
+    Accept: application/json
+
+    $REQUEST_CONTENT
+    EOF
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "curity.fullname" . }}-{{ .Release.Revision }}-cluster-conf-job
+  labels:
+        {{- include "curity.labels" . | nindent 4 }}
+spec:
+  ttlSecondsAfterFinished: 60
+  template:
+    spec:
+      containers:
+        - name: {{ include "curity.fullname" . }}-cluster-conf-job
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          command: ["sh",  "/opt/idsvr/bin/createConfigSecret.sh"]
+          env:
+            - name: CONFIG_SERVICE_HOST
+              value: {{ include "curity.fullname" . }}-admin-svc
+            - name: CONFIG_SERVICE_PORT
+              value: {{ .Values.curity.admin.service.port | quote }}
+            - name: SECRET_NAME
+              value: {{ include "curity.fullname" . }}-cluster-config-xml
+            - name: REVISION
+              value: {{ .Release.Revision | quote }}
+            {{ if .Values.curity.config.encryptionKey }}
+            - name: CONFIG_ENCRYPTION_KEY
+              value: {{ .Values.curity.config.encryptionKey }}
+            {{ end }}
+          volumeMounts:
+            - name: entrypoint-volume
+              mountPath: /opt/idsvr/bin/createConfigSecret.sh
+              subPath: createConfigSecret.sh
+      {{- if .Values.image.pullSecret }}
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecret}}
+      {{- end }}
+      volumes:
+        - name: entrypoint-volume
+          configMap:
+            name: {{ include "curity.fullname" . }}-cluster-conf-map
+      serviceAccountName: {{ include "curity.fullname" . }}-service-account
+      restartPolicy: Never

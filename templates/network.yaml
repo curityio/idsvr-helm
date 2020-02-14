@@ -1,0 +1,20 @@
+{{- if .Values.networkpolicy.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "curity.fullname" . }}-network-policy
+spec:
+  podSelector:
+    matchLabels:
+      role: {{ include "curity.fullname" . }}-admin
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              role: {{ include "curity.fullname" . }}-runtime
+      ports:
+        - protocol: TCP
+          port: {{ .Values.curity.admin.service.port }}
+{{- end }}

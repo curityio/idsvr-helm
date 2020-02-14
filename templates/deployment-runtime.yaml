@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "curity.fullname" . }}-runtime
+  labels:
+    {{- include "curity.labels" . | nindent 4 }}
+    role: {{ include "curity.fullname" . }}-runtime
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "curity.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        {{- include "curity.labels" . | nindent 8 }}
+        role: {{ include "curity.fullname" . }}-runtime
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: {{ include "curity.metricsPort" . | quote }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-runtime
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/opt/idsvr/bin/idsvr"]
+          args: ["-s", "{{ .Values.curity.runtime.role }}",
+                 {{- if .Values.curity.config.encryptionKey}}"-e","{{.Values.curity.config.encryptionKey}}",{{end -}}
+                 "--no-admin"]
+          env:
+            - name: STATUS_CMD_PORT
+              value: {{ .Values.curity.healthCheckPort | quote }}
+          {{- if .Values.curity.config.environmentVariableSecret }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.curity.config.environmentVariableSecret }}
+          {{- end }}
+          ports:
+            - name: http-port
+              containerPort: {{ .Values.curity.runtime.service.port }}
+              protocol: TCP
+            - name: health-check
+              containerPort: {{ .Values.curity.healthCheckPort }}
+              protocol: TCP
+            - name: metrics
+              containerPort: {{ include "curity.metricsPort" . }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: health-check
+            initialDelaySeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: health-check
+            initialDelaySeconds: 30
+          volumeMounts:
+            - mountPath: /opt/idsvr/etc/init/cluster.xml
+              subPath: cluster.xml
+              name: cluster-xml
+              readOnly: true
+          {{- if .Values.curity.config.configurationSecret }}
+            - mountPath: /opt/idsvr/etc/init/config.xml
+              subPath: config.xml
+              name: config
+              readOnly: true
+          {{- end }}
+          {{- if .Values.curity.config.configurationConfigMap }}
+          - mountPath: /opt/idsvr/etc/init/configmap-config.xml
+            subPath: {{ required "\n curity.config.configurationConfigMapItemName required when curity.config.configurationConfigMap is set. " .Values.curity.config.configurationConfigMapItemName }}
+            name: config
+            readOnly: true
+          {{- end }}
+          resources:
+                {{- toYaml .Values.resources | nindent 12 }}
+      {{- if .Values.image.pullSecret }}
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecret}}
+      {{- end }}
+      volumes:
+        - name: cluster-xml
+          secret:
+            secretName: {{ include "curity.fullname" . }}-cluster-config-xml
+            items:
+              - key: cluster-{{ .Release.Revision }}.xml
+                path: cluster.xml
+        {{- if .Values.curity.config.configurationSecret }}
+        - name: config
+          secret:
+            secretName: {{ .Values.curity.config.configurationSecret }}
+            items:
+              - key: {{ required "\n curity.config.configurationSecretItemName required when curity.config.configurationSecret is set. " .Values.curity.config.configurationSecretItemName }}
+                path: config.xml
+        {{- end }}
+        {{- if .Values.curity.config.configurationConfigMap }}
+        - name: configmap-config
+          configMap:
+            name: {{ .Values.curity.config.configurationConfigMap }}
+        {{- end }}
+            {{- with .Values.nodeSelector }}
+      nodeSelector:
+            {{- toYaml . | nindent 8 }}
+            {{- end }}
+            {{- with .Values.affinity }}
+      affinity:
+            {{- toYaml . | nindent 8 }}
+            {{- end }}
+            {{- with .Values.tolerations }}
+      tolerations:
+            {{- toYaml . | nindent 8 }}
+        {{- end }}

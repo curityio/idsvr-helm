@@ -1,0 +1,55 @@
+{{- if .Values.curity.config.backup -}}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "curity.fullname" . }}-config-backup
+type: Opaque
+data:
+  placeholder: Y3VyaXR5
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "curity.fullname" . }}-backup-config-script
+  labels:
+        {{- include "curity.labels" . | nindent 4 }}
+data:
+  backupConfig.sh: |
+    #!/bin/bash
+
+    CA_CERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+    NAMESPACE=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
+    IFS=
+    STATUS=$(/opt/idsvr/bin/status)
+    IS_READY=$(echo $STATUS | awk -F':' '/isReady/ {print $2}')
+    TRANSACTION_ID=$(echo $STATUS | awk -F':' '/transactionId/ {print $2}')
+
+    if [ "$IS_READY" == "false" ]; then
+      echo "transactionId=${TRANSACTION_ID} Skipping config backup because isReady=${IS_READY}"
+    else
+      CONFIG_BACKUP_XML=$(idsvr -d | sed  '/<cluster>/,/<\/cluster>/d' | base64 -w 0)
+
+      DATE=$(date +%F)
+      CONFIG_BACKUP_ITEM_NAME="${DATE}-${TRANSACTION_ID}.xml"
+
+      echo "Backing up Config with name $CONFIG_BACKUP_ITEM_NAME"
+
+      REQUEST_CONTENT="[{\"op\": \"add\", \"path\": \"/data/$CONFIG_BACKUP_ITEM_NAME\", \"value\": \"$CONFIG_BACKUP_XML\"}]"
+      openssl 2>&1 s_client -CAfile $CA_CERT -quiet -connect kubernetes.default:443 <<EOF
+    PATCH /api/v1/namespaces/$NAMESPACE/secrets/$SECRET_NAME HTTP/1.1
+    Host: kubernetes.default
+    Authorization: Bearer $TOKEN
+    Connection: close
+    Content-Type: application/json-patch+json
+    Content-length: ${#REQUEST_CONTENT}
+    Accept: application/json
+
+    $REQUEST_CONTENT
+    EOF
+    fi
+
+
+{{- end -}}
+
+

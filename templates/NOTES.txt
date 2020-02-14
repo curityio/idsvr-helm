@@ -1,0 +1,34 @@
+Get the application URL by running these commands:
+{{- if .Values.ingress.enabled }}
+  Curity: http{{ if .Values.ingress.runtime.secretName }}s{{ end }}://{{ .Values.ingress.runtime.host}}
+  {{- if .Values.curity.config.uiEnabled }}
+  Admin UI: http{{ if .Values.ingress.admin.secretName }}s{{ end }}://{{ .Values.ingress.admin.host}}/admin
+  {{- end }}
+{{- else if contains "NodePort" .Values.curity.runtime.service.type }}
+  Curity:
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:{{ .Values.curity.runtime.service.port }}
+  {{- if .Values.curity.config.uiEnabled }}
+  Admin UI:
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:{{ .Values.curity.adminUiPort }}
+  {{- end }}
+{{- else if contains "LoadBalancer" .Values.curity.runtime.service.type }}
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "curity.fullname" . }}-runtime-svc'
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "curity.fullname" . }}-runtime-svc -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  echo http://$SERVICE_IP:{{ .Values.curity.runtime.service.port }}
+{{- else if contains "ClusterIP" .Values.curity.runtime.service.type }}
+  Curity:
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "role={{ include "curity.fullname" . }}-runtime,app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  echo "Visit http://127.0.0.1:{{ .Values.curity.runtime.service.port }} to use your application"
+  kubectl port-forward $POD_NAME {{ .Values.curity.runtime.service.port }}:{{ .Values.curity.runtime.service.port }}
+  {{- if .Values.curity.config.uiEnabled }}
+  Admin UI:
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "role={{ include "curity.fullname" . }}-admin,app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  echo "Visit http://127.0.0.1:{{ .Values.curity.adminUiPort }} to use your application"
+  kubectl port-forward $POD_NAME {{ .Values.curity.adminUiPort }}:{{ .Values.curity.adminUiPort }}
+  {{- end }}
+{{- end }}
+
+** Please wait for a few minutes until the deployment is complete. The admin and runtime node(s) will wait for the cluster key to be created by the Job **

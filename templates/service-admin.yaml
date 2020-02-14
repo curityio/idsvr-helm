@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "curity.fullname" . }}-admin-svc
+  labels:
+        {{- include "curity.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.curity.admin.service.type }}
+  ports:
+    - port: {{ .Values.curity.admin.service.port }}
+      targetPort: config-port
+      protocol: TCP
+      name: config-port
+    - port: {{ .Values.curity.healthCheckPort }}
+      targetPort: health-check
+      protocol: TCP
+      name: health-check
+    - port:  {{ include "curity.metricsPort" . }}
+      targetPort: metrics
+      protocol: TCP
+      name: metrics
+    {{- if .Values.curity.config.uiEnabled }}
+    - port: {{ .Values.curity.adminUiPort }}
+      targetPort: admin-ui
+      protocol: TCP
+      name: admin-ui
+    {{- end }}
+  selector:
+    app.kubernetes.io/name: {{ include "curity.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
