@@ -3,9 +3,9 @@ entries:
   idsvr:
   - apiVersion: v1
     appVersion: 5.0.0
-    created: 2020-02-14T16:39:18.36435+01:00
+    created: 2020-02-14T17:42:19.1082+01:00
     description: A Helm chart for Curity Identity Server
-    digest: c862897d3e50d6436bf6417d92c99979dcf88d6f29d0186ce7c17b01caa40412
+    digest: 987c80ac9e2d36e35c135711adec40053f96272a31a89644748a46b0dc610f95
     home: https://curity.io
     icon: https://curity.io/assets/images/curity-logo-landscape.svg
     keywords:
@@ -18,6 +18,6 @@ entries:
     - scim
     name: idsvr
     urls:
-    - idsvr-0.0.1.tgz
-    version: 0.0.1
-generated: 2020-02-14T16:39:18.363071+01:00
+    - https://curityio.github.io/idsvr-helm/idsvr-0.9.0.tgz
+    version: 0.9.0
+generated: 2020-02-14T17:42:19.107578+01:00
