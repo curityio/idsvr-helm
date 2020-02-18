@@ -35,7 +35,7 @@ spec:
           {{- if .Values.curity.config.environmentVariableSecret }}
           envFrom:
             - secretRef:
-                name: {{ .Values.curity.config.environmentVariableSecret }}
+                name: {{ .Values.curity.config.environmentVariableSecret | quote }}
           {{- end }}
           ports:
             - name: http-port
@@ -62,18 +62,18 @@ spec:
               subPath: cluster.xml
               name: cluster-xml
               readOnly: true
-          {{- if .Values.curity.config.configurationSecret }}
+            {{- if .Values.curity.config.configurationSecret }}
             - mountPath: /opt/idsvr/etc/init/config.xml
               subPath: config.xml
               name: config
               readOnly: true
-          {{- end }}
-          {{- if .Values.curity.config.configurationConfigMap }}
-          - mountPath: /opt/idsvr/etc/init/configmap-config.xml
-            subPath: {{ required "\n curity.config.configurationConfigMapItemName required when curity.config.configurationConfigMap is set. " .Values.curity.config.configurationConfigMapItemName }}
-            name: config
-            readOnly: true
-          {{- end }}
+            {{- end }}
+            {{- if .Values.curity.config.configurationConfigMap }}
+            - mountPath: /opt/idsvr/etc/init/configmap-config.xml
+              subPath: {{ required "\n curity.config.configurationConfigMapItemName required when curity.config.configurationConfigMap is set. " .Values.curity.config.configurationConfigMapItemName }}
+              name: configmap-config
+              readOnly: true
+            {{- end }}
           resources:
                 {{- toYaml .Values.resources | nindent 12 }}
       {{- if .Values.image.pullSecret }}
