@@ -41,7 +41,7 @@ spec:
             - name: SECRET_NAME
               value: {{ include "curity.fullname" . }}-config-backup
           {{- end }}
-          {{- if .Values.curity.config.environmentVariableSecret -}}
+          {{- if .Values.curity.config.environmentVariableSecret }}
           envFrom:
             - secretRef:
                 name: {{ .Values.curity.config.environmentVariableSecret | quote }}
