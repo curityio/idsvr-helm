@@ -17,7 +17,7 @@ This chart depends on openssl to update the cluster from within a pod. Therefore
 ```console
 $ helm repo add curity https://curityio.github.io/idsvr-helm/
 $ helm repo update
-$ helm install --name <release-name> curity/idsvr --set <option>=<value>
+$ helm install <release-name> curity/idsvr --set <option>=<value>
 ```
 
 To install the chart, you must provide a password for the admin user or load an existing configuration. Therefore one of the following must be specified:
@@ -56,7 +56,7 @@ Parameter | Description | Default
 `curity.runtime.role`| The role of the runtime servers |`default`
 `curity.runtime.service.type`| The runtime service type |`ClusterIP`
 `curity.runtime.service.port`| The runtime service port |`8443`
-`curity.config.uiEnabled`| Flag to enable/disable the Admin UI and Admin REST API|`false`
+`curity.config.uiEnabled`| Flag to enable/disable the service for Admin UI and Admin REST API |`false`
 `curity.config.password`| The administrator password. Required if `curity.config.environmentVariableSecret` and `curity.config.configurationSecret` is not set | `null`
 `curity.config.encryptionKey`| The configuration encryption key |`null`
 `curity.config.environmentVariableSecret`| The data from this Secret will be mounted as environment variables |`null`
@@ -85,7 +85,7 @@ To get started and test this helm chart run the following commands:
 ```console
 $ helm repo add curity https://curityio.github.io/idsvr-helm/
 $ helm repo update
-$ helm install --name <release-name> curity/idsvr --set curity.config.password=<admin_user_password>
+$ helm install <release-name> curity/idsvr --set curity.config.password=<admin_user_password>
 ```
 
 
