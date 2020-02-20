@@ -1,3 +1,4 @@
+{{- $root := . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -58,6 +59,10 @@ spec:
               port: health-check
             initialDelaySeconds: 30
           volumeMounts:
+            {{- if .Values.curity.runtime.logging.stdout }}
+            - mountPath: /opt/idsvr/var/log/
+              name: log-volume
+            {{- end }}
             - mountPath: /opt/idsvr/etc/init/cluster.xml
               subPath: cluster.xml
               name: cluster-xml
@@ -76,11 +81,29 @@ spec:
             {{- end }}
           resources:
                 {{- toYaml .Values.resources | nindent 12 }}
+        {{- if .Values.curity.runtime.logging.stdout }}
+        {{- range .Values.curity.runtime.logging.logs }}
+        - name: {{ . }}
+          image: busybox
+          command:
+            - "tail"
+            - "-F"
+            - "/log/{{ . | lower }}.log"
+          volumeMounts:
+            - name: log-volume
+              mountPath: /log
+              readOnly: true
+        {{- end }}
+        {{- end }}
       {{- if .Values.image.pullSecret }}
       imagePullSecrets:
         - name: {{ .Values.image.pullSecret}}
       {{- end }}
       volumes:
+        {{- if .Values.curity.runtime.logging.stdout }}
+        - name: log-volume
+          emptyDir: {}
+        {{- end }}
         - name: cluster-xml
           secret:
             secretName: {{ include "curity.fullname" . }}-cluster-config-xml

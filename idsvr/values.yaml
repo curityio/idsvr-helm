@@ -24,12 +24,34 @@ curity:
     service:
       type: ClusterIP
       port: 6789
+    logging:
+      stdout: false
+      logs: []
+#        - audit
+#        - request
+#        - cluster
+#        - confsvc
+#        - confsvc-audit
+#        - confsvc-internal
+#        - confsvc-browser
+#        - post-commit-scripts
+
 
   runtime:
     role: default
     service:
       type: ClusterIP
       port: 8443
+    logging:
+      stdout: false
+      logs: []
+#        - audit
+#        - request
+#        - cluster
+#        - confsvc
+#        - confsvc-audit
+#        - confsvc-internal
+#        - post-commit-scripts
 
   config:
     uiEnabled: false
