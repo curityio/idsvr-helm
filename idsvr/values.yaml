@@ -31,9 +31,7 @@ curity:
 #        - request
 #        - cluster
 #        - confsvc
-#        - confsvc-audit
 #        - confsvc-internal
-#        - confsvc-browser
 #        - post-commit-scripts
 
 
@@ -49,7 +47,6 @@ curity:
 #        - request
 #        - cluster
 #        - confsvc
-#        - confsvc-audit
 #        - confsvc-internal
 #        - post-commit-scripts
 
