@@ -25,6 +25,7 @@ curity:
       type: ClusterIP
       port: 6789
     logging:
+      image: "busybox:latest"
       stdout: false
       logs: []
 #        - audit
@@ -41,6 +42,7 @@ curity:
       type: ClusterIP
       port: 8443
     logging:
+      image: "busybox:latest"
       stdout: false
       logs: []
 #        - audit

@@ -84,7 +84,7 @@ spec:
         {{- if .Values.curity.runtime.logging.stdout }}
         {{- range .Values.curity.runtime.logging.logs }}
         - name: {{ . }}
-          image: busybox
+          image: {{ $root.Values.curity.runtime.logging.image }}
           command:
             - "tail"
             - "-F"
