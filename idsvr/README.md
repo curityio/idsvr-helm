@@ -113,7 +113,7 @@ helm upgrade <release-name> curity/idsvr \
 ## Sending all logs to stdout
 
 If `curity.admin.logging.sdtout` is `true`, the Chart will add extra containers in the pods, that will tail any additional log files defined in `curity.admin.logging.logs` and pipe them to stdout.
-The same applies for `curity.admin.logging.sdtout`.
+The same applies for `curity.runtime.logging.sdtout`.
 
 ## More Information
 
