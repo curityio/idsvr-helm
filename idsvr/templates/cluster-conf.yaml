@@ -48,7 +48,11 @@ spec:
     spec:
       containers:
         - name: {{ include "curity.fullname" . }}-cluster-conf-job
+          {{- if .Values.clusterConfJob.image }}
+          image: "{{ .Values.clusterConfJob.image.repository }}:{{ .Values.clusterConfJob.image.tag }}"
+          {{- else }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          {{- end }}
           command: ["sh",  "/opt/idsvr/bin/createConfigSecret.sh"]
           env:
             - name: CONFIG_SERVICE_HOST
@@ -67,7 +71,9 @@ spec:
             - name: entrypoint-volume
               mountPath: /opt/idsvr/bin/createConfigSecret.sh
               subPath: createConfigSecret.sh
-      {{- if .Values.image.pullSecret }}
+      {{- if .Values.clusterConfJob.image.pullSecret }}
+        - name: {{ .Values.clusterConfJob.image.pullSecret}}
+      {{- else if .Values.image.pullSecret }}
       imagePullSecrets:
         - name: {{ .Values.image.pullSecret}}
       {{- end }}

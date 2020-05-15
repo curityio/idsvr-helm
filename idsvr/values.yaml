@@ -10,6 +10,8 @@ image:
   pullPolicy: IfNotPresent
   pullSecret:
 
+clusterConfJob: {}
+
 nameOverride: ""
 fullnameOverride: ""
 networkpolicy:
