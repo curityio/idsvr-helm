@@ -34,6 +34,9 @@ Check out the [Configuration](#Configuration) chapter below to find the correspo
 $ helm delete <release-name>
 ```
 
+## Tutorial 
+Tutorials on using the chart and more are available in the [Curity Resource library](https://curity.io/resources/tutorials/getting-started/setup/install-helm-chart/)
+
 ## Configuration
 
 In the table below you can find information about the parameters that are configurable in this chart.
@@ -114,8 +117,8 @@ helm upgrade <release-name> curity/idsvr \
 
 ## Sending all logs to stdout
 
-If `curity.admin.logging.sdtout` is `true`, the Chart will add extra containers in the pods, that will tail any additional log files defined in `curity.admin.logging.logs` and pipe them to stdout.
-The same applies for `curity.runtime.logging.sdtout`.
+If `curity.admin.logging.stdout` is `true`, the Chart will add extra containers in the pods, that will tail any additional log files defined in `curity.admin.logging.logs` and pipe them to stdout.
+The same applies for `curity.runtime.logging.stdout`.
 
 ## More Information
 
