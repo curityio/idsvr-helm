@@ -1,7 +1,7 @@
 # Curity Helm Chart Repository
 
-[![Quality](https://curity.io/assets/images/badges/idsvr-helm-quality.svg)](https://curity.io/resources/code-examples/status/)
-[![Availability](https://curity.io/assets/images/badges/idsvr-helm-availability.svg)](https://curity.io/resources/code-examples/status/)
+[![Quality](https://img.shields.io/badge/quality-test-yellow)](https://curity.io/resources/code-examples/status/)
+[![Availability](https://img.shields.io/badge/availability-source-blue)](https://curity.io/resources/code-examples/status/)
 
 This repository contains the Curity Identity Server helm chart source code. 
 
