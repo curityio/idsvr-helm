@@ -24,6 +24,18 @@ curity:
     service:
       type: ClusterIP
       port: 6789
+    livenessProbe:
+      timeoutSeconds: 1
+      failureThreshold: 3
+      successThreshold: 3
+      periodSeconds: 10
+      initialDelaySeconds: 30
+    readinessProbe:
+      timeoutSeconds: 1
+      failureThreshold: 3
+      successThreshold: 3
+      periodSeconds: 10
+      initialDelaySeconds: 30
     logging:
       image: "busybox:latest"
       stdout: false
@@ -41,6 +53,18 @@ curity:
     service:
       type: ClusterIP
       port: 8443
+    livenessProbe:
+      timeoutSeconds: 1
+      failureThreshold: 3
+      successThreshold: 3
+      periodSeconds: 10
+      initialDelaySeconds: 30
+    readinessProbe:
+      timeoutSeconds: 1
+      failureThreshold: 3
+      successThreshold: 3
+      periodSeconds: 10
+      initialDelaySeconds: 30
     logging:
       image: "busybox:latest"
       stdout: false

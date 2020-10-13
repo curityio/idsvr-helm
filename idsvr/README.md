@@ -56,12 +56,32 @@ Parameter | Description | Default
 `curity.admin.role`| The role of the admin server |`admin`
 `curity.admin.service.type`| The admin service type |`ClusterIP`
 `curity.admin.service.port`| The admin configuration port |`6789`
+`curity.admin.livenessProbe.timeoutSeconds`| LivenessProbe `timeoutSeconds` for the admin deployment |`1`
+`curity.admin.livenessProbe.failureThreshold`| LivenessProbe `failureThreshold` for the admin deployment |`3`
+`curity.admin.livenessProbe.successThreshold`| LivenessProbe `successThreshold` for the admin deployment |`3`
+`curity.admin.livenessProbe.periodSeconds`| LivenessProbe `periodSeconds` for the admin deployment |`10`
+`curity.admin.livenessProbe.initialDelaySeconds`| The admin `initialDelaySeconds` port |`30`
+`curity.admin.readinessProbe.timeoutSeconds`| ReadinessProbe `timeoutSeconds` for the admin deployment |`1`
+`curity.admin.readinessProbe.failureThreshold`| ReadinessProbe `failureThreshold` for the admin deployment  |`3`
+`curity.admin.readinessProbe.successThreshold`| ReadinessProbe `successThreshold` for the admin deployment  |`3`
+`curity.admin.readinessProbe.periodSeconds`| ReadinessProbe `periodSeconds` for the admin deployment  |`10`
+`curity.admin.readinessProbe.initialDelaySeconds`| ReadinessProbe `initialDelaySeconds` for the admin deployment  |`30`
 `curity.admin.logging.stdout`| Flag to enable/disable extra containers that tail the logs in `var/log` folder. |`false`
 `curity.admin.logging.logs`| Array of the extra containers that will be included in the admin pod |`[]`
 `curity.admin.logging.image`| The image that will be used to create the logging containers |`busybox:latest`
 `curity.runtime.role`| The role of the runtime servers |`default`
 `curity.runtime.service.type`| The runtime service type |`ClusterIP`
 `curity.runtime.service.port`| The runtime service port |`8443`
+`curity.runtime.livenessProbe.timeoutSeconds`| LivenessProbe `timeoutSeconds` for the runtime deployment |`1`
+`curity.runtime.livenessProbe.failureThreshold`| LivenessProbe `failureThreshold` for the runtime deployment |`3`
+`curity.runtime.livenessProbe.successThreshold`| LivenessProbe `successThreshold` for the runtime deployment |`3`
+`curity.runtime.livenessProbe.periodSeconds`| LivenessProbe `periodSeconds` for the runtime deployment |`10`
+`curity.runtime.livenessProbe.initialDelaySeconds`| The admin `initialDelaySeconds` port |`30`
+`curity.runtime.readinessProbe.timeoutSeconds`| ReadinessProbe `timeoutSeconds` for the runtime deployment |`1`
+`curity.runtime.readinessProbe.failureThreshold`| ReadinessProbe `failureThreshold` for the runtime deployment  |`3`
+`curity.runtime.readinessProbe.successThreshold`| ReadinessProbe `successThreshold` for the runtime deployment  |`3`
+`curity.runtime.readinessProbe.periodSeconds`| ReadinessProbe `periodSeconds` for the runtime deployment  |`10`
+`curity.runtime.readinessProbe.initialDelaySeconds`| ReadinessProbe `initialDelaySeconds` for the runtime deployment  |`30`
 `curity.runtime.logging.stdout`| Flag to enable/disable extra containers that tail the logs in `var/log` folder. |`false`
 `curity.runtime.logging.logs`| Array of the extra containers that will be included in the runtime pods |`[]`
 `curity.runtime.logging.image`| The image that will be used to create the logging containers |`busybox:latest`

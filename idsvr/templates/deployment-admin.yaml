@@ -66,12 +66,20 @@ spec:
             httpGet:
               path: /
               port: health-check
-            initialDelaySeconds: 30
+            timeoutSeconds:  {{ .Values.curity.admin.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.curity.admin.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.curity.admin.livenessProbe.successThreshold }}
+            periodSeconds: {{ .Values.curity.admin.livenessProbe.periodSeconds }}
+            initialDelaySeconds: {{ .Values.curity.admin.livenessProbe.initialDelaySeconds }}
           readinessProbe:
             httpGet:
               path: /
               port: health-check
-            initialDelaySeconds: 30
+            timeoutSeconds:  {{ .Values.curity.admin.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.curity.admin.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.curity.admin.readinessProbe.successThreshold }}
+            periodSeconds: {{ .Values.curity.admin.readinessProbe.periodSeconds }}
+            initialDelaySeconds: {{ .Values.curity.admin.readinessProbe.initialDelaySeconds }}
           volumeMounts:
             {{- if .Values.curity.admin.logging.stdout }}
             - mountPath: /opt/idsvr/var/log/
