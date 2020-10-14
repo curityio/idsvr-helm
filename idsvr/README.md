@@ -58,7 +58,6 @@ Parameter | Description | Default
 `curity.admin.service.port`| The admin configuration port |`6789`
 `curity.admin.livenessProbe.timeoutSeconds`| LivenessProbe `timeoutSeconds` for the admin deployment |`1`
 `curity.admin.livenessProbe.failureThreshold`| LivenessProbe `failureThreshold` for the admin deployment |`3`
-`curity.admin.livenessProbe.successThreshold`| LivenessProbe `successThreshold` for the admin deployment |`3`
 `curity.admin.livenessProbe.periodSeconds`| LivenessProbe `periodSeconds` for the admin deployment |`10`
 `curity.admin.livenessProbe.initialDelaySeconds`| The admin `initialDelaySeconds` port |`30`
 `curity.admin.readinessProbe.timeoutSeconds`| ReadinessProbe `timeoutSeconds` for the admin deployment |`1`
@@ -74,7 +73,6 @@ Parameter | Description | Default
 `curity.runtime.service.port`| The runtime service port |`8443`
 `curity.runtime.livenessProbe.timeoutSeconds`| LivenessProbe `timeoutSeconds` for the runtime deployment |`1`
 `curity.runtime.livenessProbe.failureThreshold`| LivenessProbe `failureThreshold` for the runtime deployment |`3`
-`curity.runtime.livenessProbe.successThreshold`| LivenessProbe `successThreshold` for the runtime deployment |`3`
 `curity.runtime.livenessProbe.periodSeconds`| LivenessProbe `periodSeconds` for the runtime deployment |`10`
 `curity.runtime.livenessProbe.initialDelaySeconds`| The admin `initialDelaySeconds` port |`30`
 `curity.runtime.readinessProbe.timeoutSeconds`| ReadinessProbe `timeoutSeconds` for the runtime deployment |`1`

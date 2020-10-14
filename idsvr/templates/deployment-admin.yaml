@@ -68,7 +68,6 @@ spec:
               port: health-check
             timeoutSeconds:  {{ .Values.curity.admin.livenessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.curity.admin.livenessProbe.failureThreshold }}
-            successThreshold: {{ .Values.curity.admin.livenessProbe.successThreshold }}
             periodSeconds: {{ .Values.curity.admin.livenessProbe.periodSeconds }}
             initialDelaySeconds: {{ .Values.curity.admin.livenessProbe.initialDelaySeconds }}
           readinessProbe:

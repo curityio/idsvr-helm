@@ -27,7 +27,6 @@ curity:
     livenessProbe:
       timeoutSeconds: 1
       failureThreshold: 3
-      successThreshold: 3
       periodSeconds: 10
       initialDelaySeconds: 30
     readinessProbe:
@@ -56,7 +55,6 @@ curity:
     livenessProbe:
       timeoutSeconds: 1
       failureThreshold: 3
-      successThreshold: 3
       periodSeconds: 10
       initialDelaySeconds: 30
     readinessProbe:
