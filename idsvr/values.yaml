@@ -106,7 +106,7 @@ openshift:
     runtime:
       create: false
     image:
-      repoitory: redhat-sso-7/sso71-openshift
+      repository: redhat-sso-7/sso71-openshift
       tag: 1.1-16
   route:
     admin:
