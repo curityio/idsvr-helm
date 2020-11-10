@@ -2,6 +2,10 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "curity.fullname" . }}-admin-svc
+  {{- if .Values.openshift.serviceCerts.admin.create }}
+  annotations:
+    service.alpha.openshift.io/serving-cert-secret-name: {{ include "curity.fullname" . }}-service-certs
+  {{- end }}
   labels:
         {{- include "curity.labels" . | nindent 4 }}
 spec:
