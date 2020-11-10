@@ -1,0 +1,24 @@
+{{- if and .Values.curity.config.uiEnabled .Values.openshift.route.admin.enabled -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "curity.fullname" . }}-admin-route
+  labels:
+        {{- include "curity.labels" . | nindent 4 }}
+        {{- with .Values.openshift.route.admin.annotations }}
+  annotations:
+        {{- toYaml . | nindent 4 }}
+        {{- end }}
+
+spec:
+  host: {{ .Values.openshift.route.admin.host }}
+  port:
+    targetPort: admin-ui
+  tls:
+    termination: {{ .Values.openshift.route.admin.tlstermination }}
+  to:
+    kind: Service
+    name: {{ include "curity.fullname" . }}-admin-svc
+    weight: 100
+  wildcardPolicy: None
+{{- end }}

@@ -22,6 +22,45 @@ spec:
         prometheus.io/path: /metrics
         prometheus.io/port: {{ include "curity.metricsPort" . | quote }}
     spec:
+{{- if .Values.openshift.serviceCerts.admin.create }}
+      initContainers:
+        - name: {{ .Chart.Name }}-keystore
+          image: "{{ .Values.openshift.serviceCerts.image.repository }}:{{ .Values.openshift.serviceCerts.image.tag }}"
+          env:
+            - name: keyfile
+              value: /var/run/secrets/openshift.io/services_serving_certs/tls.key
+            - name: crtfile
+              value: /var/run/secrets/openshift.io/services_serving_certs/tls.crt
+            - name: keystore_pkcs12
+              value: /var/run/secrets/java.io/keystores/keystore.pkcs12
+            - name: keystore_jks
+              value: /var/run/secrets/java.io/keystores/keystore.jks
+            - name: password
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "curity.fullname" . }}
+                  key: KEYSTORE_PASSWORD
+          command: ['/bin/bash']
+          args: ['-c', "openssl pkcs12 -export -inkey $keyfile -in $crtfile -out $keystore_pkcs12 -password pass:$password && keytool -importkeystore -noprompt -srckeystore $keystore_pkcs12 -srcstoretype pkcs12 -destkeystore $keystore_jks -storepass $password -srcstorepass $password"]
+          volumeMounts:
+            - name: keystore-volume
+              mountPath: /var/run/secrets/java.io/keystores
+            - name: service-certs
+              mountPath: /var/run/secrets/openshift.io/services_serving_certs
+              readOnly: true
+        - name: {{ .Chart.Name }}-truststore
+          image: redhat-openjdk-18/openjdk18-openshift
+          env:
+            - name: ca_bundle
+              value: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+            - name: truststore_jks
+              value: /var/run/secrets/java.io/keystores/truststore.jks
+          command: ['/bin/bash']
+          args: ['-c', "csplit -z -f crt- $ca_bundle '/-----BEGIN CERTIFICATE-----/' '{*}' && for file in crt-*; do keytool -list -keystore $truststore_jks -alias service-$file -storepass changeit > /dev/null 2>&1 || keytool -import -noprompt -keystore $truststore_jks -file $file -storepass changeit -alias service-$file; done && keytool -importkeystore -noprompt -srckeystore  /etc/alternatives/jre/lib/security/cacerts -srcstorepass changeit -destkeystore $truststore_jks -deststorepass changeit"]
+          volumeMounts:
+            - name: keystore-volume
+              mountPath: /var/run/secrets/java.io/keystores
+{{- end }}
       containers:
         - name: {{ .Chart.Name }}-admin
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -105,6 +144,10 @@ spec:
               subPath: {{ required "\n curity.config.configurationConfigMapItemName required when curity.config.configurationConfigMap is set. " .Values.curity.config.configurationConfigMapItemName }}
               name: configmap-config
               readOnly: true
+            {{- end }}
+            {{- if .Values.openshift.serviceCerts.admin.create }}
+            - name: keystore-volume
+              mountPath: /var/run/secrets/java.io/keystoresœ
             {{- end }}
           resources:
                 {{- toYaml .Values.resources | nindent 12 }}

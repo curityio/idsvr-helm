@@ -1,0 +1,24 @@
+{{- if .Values.openshift.route.runtime.enabled -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "curity.fullname" . }}-runtime-route
+  labels:
+        {{- include "curity.labels" . | nindent 4 }}
+        {{- with .Values.openshift.route.runtime.annotations }}
+  annotations:
+        {{- toYaml . | nindent 4 }}
+        {{- end }}
+
+spec:
+  host: {{ .Values.openshift.route.runtime.host }}
+  port:
+    targetPort: http-port
+  tls:
+    termination: {{ .Values.openshift.route.runtime.tlstermination }}
+  to:
+    kind: Service
+    name: {{ include "curity.fullname" . }}-runtime-svc
+    weight: 100
+  wildcardPolicy: None
+{{- end }}
