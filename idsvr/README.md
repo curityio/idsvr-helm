@@ -102,6 +102,19 @@ Parameter | Description | Default
 `nodeSelector`| Node selector applied in admin and runtime deployments|`{}`
 `tolerations`| Tolerations applied in admin and runtime deployments |`{}`
 `affinity`| Affinity applied in admin and runtime deployments |`{}`
+`openshift.serviceCerts.admin.create`| Use init container to create TLS certs for admin service | `false`
+`openshift.serviceCerts.runtime.create`| Use init container to create TLS certs for runtime service | `false`
+`openshift.serviceCerts.image.repository`| image that will be used to create TLS certs | `redhat-sso-7/sso71-openshift`
+`openshift.serviceCerts.image.tag`| image tag | `1.1-16`
+`openshift.route.admin.enabled`| Create openshift route for admin-ui | `false`
+`openshift.route.admin.tlstermination`| Type of TLS termination for admin-ui route | `edge`
+`openshift.route.admin.annotations`| Extra annotations for admin-ui route | `{}`
+`openshift.route.admin.host`| Hostname for the admin server | `curity-admin.local`
+`openshift.route.runtime.enabled`| Create openshift route for runtime service | `false`
+`openshift.route.runtime.tlstermination`| Type of TLS termination for runtime route | `edge`
+`openshift.route.runtime.annotations`| Extra annotations for runtime route | `{}`
+`openshift.route.runtime.host`| Hostname for the runtime service | `curity.local`
+
 
 <b id="f1">1</b> The network policy within the cluster will not have any affect unless there is a network policy provider that can enforce network policies. Check out kubernetes official documentation for more guidance on how to install network providers: [Install Network Policy Provider - Kubernetes](https://kubernetes.io/docs/tasks/administer-cluster/network-policy-provider/)
 
