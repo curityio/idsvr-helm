@@ -173,6 +173,13 @@ spec:
           configMap:
             name: {{ .Values.curity.config.configurationConfigMap }}
         {{- end }}
+        {{- if .Values.openshift.serviceCerts.runtime.create }}
+        - name: keystore-volume
+          emptyDir: {}
+        - name: service-certs
+          secret:
+            secretName: {{ include "curity.fullname" . }}-service-certs
+        {{- end }}
             {{- with .Values.nodeSelector }}
       nodeSelector:
             {{- toYaml . | nindent 8 }}
