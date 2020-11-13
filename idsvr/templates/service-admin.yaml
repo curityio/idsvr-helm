@@ -4,7 +4,7 @@ metadata:
   name: {{ include "curity.fullname" . }}-admin-svc
   {{- if .Values.openshift.serviceCerts.admin.create }}
   annotations:
-    service.alpha.openshift.io/serving-cert-secret-name: {{ include "curity.fullname" . }}-service-certs
+    service.alpha.openshift.io/serving-cert-secret-name: {{ include "curity.fullname" . }}-admin-svc-service-certs
   {{- end }}
   labels:
         {{- include "curity.labels" . | nindent 4 }}
@@ -32,3 +32,4 @@ spec:
   selector:
     app.kubernetes.io/name: {{ include "curity.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
+    role: {{ include "curity.fullname" . }}-admin
