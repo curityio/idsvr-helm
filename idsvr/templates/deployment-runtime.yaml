@@ -178,7 +178,7 @@ spec:
           emptyDir: {}
         - name: service-certs
           secret:
-            secretName: {{ include "curity.fullname" . }}-service-certs
+            secretName: {{ include "curity.fullname" . }}-runtime-svc-service-certs
         {{- end }}
             {{- with .Values.nodeSelector }}
       nodeSelector:
