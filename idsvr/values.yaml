@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: curity/idsvr
-  tag: 5.3.1
+  tag: 5.4.0
   pullPolicy: IfNotPresent
   pullSecret:
 
