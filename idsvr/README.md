@@ -65,6 +65,7 @@ Parameter | Description | Default
 `curity.admin.readinessProbe.successThreshold`| ReadinessProbe `successThreshold` for the admin deployment  |`3`
 `curity.admin.readinessProbe.periodSeconds`| ReadinessProbe `periodSeconds` for the admin deployment  |`10`
 `curity.admin.readinessProbe.initialDelaySeconds`| ReadinessProbe `initialDelaySeconds` for the admin deployment  |`30`
+`curity.admin.logging.level`| The logging level of the admin pod |`INFO`
 `curity.admin.logging.stdout`| Flag to enable/disable extra containers that tail the logs in `var/log` folder. |`false`
 `curity.admin.logging.logs`| Array of the extra containers that will be included in the admin pod |`[]`
 `curity.admin.logging.image`| The image that will be used to create the logging containers |`busybox:latest`
@@ -80,6 +81,7 @@ Parameter | Description | Default
 `curity.runtime.readinessProbe.successThreshold`| ReadinessProbe `successThreshold` for the runtime deployment  |`3`
 `curity.runtime.readinessProbe.periodSeconds`| ReadinessProbe `periodSeconds` for the runtime deployment  |`10`
 `curity.runtime.readinessProbe.initialDelaySeconds`| ReadinessProbe `initialDelaySeconds` for the runtime deployment  |`30`
+`curity.runtime.logging.level`| The logging level of the runtime pod |`INFO`
 `curity.runtime.logging.stdout`| Flag to enable/disable extra containers that tail the logs in `var/log` folder. |`false`
 `curity.runtime.logging.logs`| Array of the extra containers that will be included in the runtime pods |`[]`
 `curity.runtime.logging.image`| The image that will be used to create the logging containers |`busybox:latest`

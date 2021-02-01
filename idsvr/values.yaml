@@ -36,6 +36,7 @@ curity:
       periodSeconds: 10
       initialDelaySeconds: 30
     logging:
+      level: INFO
       image: "busybox:latest"
       stdout: false
       logs: []
@@ -64,6 +65,7 @@ curity:
       periodSeconds: 10
       initialDelaySeconds: 30
     logging:
+      level: INFO
       image: "busybox:latest"
       stdout: false
       logs: []

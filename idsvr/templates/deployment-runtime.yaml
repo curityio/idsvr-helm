@@ -33,6 +33,8 @@ spec:
           env:
             - name: STATUS_CMD_PORT
               value: {{ .Values.curity.healthCheckPort | quote }}
+            - name: LOGGING_LEVEL
+              value: {{ .Values.curity.runtime.logging.level }}
           {{- if .Values.curity.config.environmentVariableSecret }}
           envFrom:
             - secretRef:

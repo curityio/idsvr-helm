@@ -34,6 +34,8 @@ spec:
           env:
             - name: STATUS_CMD_PORT
               value: {{ .Values.curity.healthCheckPort | quote }}
+            - name: LOGGING_LEVEL
+              value: {{ .Values.curity.admin.logging.level }}
           {{- if not (or (.Values.curity.config.environmentVariableSecret) (.Values.curity.config.configurationSecret)) }}
             - name: PASSWORD
               value: {{ required "\n curity.config.password required! use --set curity.config.password=YOUR_PASSWORD" .Values.curity.config.password | quote }}
