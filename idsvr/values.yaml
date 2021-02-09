@@ -18,6 +18,7 @@ networkpolicy:
 curity:
   healthCheckPort: 4465
   adminUiPort: 6749
+  adminUiHttp: false
 
   admin:
     role: admin
