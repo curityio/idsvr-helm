@@ -37,7 +37,7 @@ spec:
             - name: LOGGING_LEVEL
               value: {{ .Values.curity.admin.logging.level }}
             - name: ADMIN_UI_HTTP_MODE
-              value: {{ .Values.curity.adminUiHttp }}
+              value: {{ quote .Values.curity.adminUiHttp }}
           {{- if not (or (.Values.curity.config.environmentVariableSecret) (.Values.curity.config.configurationSecret)) }}
             - name: PASSWORD
               value: {{ required "\n curity.config.password required! use --set curity.config.password=YOUR_PASSWORD" .Values.curity.config.password | quote }}
