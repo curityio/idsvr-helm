@@ -32,6 +32,10 @@ spec:
                  {{- if .Values.curity.config.encryptionKey}}"-e","{{.Values.curity.config.encryptionKey}}",{{end -}}
                  "--admin"]
           env:
+            {{- if .Values.curity.config.encryptionKey }}
+            - name: CONFIG_ENCRYPTION_KEY
+              value: {{ .Values.curity.config.encryptionKey | quote }}
+            {{- end }}
             - name: STATUS_CMD_PORT
               value: {{ .Values.curity.healthCheckPort | quote }}
             - name: LOGGING_LEVEL
