@@ -44,7 +44,7 @@ In the table below you can find information about the parameters that are config
 Parameter | Description | Default
 --- | --- | ---
 `replicaCount`|The number of runtime nodes to be deployed |`1`
-`image.repository`| Image repository |`curity/idsvr`
+`image.repository`| Image repository |`curity.azurecr.io/curity/idsvr`
 `image.tag`| Image tag |`6.0.0`
 `image.pullPolicy`| The policy to be applied in the deployment |`IfNotPresent`
 `image.pullSecret`| The secret that is used to fetch images from the docker registry |`null`
