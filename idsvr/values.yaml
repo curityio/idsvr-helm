@@ -54,6 +54,8 @@ curity:
     service:
       type: ClusterIP
       port: 8443
+    deployment:
+      port: 8443
     livenessProbe:
       timeoutSeconds: 1
       failureThreshold: 3
