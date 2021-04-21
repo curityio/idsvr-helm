@@ -73,6 +73,7 @@ Parameter | Description | Default
 `curity.runtime.role`| The role of the runtime servers |`default`
 `curity.runtime.service.type`| The runtime service type |`ClusterIP`
 `curity.runtime.service.port`| The runtime service port |`8443`
+`curity.runtime.deployment.port`| The runtime deployment port |`8443`
 `curity.runtime.livenessProbe.timeoutSeconds`| LivenessProbe `timeoutSeconds` for the runtime deployment |`1`
 `curity.runtime.livenessProbe.failureThreshold`| LivenessProbe `failureThreshold` for the runtime deployment |`3`
 `curity.runtime.livenessProbe.periodSeconds`| LivenessProbe `periodSeconds` for the runtime deployment |`10`

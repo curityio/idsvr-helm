@@ -42,7 +42,7 @@ spec:
           {{- end }}
           ports:
             - name: http-port
-              containerPort: {{ .Values.curity.runtime.service.port }}
+              containerPort: {{ .Values.curity.runtime.deployment.port }}
               protocol: TCP
             - name: health-check
               containerPort: {{ .Values.curity.healthCheckPort }}
