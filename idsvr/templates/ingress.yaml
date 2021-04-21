@@ -27,10 +27,12 @@ spec:
     - host: {{ .Values.ingress.runtime.host }}
       http:
         paths:
-          - path: /
+          {{- range .Values.ingress.runtime.paths }}
+          - path: {{ . }}
             backend:
-              serviceName: {{ include "curity.fullname" . }}-runtime-svc
+              serviceName: {{ include "curity.fullname" $ }}-runtime-svc
               servicePort: http-port
+          {{- end }}
   {{- if .Values.curity.config.uiEnabled }}
     - host: {{ .Values.ingress.admin.host }}
       http:
