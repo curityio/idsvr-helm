@@ -98,6 +98,8 @@ ingress:
   runtime:
     host: curity.local
     secretName:
+    paths:
+      - /
   admin:
     host: curity-admin.local
     secretName:

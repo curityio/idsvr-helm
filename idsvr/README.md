@@ -98,6 +98,7 @@ Parameter | Description | Default
 `ingress.enabled`| Flag to enable/disable an Ingress resource |`false`
 `ingress.annotations`| Extra annotations for the Ingress resource   |`{}`
 `ingress.runtime.host`| Hostname of the runtime servers (used by the Ingress resource) |`curity.local`
+`ingress.runtime.paths`| Paths of the runtime servers that can be accessed externally |`{/}`<sup>[2](#f2)</sup>
 `ingress.runtime.secretName`| Secret which contains the tls cert and key for the runtime TLS connection. If not set, the Ingress will be configured for HTTP |`null`
 `ingress.admin.host`| Hostname for the admin server (used by the Ingress resource) |`curity-admin.local`
 `ingress.admin.secretName`| Secret which contains the tls cert and key for the runtime TLS connection. If not set, the Ingress resource will be configured for HTTP |`null`
@@ -107,6 +108,13 @@ Parameter | Description | Default
 `affinity`| Affinity applied in admin and runtime deployments |`{}`
 
 <b id="f1">1</b> The network policy within the cluster will not have any affect unless there is a network policy provider that can enforce network policies. Check out kubernetes official documentation for more guidance on how to install network providers: [Install Network Policy Provider - Kubernetes](https://kubernetes.io/docs/tasks/administer-cluster/network-policy-provider/)
+
+<b id="f2">2</b> When using Helm's `--set` option, lists can be expressed by enclosing values in `{` and `}`. For example, `--set ingress.runtime.paths="{/foo, /bar}"` translates to:
+```
+paths:
+  - /foo
+  - /bar
+```
 
 ## Examples
 ### Quickstart
