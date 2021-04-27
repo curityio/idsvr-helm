@@ -88,13 +88,15 @@ Parameter | Description | Default
 `curity.runtime.logging.logs`| Array of the extra containers that will be included in the runtime pods |`[]`
 `curity.runtime.logging.image`| The image that will be used to create the logging containers |`busybox:latest`
 `curity.config.uiEnabled`| Flag to enable/disable the service for Admin UI and Admin REST API |`false`
-`curity.config.password`| The administrator password. Required if `curity.config.environmentVariableSecret` and `curity.config.configurationSecret` is not set | `null`
+`curity.config.password`| The administrator password. Required if none of `curity.config.environmentVariableSecret`, `curity.config.configurationSecret`, and `curity.config.startupProperties` is set | `null`
 `curity.config.encryptionKey`| The configuration encryption key |`null`
 `curity.config.environmentVariableSecret`| The data from this Secret will be mounted as environment variables |`null`
 `curity.config.configurationSecret`| The Secret containing configuration which is mounted as a volume  |`null`
 `curity.config.configurationSecretItemName`| The `curity.config.configurationSecret`'s item name, required if the Secret is set. |`null`
 `curity.config.configurationConfigMap`| The ConfigMap containing configuration which is mounted as a volume  |`null`
 `curity.config.configurationConfigMapItemName`| The `curity.config.configurationConfigMap`'s item name, required if the ConfigMap is set. |`null`
+`curity.config.startupProperties`| The Secret containing `startup.properties` which is mounted as a volume  |`null`
+`curity.config.startupPropertiesItemName`| The `curity.config.startupProperties`'s item name, required if the Secret is set. |`null`
 `curity.config.backup` | If `true`, the configuration will be backed up in a secret in each commit | `false` 
 `ingress.enabled`| Flag to enable/disable an Ingress resource |`false`
 `ingress.annotations`| Extra annotations for the Ingress resource   |`{}`

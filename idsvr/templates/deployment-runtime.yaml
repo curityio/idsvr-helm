@@ -82,6 +82,12 @@ spec:
               name: config
               readOnly: true
             {{- end }}
+            {{- if .Values.curity.config.startupPropertiesSecret }}
+            - mountPath: /opt/idsvr/etc/startup.properties
+              subPath: startup.properties
+              name: startup-properties
+              readOnly: true
+            {{- end }}
             {{- if .Values.curity.config.configurationConfigMap }}
             - mountPath: /opt/idsvr/etc/init/configmap-config.xml
               subPath: {{ required "\n curity.config.configurationConfigMapItemName required when curity.config.configurationConfigMap is set. " .Values.curity.config.configurationConfigMapItemName }}
@@ -126,6 +132,14 @@ spec:
             items:
               - key: {{ required "\n curity.config.configurationSecretItemName required when curity.config.configurationSecret is set. " .Values.curity.config.configurationSecretItemName }}
                 path: config.xml
+        {{- end }}
+        {{- if .Values.curity.config.startupPropertiesSecret }}
+        - name: startup-properties
+          secret:
+            secretName: {{ .Values.curity.config.startupPropertiesSecret }}
+            items:
+              - key: {{ required "\n curity.config.startupPropertiesSecretItemName required when curity.config.startupPropertiesSecret is set. " .Values.curity.config.startupPropertiesSecretItemName }}
+                path: startup.properties
         {{- end }}
         {{- if .Values.curity.config.configurationConfigMap }}
         - name: configmap-config

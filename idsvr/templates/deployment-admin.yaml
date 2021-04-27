@@ -42,7 +42,7 @@ spec:
               value: {{ .Values.curity.admin.logging.level }}
             - name: ADMIN_UI_HTTP_MODE
               value: {{ quote .Values.curity.adminUiHttp }}
-          {{- if not (or (.Values.curity.config.environmentVariableSecret) (.Values.curity.config.configurationSecret)) }}
+          {{- if not (or (.Values.curity.config.environmentVariableSecret) (.Values.curity.config.configurationSecret) (.Values.curity.config.startupPropertiesSecret)) }}
             - name: PASSWORD
               value: {{ required "\n curity.config.password required! use --set curity.config.password=YOUR_PASSWORD" .Values.curity.config.password | quote }}
           {{- end }}
@@ -108,6 +108,12 @@ spec:
               name: config
               readOnly: true
             {{- end }}
+            {{- if .Values.curity.config.startupPropertiesSecret }}
+            - mountPath: /opt/idsvr/etc/startup.properties
+              subPath: startup.properties
+              name: startup-properties
+              readOnly: true
+            {{- end }}
             {{- if .Values.curity.config.configurationConfigMap }}
             - mountPath: /opt/idsvr/etc/init/configmap-config.xml
               subPath: {{ required "\n curity.config.configurationConfigMapItemName required when curity.config.configurationConfigMap is set. " .Values.curity.config.configurationConfigMapItemName }}
@@ -152,6 +158,14 @@ spec:
             items:
               - key: {{ required "\n curity.config.configurationSecretItemName required when curity.config.configurationSecret is set. " .Values.curity.config.configurationSecretItemName }}
                 path: config.xml
+        {{- end }}
+        {{- if .Values.curity.config.startupPropertiesSecret }}
+        - name: startup-properties
+          secret:
+            secretName: {{ .Values.curity.config.startupPropertiesSecret }}
+            items:
+              - key: {{ required "\n curity.config.startupPropertiesSecretItemName required when curity.config.startupPropertiesSecret is set. " .Values.curity.config.startupPropertiesSecretItemName }}
+                path: startup.properties
         {{- end }}
         {{- if .Values.curity.config.backup }}
         - name: backup-config-script

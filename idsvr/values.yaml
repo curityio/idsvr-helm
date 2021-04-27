@@ -89,6 +89,8 @@ curity:
     configurationConfigMapItemName:
     configurationSecret:
     configurationSecretItemName:
+    startupPropertiesSecret:
+    startupPropertiesSecretItemName:
 
 
 ingress:
