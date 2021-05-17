@@ -12,6 +12,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: {{ include "curity.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
+      role: {{ include "curity.fullname" . }}-runtime
   template:
     metadata:
       labels:
