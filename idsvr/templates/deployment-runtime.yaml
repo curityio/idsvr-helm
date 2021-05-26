@@ -12,6 +12,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: {{ include "curity.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
+      role: {{ include "curity.fullname" . }}-runtime
   template:
     metadata:
       labels:
@@ -46,7 +47,7 @@ spec:
           {{- end }}
           ports:
             - name: http-port
-              containerPort: {{ .Values.curity.runtime.service.port }}
+              containerPort: {{ .Values.curity.runtime.deployment.port }}
               protocol: TCP
             - name: health-check
               containerPort: {{ .Values.curity.healthCheckPort }}
