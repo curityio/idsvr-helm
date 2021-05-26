@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: curity.azurecr.io/curity/idsvr
-  tag: 6.2.2
+  tag: 6.1.0
   pullPolicy: IfNotPresent
   pullSecret:
 
@@ -36,6 +36,12 @@ curity:
       successThreshold: 3
       periodSeconds: 10
       initialDelaySeconds: 30
+    # extraEnv provides additional environment variables
+    # extraEnv:
+    #   - name: SOME_EXTRA_VARIABLE
+    #     value: "extra-variable-value"
+    extraEnv: []
+
     logging:
       level: INFO
       image: "busybox:latest"
@@ -54,8 +60,6 @@ curity:
     service:
       type: ClusterIP
       port: 8443
-    deployment:
-      port: 8443
     livenessProbe:
       timeoutSeconds: 1
       failureThreshold: 3
@@ -67,6 +71,11 @@ curity:
       successThreshold: 3
       periodSeconds: 10
       initialDelaySeconds: 30
+    # extraEnv provides additional environment variables
+    # extraEnv:
+    #   - name: SOME_EXTRA_VARIABLE
+    #     value: "extra-variable-value"
+    extraEnv: []
     logging:
       level: INFO
       image: "busybox:latest"
@@ -100,8 +109,6 @@ ingress:
   runtime:
     host: curity.local
     secretName:
-    paths:
-      - /
   admin:
     host: curity-admin.local
     secretName:

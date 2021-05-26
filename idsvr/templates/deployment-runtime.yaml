@@ -12,7 +12,6 @@ spec:
     matchLabels:
       app.kubernetes.io/name: {{ include "curity.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
-      role: {{ include "curity.fullname" . }}-runtime
   template:
     metadata:
       labels:
@@ -36,6 +35,10 @@ spec:
               value: {{ .Values.curity.healthCheckPort | quote }}
             - name: LOGGING_LEVEL
               value: {{ .Values.curity.runtime.logging.level }}
+            {{- range $env := .Values.curity.runtime.extraEnv }}
+            - name: {{ $env.name }}
+              value: {{ $env.value | quote }}
+            {{- end }}
           {{- if .Values.curity.config.environmentVariableSecret }}
           envFrom:
             - secretRef:
@@ -43,7 +46,7 @@ spec:
           {{- end }}
           ports:
             - name: http-port
-              containerPort: {{ .Values.curity.runtime.deployment.port }}
+              containerPort: {{ .Values.curity.runtime.service.port }}
               protocol: TCP
             - name: health-check
               containerPort: {{ .Values.curity.healthCheckPort }}
