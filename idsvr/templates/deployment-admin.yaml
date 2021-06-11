@@ -26,8 +26,8 @@ spec:
         - name: {{ .Chart.Name }}-admin
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["/opt/idsvr/bin/idsvr"]
-          args: ["-s", "{{ .Values.curity.admin.role }}",
+          args: ["/opt/idsvr/bin/idsvr",
+                 "-s", "{{ .Values.curity.admin.role }}",
                  "-N", "{{ .Chart.Name }}-admin",
                  {{- if .Values.curity.config.encryptionKey}}"-e","{{.Values.curity.config.encryptionKey}}",{{end -}}
                  "--admin"]
