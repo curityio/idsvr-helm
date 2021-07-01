@@ -45,7 +45,7 @@ Parameter | Description | Default
 --- | --- | ---
 `replicaCount`|The number of runtime nodes to be deployed |`1`
 `image.repository`| Image repository |`curity.azurecr.io/curity/idsvr`
-`image.tag`| Image tag |`6.2.2`
+`image.tag`| Image tag |`6.3.0`
 `image.pullPolicy`| The policy to be applied in the deployment |`IfNotPresent`
 `image.pullSecret`| The secret that is used to fetch images from the docker registry |`null`
 `nameOverride`| Override the name release name used in labels and selectors. If left blank it will be `idsvr`  |`""`
@@ -57,6 +57,7 @@ Parameter | Description | Default
 `curity.admin.role`| The role of the admin server |`admin`
 `curity.admin.service.type`| The admin service type |`ClusterIP`
 `curity.admin.service.port`| The admin configuration port |`6789`
+`curity.admin.extraEnv`| Extra environment variables to provide to the admin container |`[]`
 `curity.admin.livenessProbe.timeoutSeconds`| LivenessProbe `timeoutSeconds` for the admin deployment |`1`
 `curity.admin.livenessProbe.failureThreshold`| LivenessProbe `failureThreshold` for the admin deployment |`3`
 `curity.admin.livenessProbe.periodSeconds`| LivenessProbe `periodSeconds` for the admin deployment |`10`
@@ -74,6 +75,7 @@ Parameter | Description | Default
 `curity.runtime.service.type`| The runtime service type |`ClusterIP`
 `curity.runtime.service.port`| The runtime service port |`8443`
 `curity.runtime.deployment.port`| The runtime deployment port |`8443`
+`curity.runtime.extraEnv`| Extra environment variables to provide to the runtime container |`[]`
 `curity.runtime.livenessProbe.timeoutSeconds`| LivenessProbe `timeoutSeconds` for the runtime deployment |`1`
 `curity.runtime.livenessProbe.failureThreshold`| LivenessProbe `failureThreshold` for the runtime deployment |`3`
 `curity.runtime.livenessProbe.periodSeconds`| LivenessProbe `periodSeconds` for the runtime deployment |`10`
