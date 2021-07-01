@@ -36,6 +36,10 @@ spec:
               value: {{ .Values.curity.healthCheckPort | quote }}
             - name: LOGGING_LEVEL
               value: {{ .Values.curity.runtime.logging.level }}
+            {{- range $env := .Values.curity.runtime.extraEnv }}
+            - name: {{ $env.name }}
+              value: {{ $env.value | quote }}
+            {{- end }}
           {{- if .Values.curity.config.environmentVariableSecret }}
           envFrom:
             - secretRef:

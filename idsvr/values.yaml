@@ -36,6 +36,12 @@ curity:
       successThreshold: 3
       periodSeconds: 10
       initialDelaySeconds: 30
+    # extraEnv provides additional environment variables
+    # extraEnv:
+    #   - name: SOME_EXTRA_VARIABLE
+    #     value: "extra-variable-value"
+    extraEnv: []
+
     logging:
       level: INFO
       image: "busybox:latest"
@@ -67,6 +73,11 @@ curity:
       successThreshold: 3
       periodSeconds: 10
       initialDelaySeconds: 30
+    # extraEnv provides additional environment variables
+    # extraEnv:
+    #   - name: SOME_EXTRA_VARIABLE
+    #     value: "extra-variable-value"
+    extraEnv: []
     logging:
       level: INFO
       image: "busybox:latest"
