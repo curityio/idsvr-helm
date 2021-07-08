@@ -27,8 +27,8 @@ spec:
         - name: {{ .Chart.Name }}-runtime
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["/opt/idsvr/bin/idsvr"]
-          args: ["-s", "{{ .Values.curity.runtime.role }}",
+          args: ["/opt/idsvr/bin/idsvr",
+                 "-s", "{{ .Values.curity.runtime.role }}",
                  {{- if .Values.curity.config.encryptionKey}}"-e","{{.Values.curity.config.encryptionKey}}",{{end -}}
                  "--no-admin"]
           env:
