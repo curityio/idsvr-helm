@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: curity.azurecr.io/curity/idsvr
-  tag: 6.3.1
+  tag: 6.4.0
   pullPolicy: IfNotPresent
   pullSecret:
 
