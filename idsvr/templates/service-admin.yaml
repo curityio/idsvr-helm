@@ -3,7 +3,8 @@ kind: Service
 metadata:
   name: {{ include "curity.fullname" . }}-admin-svc
   labels:
-        {{- include "curity.labels" . | nindent 4 }}
+    {{- include "curity.labels" . | nindent 4 }}
+    role: {{ include "curity.fullname" . }}-admin
 spec:
   type: {{ .Values.curity.admin.service.type }}
   ports:
