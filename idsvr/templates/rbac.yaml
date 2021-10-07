@@ -14,6 +14,9 @@ metadata:
   name: {{ include "curity.fullname" . }}-create-secret
   labels:
         {{- include "curity.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-5"
 rules:
   - apiGroups:
       - ""
@@ -28,6 +31,9 @@ metadata:
   name: {{ include "curity.fullname" . }}-role-binding
   labels:
         {{- include "curity.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-5"
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
