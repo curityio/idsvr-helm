@@ -3,6 +3,25 @@ entries:
   idsvr:
     - apiVersion: v1
       appVersion: 6.5.0
+      created: "2021-10-07T09:44:47.20897+02:00"
+      description: A Helm chart for Curity Identity Server
+      digest: 4ef0030d90968782548ee6d603c31136267f0a45d6b79e1f579284b9028b21b3
+      home: https://curity.io
+      icon: https://curity.io/assets/images/curity-logo-landscape.svg
+      keywords:
+      - iam
+      - oauth
+      - openid connect
+      - ldap
+      - sso
+      - saml
+      - scim
+      name: idsvr
+      urls:
+      - https://curityio.github.io/idsvr-helm/idsvr-0.9.32.tgz
+      version: 0.9.32
+    - apiVersion: v1
+      appVersion: 6.5.0
       created: "2021-10-04T11:53:08.219071+02:00"
       description: A Helm chart for Curity Identity Server
       digest: ff8f77fc9f78d86c098ad9dc431310a36914a763f0b174937112e998abe493e9
