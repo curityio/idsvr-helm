@@ -12,7 +12,7 @@ For more information on Curity and its capabilities, click [here](https://curity
 ```console
 $ helm repo add curity https://curityio.github.io/idsvr-helm/
 $ helm repo update
-$ helm install --name <release-name> curity/idsvr --set <option>=<value>
+$ helm install <release-name> curity/idsvr --set <option>=<value>
 ```
 
 For more details see the chart [README.md](/idsvr/README.md)
