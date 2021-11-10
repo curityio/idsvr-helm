@@ -97,7 +97,7 @@ curity:
     encryptionKey:
     environmentVariableSecret:
     configurationConfigMap:
-    configurationConfigMapItemName:
+    configurationConfigMapItemNames:
     configurationSecret:
     configurationSecretItemName:
 
