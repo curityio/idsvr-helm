@@ -114,12 +114,10 @@ spec:
             {{- end }}
             {{- if .Values.curity.config.configurationConfigMap }}
             {{- range $item := required "\n curity.config.configurationConfigMapItemNames required when curity.config.configurationConfigMap is set. " .Values.curity.config.configurationConfigMapItemNames}}
-            {{- range $file := $item.files }}
-            - mountPath: /opt/idsvr/{{ $item.path }}/{{ $file }}
-              subPath: {{ $file }}
+            - mountPath: /opt/idsvr/etc/init/{{ $item }}
+              subPath: {{ $item }}
               name: config-volume
               readOnly: true
-            {{- end }}
             {{- end }}
             {{- end }}
           resources:
