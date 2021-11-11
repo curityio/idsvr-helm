@@ -88,10 +88,16 @@ spec:
               readOnly: true
             {{- end }}
             {{- if .Values.curity.config.configurationConfigMap }}
-            {{- range $item := required "\n curity.config.configurationConfigMapItemNames required when curity.config.configurationConfigMap is set. " .Values.curity.config.configurationConfigMapItemNames }}
+            - mountPath: /opt/idsvr/etc/init/configmap-config.xml
+              subPath: {{ required "\n curity.config.configurationConfigMapItemName required when curity.config.configurationConfigMap is set. " .Values.curity.config.configurationConfigMapItemName }}
+              name: configmap-config
+              readOnly: true
+            {{- end }}
+            {{- if .Values.curity.config.configurationExtraConfigMap }}
+            {{- range $item := required "\n curity.config.configurationExtraConfigMapItemNames required when curity.config.configurationExtraConfigMap is set. " .Values.curity.config.configurationExtraConfigMapItemNames }}
             - mountPath: /opt/idsvr/etc/init/{{ $item }}
               subPath: {{ $item }}
-              name: config-volume
+              name: config-extra-volume
               readOnly: true
             {{- end }}
             {{- end }}
@@ -135,9 +141,14 @@ spec:
                 path: config.xml
         {{- end }}
         {{- if .Values.curity.config.configurationConfigMap }}
-        - name: config-volume
+        - name: configmap-config
           configMap:
             name: {{ .Values.curity.config.configurationConfigMap }}
+        {{- end }}
+        {{- if .Values.curity.config.configurationExtraConfigMap }}
+        - name: config-extra-volume
+          configMap:
+            name: {{ .Values.curity.config.configurationExtraConfigMap }}
         {{- end }}
             {{- with .Values.nodeSelector }}
       nodeSelector:
