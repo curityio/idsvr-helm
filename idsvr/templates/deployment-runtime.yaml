@@ -40,7 +40,7 @@ spec:
             - name: {{ $env.name }}
               value: {{ $env.value | quote }}
             {{- end }}
-          {{- if or ( .Values.curity.config.environmentVariableSecret .Values.curity.config.environmentVariableConfigMap ) }}
+          {{- if ( or .Values.curity.config.environmentVariableSecret .Values.curity.config.environmentVariableConfigMap ) }}
           envFrom:
           {{- if .Values.curity.config.environmentVariableConfigMap }}
             - configMapRef:
