@@ -96,6 +96,7 @@ curity:
     password:
     encryptionKey:
     environmentVariableSecret:
+    environmentVariableConfigMap:
     configurationConfigMap:
     configurationConfigMapItemName:
     configurationSecret:
