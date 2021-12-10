@@ -92,7 +92,8 @@ Parameter | Description | Default
 `curity.config.uiEnabled`| Flag to enable/disable the service for Admin UI and Admin REST API |`false`
 `curity.config.password`| The administrator password. Required if `curity.config.environmentVariableSecret` and `curity.config.configurationSecret` is not set | `null`
 `curity.config.encryptionKey`| The configuration encryption key |`null`
-`curity.config.environmentVariableSecret`| The data from this Secret will be mounted as environment variables |`null`
+`curity.config.environmentVariableSecret`| The data from this Secret will be mounted as environment variables |`null` 
+`curity.config.environmentVariableConfigMap`| The data from this ConfigMap will be mounted as environment variables |`null`
 `curity.config.configurationSecret`| The Secret containing configuration which is mounted as a volume  |`null`
 `curity.config.configurationSecretItemName`| The `curity.config.configurationSecret`'s item name, required if the Secret is set. |`null`
 `curity.config.configurationConfigMap`| The ConfigMap containing configuration which is mounted as a volume  |`null`

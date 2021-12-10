@@ -54,10 +54,16 @@ spec:
             - name: {{ $env.name }}
               value: {{ $env.value | quote }}
           {{- end }}
-          {{- if .Values.curity.config.environmentVariableSecret }}
+          {{- if ( or .Values.curity.config.environmentVariableSecret .Values.curity.config.environmentVariableConfigMap ) }}
           envFrom:
+          {{- if .Values.curity.config.environmentVariableConfigMap }}
+            - configMapRef:
+                name: {{ .Values.curity.config.environmentVariableConfigMap | quote }}
+          {{- end }}
+          {{- if .Values.curity.config.environmentVariableSecret }}
             - secretRef:
                 name: {{ .Values.curity.config.environmentVariableSecret | quote }}
+          {{- end }}
           {{- end }}
           ports:
             - name: config-port
