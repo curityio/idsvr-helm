@@ -1,7 +1,7 @@
 apiVersion: v1
 name: idsvr
-version: 0.9.35
-appVersion: 6.6.2
+version: 0.9.36
+appVersion: 6.7.0
 description: A Helm chart for Curity Identity Server
 keywords:
   - iam
