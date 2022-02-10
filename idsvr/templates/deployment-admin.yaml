@@ -50,9 +50,8 @@ spec:
             - name: SECRET_NAME
               value: {{ include "curity.fullname" . }}-config-backup
           {{- end }}
-          {{- range $env := .Values.curity.admin.extraEnv }}
-            - name: {{ $env.name }}
-              value: {{ $env.value | quote }}
+          {{- if .Values.curity.admin.extraEnv }}
+{{ toYaml .Values.curity.admin.extraEnv | indent 12 }}
           {{- end }}
           {{- if ( or .Values.curity.config.environmentVariableSecret .Values.curity.config.environmentVariableConfigMap ) }}
           envFrom:
