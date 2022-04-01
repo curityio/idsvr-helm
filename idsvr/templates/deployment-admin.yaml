@@ -60,7 +60,7 @@ spec:
                 {{- $env.valueFrom | toYaml | trim | indent 16 }}
             {{- end }}
           {{- end}}
-          {{- if ( or .Values.curity.config.environmentVariableSecret .Values.curity.config.environmentVariableConfigMap ) }}
+          {{- if ( or .Values.curity.config.environmentVariableSecret .Values.curity.config.environmentVariableConfigMap .Values.curity.config.environmentVariableSecrets ) }}
           envFrom:
           {{- if .Values.curity.config.environmentVariableConfigMap }}
             - configMapRef:
@@ -69,6 +69,10 @@ spec:
           {{- if .Values.curity.config.environmentVariableSecret }}
             - secretRef:
                 name: {{ .Values.curity.config.environmentVariableSecret | quote }}
+          {{- end }}
+          {{- range $secret := .Values.curity.config.environmentVariableSecrets }}
+            - secretRef:
+                name: {{ $secret.name | quote}}
           {{- end }}
           {{- end }}
           ports:
