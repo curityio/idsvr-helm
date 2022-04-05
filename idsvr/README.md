@@ -41,6 +41,7 @@ Tutorials on using the chart and more are available in the [Curity Resource libr
 
 In the table below you can find information about the parameters that are configurable in this chart.
 
+<<<<<<< HEAD
 Parameter | Description | Default
 --- | --- | ---
 `replicaCount`|The number of runtime nodes to be deployed |`1`
@@ -97,6 +98,7 @@ Parameter | Description | Default
 `curity.config.configurationSecretItemName`| The `curity.config.configurationSecret`'s item name, required if the Secret is set. |`null`
 `curity.config.configurationConfigMap`| The ConfigMap containing configuration which is mounted as a volume  |`null`
 `curity.config.configurationConfigMapItemName`| The `curity.config.configurationConfigMap`'s item name, required if the ConfigMap is set. |`null`
+`curity.config.configuration` | The array of Configmaps and secrets configuration items are mounted as a volume | `[]`
 `curity.config.backup` | If `true`, the configuration will be backed up in a secret in each commit | `false` 
 `ingress.enabled`| Flag to enable/disable an Ingress resource |`false`
 `ingress.annotations`| Extra annotations for the Ingress resource   |`{}`
