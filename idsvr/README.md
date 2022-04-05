@@ -41,7 +41,6 @@ Tutorials on using the chart and more are available in the [Curity Resource libr
 
 In the table below you can find information about the parameters that are configurable in this chart.
 
-<<<<<<< HEAD
 Parameter | Description | Default
 --- | --- | ---
 `replicaCount`|The number of runtime nodes to be deployed |`1`
@@ -154,6 +153,36 @@ helm upgrade <release-name> curity/idsvr \
 If `curity.admin.logging.stdout` is `true`, the Chart will add extra containers in the pods, that will tail any additional log files defined in `curity.admin.logging.logs` and pipe them to stdout.
 The same applies for `curity.runtime.logging.stdout`.
 
+
+## Mount configuration files from configmaps and secrets
+
+Use the `curity.config.configuration` to mount several files from configmaps and secrets into `etc/init` folder.
+
+Example:
+```
+curity:
+  config:
+    configuration:
+      - configMapRef:
+          name: cfg-configmap-name
+          items:
+            - key: item-1
+              path: item-1.xml
+            - key: item-2
+              path: item-2.xml
+      - secretRef:
+          name: cfg-secret
+          items:
+            - key: scrt-1
+              path: scrt-1.xml
+            - key: scrt-2
+              path: scrt-2.xml
+      - secretRef:
+          name: cfg-secret-2
+          items:
+            - key: cfg
+              path: configuration.xml
+```
 ## More Information
 
 
