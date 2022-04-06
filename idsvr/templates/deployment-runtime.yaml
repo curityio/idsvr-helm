@@ -89,10 +89,12 @@ spec:
             - mountPath: /opt/idsvr/var/log/
               name: log-volume
             {{- end }}
+            {{- if not .Values.curity.onlyRuntimeNodes}}
             - mountPath: /opt/idsvr/etc/init/cluster.xml
               subPath: cluster.xml
               name: cluster-xml
               readOnly: true
+            {{- end }}
             {{- if .Values.curity.config.configurationSecret }}
             - mountPath: /opt/idsvr/etc/init/config.xml
               subPath: config.xml
@@ -130,12 +132,14 @@ spec:
         - name: log-volume
           emptyDir: {}
         {{- end }}
+        {{- if not .Values.curity.onlyRuntimeNodes}}
         - name: cluster-xml
           secret:
             secretName: {{ include "curity.fullname" . }}-cluster-config-xml
             items:
               - key: cluster-{{ .Release.Revision }}.xml
                 path: cluster.xml
+        {{- end }}
         {{- if .Values.curity.config.configurationSecret }}
         - name: config
           secret:

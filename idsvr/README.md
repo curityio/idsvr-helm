@@ -54,6 +54,7 @@ Parameter | Description | Default
 `curity.healthCheckPort`| The port to use for the status server |`4465`
 `curity.adminUiPort`| The admin UI and API port. Ignored if `curity.config.uiEnabled=false` |`6749`
 `curity.adminUiHttp`| Controls if admin UI will be on http or https mode after installation if enabled. Ignored if `curity.config.uiEnabled=false` |`false`
+`curity.onlyRuntimeNodes` | Only deploy runtime nodes | `false`
 `curity.admin.role`| The role of the admin server |`admin`
 `curity.admin.service.type`| The admin service type |`ClusterIP`
 `curity.admin.service.port`| The admin configuration port |`6789`
