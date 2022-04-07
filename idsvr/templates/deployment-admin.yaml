@@ -196,7 +196,7 @@ spec:
             name: {{ $conf.configMapRef.name | quote }}
             items:
               {{- range $confItem := $conf.configMapRef.items }}
-              - key: {{ $confItem.key | quote }}
+              - key: {{ if $confItem.key }}{{ $confItem.key | quote }}{{ else }}{{ $confItem.path | quote }}{{ end }}
                 path: {{ $confItem.path }}
               {{- end }}
         {{- end }}
@@ -206,7 +206,7 @@ spec:
             secretName: {{ $conf.secretRef.name | quote }}
             items:
               {{- range $confItem := $conf.secretRef.items }}
-              - key: {{ $confItem.key | quote }}
+              - key: {{ if $confItem.key }}{{ $confItem.key | quote }}{{ else }}{{ $confItem.path | quote }}{{ end }}
                 path: {{ $confItem.path }}
               {{- end }}
         {{- end }}
