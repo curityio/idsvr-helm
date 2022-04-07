@@ -25,6 +25,7 @@ curity:
     service:
       type: ClusterIP
       port: 6789
+      annotations: {}
     livenessProbe:
       timeoutSeconds: 1
       failureThreshold: 3
@@ -64,6 +65,7 @@ curity:
     service:
       type: ClusterIP
       port: 8443
+      annotations: {}
     deployment:
       port: 8443
     livenessProbe:
