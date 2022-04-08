@@ -41,6 +41,7 @@ Tutorials on using the chart and more are available in the [Curity Resource libr
 
 In the table below you can find information about the parameters that are configurable in this chart.
 
+
 Parameter | Description                                                                                                                                   | Default
 --- |-----------------------------------------------------------------------------------------------------------------------------------------------| ---
 `replicaCount`| The number of runtime nodes to be deployed                                                                                                    |`1`

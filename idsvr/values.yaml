@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: curity.azurecr.io/curity/idsvr
-  tag: 7.0.0
+  tag: 7.0.1
   pullPolicy: IfNotPresent
   pullSecret:
 
@@ -25,6 +25,7 @@ curity:
     service:
       type: ClusterIP
       port: 6789
+      annotations: {}
     livenessProbe:
       timeoutSeconds: 1
       failureThreshold: 3
@@ -64,6 +65,7 @@ curity:
     service:
       type: ClusterIP
       port: 8443
+      annotations: {}
     deployment:
       port: 8443
     livenessProbe:
