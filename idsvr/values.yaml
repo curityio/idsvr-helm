@@ -103,9 +103,8 @@ curity:
     backup: false
     password:
     encryptionKey:
-    environmentVariableSecret:
     environmentVariableSecrets: []
-    environmentVariableConfigMap:
+    environmentVariableConfigMaps: []
     configurationConfigMap:
     configurationConfigMapItemName:
     configurationSecret:
