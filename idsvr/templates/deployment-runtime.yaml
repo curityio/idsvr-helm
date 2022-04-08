@@ -159,20 +159,20 @@ spec:
         {{- if $conf.configMapRef }}
         - name: {{ $conf.configMapRef.name }}-volume
           configMap:
-            name: {{ $conf.configMapRef.name | quote }}
+            name: {{ $conf.configMapRef.name }}
             items:
               {{- range $confItem := $conf.configMapRef.items }}
-              - key: {{ if $confItem.key }}{{ $confItem.key | quote }}{{ else }}{{ $confItem.path | quote }}{{ end }}
+              - key: {{ if $confItem.key }}{{ $confItem.key }}{{ else }}{{ $confItem.path }}{{ end }}
                 path: {{ $confItem.path }}
               {{- end }}
         {{- end }}
         {{- if $conf.secretRef }}
         - name: {{ $conf.secretRef.name }}-volume
           secret:
-            secretName: {{ $conf.secretRef.name | quote }}
+            secretName: {{ $conf.secretRef.name }}
             items:
               {{- range $confItem := $conf.secretRef.items }}
-              - key: {{ if $confItem.key }}{{ $confItem.key | quote }}{{ else }}{{ $confItem.path | quote }}{{ end }}
+              - key: {{ if $confItem.key }}{{ $confItem.key }}{{ else }}{{ $confItem.path }}{{ end }}
                 path: {{ $confItem.path }}
               {{- end }}
         {{- end }}
