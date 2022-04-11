@@ -134,6 +134,24 @@ spec:
               name: configmap-config
               readOnly: true
             {{- end }}
+            {{- range $conf := .Values.curity.config.configuration }}
+            {{- if $conf.configMapRef }}
+            {{- range $confItem := $conf.configMapRef.items }}
+            - mountPath: /opt/idsvr/etc/init/{{ $confItem.path }}
+              subPath: {{ $confItem.path }}
+              name: {{ $conf.configMapRef.name }}-volume
+              readOnly: true
+            {{- end }}
+            {{- end }}
+            {{- if $conf.secretRef }}
+            {{- range $confItem := $conf.secretRef.items }}
+            - mountPath: /opt/idsvr/etc/init/{{ $confItem.path }}
+              subPath: {{ $confItem.path }}
+              name: {{ $conf.secretRef.name }}-volume
+              readOnly: true
+            {{- end }}
+            {{- end }}
+            {{- end }}
           resources:
                 {{- toYaml .Values.resources | nindent 12 }}
         {{- if .Values.curity.admin.logging.stdout }}
@@ -186,6 +204,28 @@ spec:
         - name: configmap-config
           configMap:
             name: {{ .Values.curity.config.configurationConfigMap }}
+        {{- end }}
+        {{- range $conf := .Values.curity.config.configuration }}
+        {{- if $conf.configMapRef }}
+        - name: {{ $conf.configMapRef.name }}-volume
+          configMap:
+            name: {{ $conf.configMapRef.name }}
+            items:
+              {{- range $confItem := $conf.configMapRef.items }}
+              - key: {{ if $confItem.key }}{{ $confItem.key }}{{ else }}{{ $confItem.path }}{{ end }}
+                path: {{ $confItem.path }}
+              {{- end }}
+        {{- end }}
+        {{- if $conf.secretRef }}
+        - name: {{ $conf.secretRef.name }}-volume
+          secret:
+            secretName: {{ $conf.secretRef.name }}
+            items:
+              {{- range $confItem := $conf.secretRef.items }}
+              - key: {{ if $confItem.key }}{{ $confItem.key }}{{ else }}{{ $confItem.path }}{{ end }}
+                path: {{ $confItem.path }}
+              {{- end }}
+        {{- end }}
         {{- end }}
       {{- if .Values.curity.config.backup }}
       serviceAccountName: {{ include "curity.fullname" . }}-service-account

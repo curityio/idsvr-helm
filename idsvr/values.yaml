@@ -111,7 +111,7 @@ curity:
     configurationConfigMapItemName:
     configurationSecret:
     configurationSecretItemName:
-
+    configuration: []
 
 ingress:
   enabled: false
