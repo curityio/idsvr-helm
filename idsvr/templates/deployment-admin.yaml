@@ -26,8 +26,8 @@ spec:
         - name: {{ .Chart.Name }}-admin
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["/opt/idsvr/bin/idsvr"]
-          args: ["-s", "{{ .Values.curity.admin.role }}",
+          args: ["/opt/idsvr/bin/idsvr",
+                 "-s", "{{ .Values.curity.admin.role }}",
                  "-N", "{{ .Chart.Name }}-admin",
                  {{- if .Values.curity.config.encryptionKey}}"-e","{{.Values.curity.config.encryptionKey}}",{{end -}}
                  "--admin"]
@@ -52,12 +52,28 @@ spec:
           {{- end }}
           {{- range $env := .Values.curity.admin.extraEnv }}
             - name: {{ $env.name }}
+            {{- if $env.value }}
               value: {{ $env.value | quote }}
-          {{- end }}
-          {{- if .Values.curity.config.environmentVariableSecret }}
+            {{- end }}
+            {{- if $env.valueFrom }}
+              valueFrom: 
+                {{- $env.valueFrom | toYaml | trim | indent 16 }}
+            {{- end }}
+          {{- end}}
+          {{- if ( or .Values.curity.config.environmentVariableSecret .Values.curity.config.environmentVariableConfigMap .Values.curity.config.environmentVariableSecrets .Values.curity.config.environmentVariableConfigMaps ) }}
           envFrom:
+          {{- range $configMap := concat .Values.curity.config.environmentVariableConfigMaps ( list .Values.curity.config.environmentVariableConfigMap ) }}
+          {{- if $configMap }}
+            - configMapRef:
+                name: {{ $configMap | quote }}
+          {{- end }}
+          {{- end }}
+          {{- range $secret := concat .Values.curity.config.environmentVariableSecrets ( list .Values.curity.config.environmentVariableSecret ) }}
+          {{- if $secret }}
             - secretRef:
-                name: {{ .Values.curity.config.environmentVariableSecret | quote }}
+                name: {{ $secret | quote}}
+          {{- end }}
+          {{- end }}
           {{- end }}
           ports:
             - name: config-port

@@ -3,7 +3,12 @@ kind: Service
 metadata:
   name: {{ include "curity.fullname" . }}-admin-svc
   labels:
-        {{- include "curity.labels" . | nindent 4 }}
+    {{- include "curity.labels" . | nindent 4 }}
+    role: {{ include "curity.fullname" . }}-admin
+  {{- with .Values.curity.admin.service.annotations }}
+  annotations:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.curity.admin.service.type }}
   ports:
@@ -28,3 +33,5 @@ spec:
   selector:
     app.kubernetes.io/name: {{ include "curity.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
+    role: {{ include "curity.fullname" . }}-admin
+    

@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: curity.azurecr.io/curity/idsvr
-  tag: 6.4.1
+  tag: 7.0.1
   pullPolicy: IfNotPresent
   pullSecret:
 
@@ -25,6 +25,7 @@ curity:
     service:
       type: ClusterIP
       port: 6789
+      annotations: {}
     livenessProbe:
       timeoutSeconds: 1
       failureThreshold: 3
@@ -36,10 +37,14 @@ curity:
       successThreshold: 3
       periodSeconds: 10
       initialDelaySeconds: 30
-    # extraEnv provides additional environment variables
-    # extraEnv:
-    #   - name: SOME_EXTRA_VARIABLE
-    #     value: "extra-variable-value"
+# extraEnv provides additional environment variables
+#    extraEnv:
+#      - name: SOME_EXTRA_VARIABLE
+#        value: "extra-variable-value"
+#      - name: SOME_OTHER_EXTRA_VARIABLE_USING_VALUE_FROM
+#        valueFrom:
+#          fieldRef:
+#            fieldPath: status.hostIP
     extraEnv: []
 
     logging:
@@ -60,6 +65,7 @@ curity:
     service:
       type: ClusterIP
       port: 8443
+      annotations: {}
     deployment:
       port: 8443
     livenessProbe:
@@ -73,10 +79,14 @@ curity:
       successThreshold: 3
       periodSeconds: 10
       initialDelaySeconds: 30
-    # extraEnv provides additional environment variables
-    # extraEnv:
-    #   - name: SOME_EXTRA_VARIABLE
-    #     value: "extra-variable-value"
+# extraEnv provides additional environment variables
+#    extraEnv:
+#      - name: SOME_EXTRA_VARIABLE
+#        value: "extra-variable-value"
+#      - name: SOME_OTHER_EXTRA_VARIABLE_USING_VALUE_FROM
+#        valueFrom:
+#          fieldRef:
+#            fieldPath: status.hostIP
     extraEnv: []
     logging:
       level: INFO
@@ -95,7 +105,8 @@ curity:
     backup: false
     password:
     encryptionKey:
-    environmentVariableSecret:
+    environmentVariableSecrets: []
+    environmentVariableConfigMaps: []
     configurationConfigMap:
     configurationConfigMapItemName:
     configurationSecret:
@@ -118,19 +129,19 @@ ingress:
     secretName:
 
 resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+# We usually recommend not to specify default resources and to leave this as a conscious
+# choice for the user. This also increases chances charts run on environments with little
+# resources, such as Minikube. If you do want to specify resources, uncomment the following
+# lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+#   limits:
+#     cpu: 100m
+#     memory: 128Mi
+#   requests:
+#     cpu: 100m
+#     memory: 128Mi
 
 nodeSelector: {}
 
 tolerations: []
 
-affinity: {}
+affinity: { }
