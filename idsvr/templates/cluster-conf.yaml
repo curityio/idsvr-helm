@@ -1,3 +1,4 @@
+{{- if ne .Values.curity.onlyRuntimes true -}}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -87,3 +88,4 @@ spec:
             name: {{ include "curity.fullname" . }}-cluster-conf-map
       serviceAccountName: {{ include "curity.fullname" . }}-service-account
       restartPolicy: Never
+{{- end }}
