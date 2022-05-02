@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: {{ include "curity.fullname" . }}-network-policy-allow-web
+  name: {{ include "curity.fullname" . }}-network-policy-allow-adminuiport-port
 spec:
   podSelector:
     matchLabels:
@@ -10,5 +10,10 @@ spec:
   policyTypes:
     - Ingress
   ingress:
-    - {}
+    - ports: 
+      - port: {{ .Values.curity.adminUiPort }}
+      from:
+        - podSelector:
+            matchlabels:
+              role: {{ include "curity.fullname" . }}-admin
 {{- end }}
