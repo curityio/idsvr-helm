@@ -75,6 +75,7 @@ Parameter | Description | Default
 `curity.runtime.role`| The role of the runtime servers | `default`
 `curity.runtime.service.type`| The runtime service type | `ClusterIP`
 `curity.runtime.service.port`| The runtime service port | `8443`
+`curity.runtime.serviceAccount.name`| The name of an existing service account to use on the runtime nodes. Defaults to `default` if not specified.  | `null`
 `curity.runtime.deployment.port`| The runtime deployment port | `8443`
 `curity.runtime.extraEnv`| Extra environment variables to provide to the runtime container | `[]`
 `curity.runtime.livenessProbe.timeoutSeconds`| LivenessProbe `timeoutSeconds` for the runtime deployment | `1`
