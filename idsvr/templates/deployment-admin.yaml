@@ -75,6 +75,10 @@ spec:
           {{- end }}
           {{- end }}
           {{- end }}
+          {{- if .Values.curity.config.convertKeystore }}
+            - secretRef:
+                name: {{ include "curity.fullname" . }}-convert-ks-secret-envs
+          {{- end }}
           ports:
             - name: config-port
               containerPort: {{ .Values.curity.admin.service.port }}
