@@ -127,6 +127,15 @@ curity:
 #          items:
 #            - key: cfg
 #              path: configuration.xml
+    convertKeystore: []
+#      - sourceTls:
+#          keyName: SSL_SERVER_KEY
+#          fromSecretRef: curity-local-tls
+#          cert: SSL_SERVER_CERT # optional
+#          inAlias: curity
+#          keystorePasswordSecretRef:
+#            name: curity-idsvr-secret
+#            key: KEYSTORE_PASSWORD
 
 ingress:
   enabled: false
