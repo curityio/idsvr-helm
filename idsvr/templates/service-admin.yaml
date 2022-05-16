@@ -1,4 +1,4 @@
-{{- if not .Values.curity.onlyRuntimes -}}
+{{- if eq .Values.curity.onlyRuntimeNodes false -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -6,6 +6,10 @@ metadata:
   labels:
     {{- include "curity.labels" . | nindent 4 }}
     role: {{ include "curity.fullname" . }}-admin
+  {{- with .Values.curity.admin.service.annotations }}
+  annotations:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.curity.admin.service.type }}
   ports:

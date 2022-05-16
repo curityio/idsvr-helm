@@ -1,4 +1,4 @@
-{{- if ne .Values.curity.onlyRuntimes true -}}
+{{- if eq .Values.curity.onlyRuntimeNodes false }}
 apiVersion: v1
 kind: Secret
 metadata:

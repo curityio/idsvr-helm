@@ -1,4 +1,4 @@
-{{- if ne .Values.curity.onlyRuntimes true -}}
+{{- if or ( eq .Values.curity.onlyRuntimeNodes false ) .Values.curity.config.convertKeystore -}}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -42,4 +42,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "curity.fullname" . }}-service-account
-{{- end }
+{{- end }}

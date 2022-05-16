@@ -1,5 +1,5 @@
 {{- $root := . -}}
-{{- if ne .Values.curity.onlyRuntimes true -}}
+  {{- if eq .Values.curity.onlyRuntimeNodes false -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -8,11 +8,12 @@ metadata:
     {{- include "curity.labels" . | nindent 4 }}
     role: {{ include "curity.fullname" . }}-admin
 spec:
-  replicas: {{ if .Values.curity.onlyRuntimeNodes}}0{{ else }}1{{ end }}
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "curity.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
+      role: {{ include "curity.fullname" . }}-admin
   template:
     metadata:
       labels:
@@ -57,20 +58,27 @@ spec:
               value: {{ $env.value | quote }}
             {{- end }}
             {{- if $env.valueFrom }}
-              valueFrom: 
-                {{- $env.valueFrom | toYaml | trim | indent 16 }}
+              valueFrom: {{ $env.valueFrom | toYaml | trim | nindent 16 }}
             {{- end }}
           {{- end}}
-          {{- if ( or .Values.curity.config.environmentVariableSecret .Values.curity.config.environmentVariableConfigMap ) }}
+          {{- if ( or .Values.curity.config.environmentVariableSecret .Values.curity.config.environmentVariableConfigMap .Values.curity.config.environmentVariableSecrets .Values.curity.config.environmentVariableConfigMaps ) }}
           envFrom:
-          {{- if .Values.curity.config.environmentVariableConfigMap }}
+          {{- range $configMap := concat .Values.curity.config.environmentVariableConfigMaps ( list .Values.curity.config.environmentVariableConfigMap ) }}
+          {{- if $configMap }}
             - configMapRef:
-                name: {{ .Values.curity.config.environmentVariableConfigMap | quote }}
+                name: {{ $configMap | quote }}
           {{- end }}
-          {{- if .Values.curity.config.environmentVariableSecret }}
+          {{- end }}
+          {{- range $secret := concat .Values.curity.config.environmentVariableSecrets ( list .Values.curity.config.environmentVariableSecret ) }}
+          {{- if $secret }}
             - secretRef:
-                name: {{ .Values.curity.config.environmentVariableSecret | quote }}
+                name: {{ $secret | quote}}
           {{- end }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.curity.config.convertKeystore }}
+            - secretRef:
+                name: {{ include "curity.fullname" . }}-convert-ks-secret-envs
           {{- end }}
           ports:
             - name: config-port
@@ -131,6 +139,24 @@ spec:
               name: configmap-config
               readOnly: true
             {{- end }}
+            {{- range $conf := .Values.curity.config.configuration }}
+            {{- if $conf.configMapRef }}
+            {{- range $confItem := $conf.configMapRef.items }}
+            - mountPath: /opt/idsvr/etc/init/{{ $confItem.path }}
+              subPath: {{ $confItem.path }}
+              name: {{ $conf.configMapRef.name }}-volume
+              readOnly: true
+            {{- end }}
+            {{- end }}
+            {{- if $conf.secretRef }}
+            {{- range $confItem := $conf.secretRef.items }}
+            - mountPath: /opt/idsvr/etc/init/{{ $confItem.path }}
+              subPath: {{ $confItem.path }}
+              name: {{ $conf.secretRef.name }}-volume
+              readOnly: true
+            {{- end }}
+            {{- end }}
+            {{- end }}
           resources:
                 {{- toYaml .Values.resources | nindent 12 }}
         {{- if .Values.curity.admin.logging.stdout }}
@@ -183,6 +209,28 @@ spec:
         - name: configmap-config
           configMap:
             name: {{ .Values.curity.config.configurationConfigMap }}
+        {{- end }}
+        {{- range $conf := .Values.curity.config.configuration }}
+        {{- if $conf.configMapRef }}
+        - name: {{ $conf.configMapRef.name }}-volume
+          configMap:
+            name: {{ $conf.configMapRef.name }}
+            items:
+              {{- range $confItem := $conf.configMapRef.items }}
+              - key: {{ if $confItem.key }}{{ $confItem.key }}{{ else }}{{ $confItem.path }}{{ end }}
+                path: {{ $confItem.path }}
+              {{- end }}
+        {{- end }}
+        {{- if $conf.secretRef }}
+        - name: {{ $conf.secretRef.name }}-volume
+          secret:
+            secretName: {{ $conf.secretRef.name }}
+            items:
+              {{- range $confItem := $conf.secretRef.items }}
+              - key: {{ if $confItem.key }}{{ $confItem.key }}{{ else }}{{ $confItem.path }}{{ end }}
+                path: {{ $confItem.path }}
+              {{- end }}
+        {{- end }}
         {{- end }}
       {{- if .Values.curity.config.backup }}
       serviceAccountName: {{ include "curity.fullname" . }}-service-account

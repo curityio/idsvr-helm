@@ -42,20 +42,27 @@ spec:
               value: {{ $env.value | quote }}
               {{- end }}
               {{- if $env.valueFrom }}
-              valueFrom: 
-                {{- $env.valueFrom | toYaml | trim | indent 16 }}
+              valueFrom: {{ $env.valueFrom | toYaml | trim | nindent 16 }}
               {{- end }}
             {{- end }}
-          {{- if ( or .Values.curity.config.environmentVariableSecret .Values.curity.config.environmentVariableConfigMap ) }}
+          {{- if ( or .Values.curity.config.environmentVariableSecret .Values.curity.config.environmentVariableConfigMap .Values.curity.config.environmentVariableSecrets .Values.curity.config.environmentVariableConfigMaps ) }}
           envFrom:
-          {{- if .Values.curity.config.environmentVariableConfigMap }}
-            - configMapRef:
-                name: {{ .Values.curity.config.environmentVariableConfigMap | quote }}
+          {{- range $configMap := concat .Values.curity.config.environmentVariableConfigMaps ( list .Values.curity.config.environmentVariableConfigMap ) }}
+          {{- if $configMap }}
+          - configMapRef:
+              name: {{ $configMap | quote }}
           {{- end }}
-          {{- if .Values.curity.config.environmentVariableSecret }}
-            - secretRef:
-                name: {{ .Values.curity.config.environmentVariableSecret | quote }}
           {{- end }}
+          {{- range $secret := concat .Values.curity.config.environmentVariableSecrets ( list .Values.curity.config.environmentVariableSecret ) }}
+          {{- if $secret }}
+          - secretRef:
+              name: {{ $secret | quote }}
+          {{- end }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.curity.config.convertKeystore }}
+          - secretRef:
+              name: {{ include "curity.fullname" . }}-convert-ks-secret-envs
           {{- end }}
           ports:
             - name: http-port
@@ -89,7 +96,7 @@ spec:
             - mountPath: /opt/idsvr/var/log/
               name: log-volume
             {{- end }}
-            {{- if not .Values.curity.onlyRuntimeNodes}}
+            {{- if eq .Values.curity.onlyRuntimeNodes false }}
             - mountPath: /opt/idsvr/etc/init/cluster.xml
               subPath: cluster.xml
               name: cluster-xml
@@ -106,6 +113,24 @@ spec:
               subPath: {{ required "\n curity.config.configurationConfigMapItemName required when curity.config.configurationConfigMap is set. " .Values.curity.config.configurationConfigMapItemName }}
               name: configmap-config
               readOnly: true
+            {{- end }}
+            {{- range $conf := .Values.curity.config.configuration }}
+            {{- if $conf.configMapRef }}
+            {{- range $confItem := $conf.configMapRef.items }}
+            - mountPath: /opt/idsvr/etc/init/{{ $confItem.path }}
+              subPath: {{ $confItem.path }}
+              name: {{ $conf.configMapRef.name }}-volume
+              readOnly: true
+            {{- end }}
+            {{- end }}
+            {{- if $conf.secretRef }}
+            {{- range $confItem := $conf.secretRef.items }}
+            - mountPath: /opt/idsvr/etc/init/{{ $confItem.path }}
+              subPath: {{ $confItem.path }}
+              name: {{ $conf.secretRef.name }}-volume
+              readOnly: true
+            {{- end }}
+            {{- end }}
             {{- end }}
           resources:
                 {{- toYaml .Values.resources | nindent 12 }}
@@ -132,7 +157,7 @@ spec:
         - name: log-volume
           emptyDir: {}
         {{- end }}
-        {{- if not .Values.curity.onlyRuntimeNodes}}
+        {{- if eq .Values.curity.onlyRuntimeNodes false }}
         - name: cluster-xml
           secret:
             secretName: {{ include "curity.fullname" . }}-cluster-config-xml
@@ -152,6 +177,28 @@ spec:
         - name: configmap-config
           configMap:
             name: {{ .Values.curity.config.configurationConfigMap }}
+        {{- end }}
+        {{- range $conf := .Values.curity.config.configuration }}
+        {{- if $conf.configMapRef }}
+        - name: {{ $conf.configMapRef.name }}-volume
+          configMap:
+            name: {{ $conf.configMapRef.name }}
+            items:
+              {{- range $confItem := $conf.configMapRef.items }}
+              - key: {{ if $confItem.key }}{{ $confItem.key }}{{ else }}{{ $confItem.path }}{{ end }}
+                path: {{ $confItem.path }}
+              {{- end }}
+        {{- end }}
+        {{- if $conf.secretRef }}
+        - name: {{ $conf.secretRef.name }}-volume
+          secret:
+            secretName: {{ $conf.secretRef.name }}
+            items:
+              {{- range $confItem := $conf.secretRef.items }}
+              - key: {{ if $confItem.key }}{{ $confItem.key }}{{ else }}{{ $confItem.path }}{{ end }}
+                path: {{ $confItem.path }}
+              {{- end }}
+        {{- end }}
         {{- end }}
             {{- with .Values.nodeSelector }}
       nodeSelector:

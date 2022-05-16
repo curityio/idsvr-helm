@@ -1,4 +1,5 @@
-{{- if and .Values.curity.config.backup ( ne .Values.curity.onlyRuntimes true ) -}}
+{{- if and .Values.curity.config.backup -}}
+{{- required "\n Admin node need to be running if curity.config.backup is true! use --set curity.config.onlyRuntimeNodes=false" ( .Values.curity.onlyRuntimeNodes ) }}
 apiVersion: v1
 kind: Secret
 metadata:
