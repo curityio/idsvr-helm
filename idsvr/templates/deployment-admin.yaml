@@ -60,7 +60,7 @@ spec:
               valueFrom: {{ $env.valueFrom | toYaml | trim | nindent 16 }}
             {{- end }}
           {{- end}}
-          {{- if ( or .Values.curity.config.environmentVariableSecret .Values.curity.config.environmentVariableConfigMap .Values.curity.config.environmentVariableSecrets .Values.curity.config.environmentVariableConfigMaps ) }}
+          {{- if ( or .Values.curity.config.environmentVariableSecret .Values.curity.config.environmentVariableConfigMap .Values.curity.config.environmentVariableSecrets .Values.curity.config.environmentVariableConfigMaps .Values.curity.config.convertKeystore ) }}
           envFrom:
           {{- range $configMap := concat .Values.curity.config.environmentVariableConfigMaps ( list .Values.curity.config.environmentVariableConfigMap ) }}
           {{- if $configMap }}
