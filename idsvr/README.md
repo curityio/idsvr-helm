@@ -59,6 +59,7 @@ In the table below you can find information about the parameters that are config
 | `curity.healthCheckPort` | The port to use for the status server| `4465` |
 | `curity.adminUiPort` | The admin UI and API port. Ignored if `curity.config.uiEnabled=false` | `6749` |
 | `curity.adminUiHttp` | Controls if admin UI will be on http or https mode after installation if enabled. Ignored if `curity.config.uiEnabled=false` | | `false` |
+| `curity.admin.annotations` | Extra annotations to add to the admin deployment | `{}` |
 | `curity.admin.role` | The role of the admin server | `admin` |
 | `curity.admin.service.type` | The admin service type | `ClusterIP` |
 | `curity.admin.service.port` | The admin configuration port | `6789` |
@@ -109,6 +110,7 @@ In the table below you can find information about the parameters that are config
 | `curity.config.convertKeystore` | The array of secrets containing tls certificates that will be converted to Curity format | `[]` |
 | `curity.config.backup` | If `true`, the configuration will be backed up in a secret in each commit| `false` |
 | `ingress.enabled` | Flag to enable/disable an Ingress resource | `false` |
+| `ingress.annotations` | Extra annotations for the Ingress resource | `{}` |
 | `ingress.runtime.host` | Hostname of the runtime servers (used by the Ingress resource) | `curity.local` |
 | `ingress.runtime.paths` | Paths of the runtime servers that can be accessed externally | `{/}`<sup>[2](#f2)</sup> |
 | `ingress.runtime.secretName` | Secret which contains the tls cert and key for the runtime TLS connection. If not set, the Ingress will be configured | for HTTP | `null` |

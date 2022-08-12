@@ -238,6 +238,10 @@ spec:
       {{- if .Values.curity.config.backup }}
       serviceAccountName: {{ include "curity.fullname" . }}-service-account
       {{- end }}
+      {{- with .Values.curity.admin.initContainers }}
+      initContainers:
+            {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
             {{- toYaml . | nindent 8 }}
