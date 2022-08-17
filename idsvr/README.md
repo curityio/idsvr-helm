@@ -65,6 +65,7 @@ In the table below you can find information about the parameters that are config
 | `curity.admin.service.type` | The admin service type | `ClusterIP` |
 | `curity.admin.service.port` | The admin configuration port | `6789` |
 | `curity.admin.extraEnv` | Extra environment variables to provide to the admin container | `[]` |
+| `curity.admin.annotations`| Extra annotations for admin deployment | `{}` |
 | `curity.admin.livenessProbe.timeoutSeconds` | LivenessProbe `timeoutSeconds` for the admin deployment | `1` |
 | `curity.admin.livenessProbe.failureThreshold` | LivenessProbe `failureThreshold` for the admin deployment| `3` |
 | `curity.admin.livenessProbe.periodSeconds` | LivenessProbe `periodSeconds` for the admin deployment | `10` |
@@ -78,6 +79,7 @@ In the table below you can find information about the parameters that are config
 | `curity.admin.logging.stdout` | Flag to enable/disable extra containers that tail the logs in `var/log` folder | `false` |
 | `curity.admin.logging.logs` | Array of the extra containers that will be included in the admin pod | `[]` |
 | `curity.admin.logging.image` | The image that will be used to create the logging containers | `busybox:latest` |
+| `curity.runtime.annotations` | Extra annotations to add to the runtime deployment | `{}` |
 | `curity.runtime.role` | The role of the runtime servers | `default` |
 | `curity.runtime.service.type` | The runtime service type | `ClusterIP` |
 | `curity.runtime.service.port` | The runtime service port | `8443` |

@@ -23,6 +23,7 @@ spec:
         {{- include "curity.labels" . | nindent 8 }}
         role: {{ include "curity.fullname" . }}-runtime
       annotations:
+        {{- toYaml .Values.curity.annotations | indent 8 }}
         prometheus.io/scrape: "true"
         prometheus.io/path: /metrics
         prometheus.io/port: {{ include "curity.metricsPort" . | quote }}
