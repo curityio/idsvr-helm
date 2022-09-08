@@ -19,6 +19,7 @@ curity:
   healthCheckPort: 4465
   adminUiPort: 6749
   adminUiHttp: false
+  onlyRuntimeNodes: false
 
   admin:
     role: admin
