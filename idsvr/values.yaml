@@ -22,6 +22,7 @@ curity:
 
   admin:
     role: admin
+    annotations: {}
     service:
       type: ClusterIP
       port: 6789
@@ -62,6 +63,7 @@ curity:
 
   runtime:
     role: default
+    annotations: {}
     service:
       type: ClusterIP
       port: 8443

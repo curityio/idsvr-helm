@@ -55,6 +55,7 @@ Parameter | Description                                                         
 `curity.healthCheckPort`| The port to use for the status server                                                                                                | `4465`
 `curity.adminUiPort`| The admin UI and API port. Ignored if `curity.config.uiEnabled=false`                                                                | `6749`
 `curity.adminUiHttp`| Controls if admin UI will be on http or https mode after installation if enabled. Ignored if `curity.config.uiEnabled=false`         | `false`
+`curity.admin.annotations`| Extra annotations for admin deployment                                                                                                    | `{}`
 `curity.admin.role`| The role of the admin server                                                                                                         | `admin`
 `curity.admin.service.type`| The admin service type                                                                                                               | `ClusterIP`
 `curity.admin.service.port`| The admin configuration port                                                                                                         | `6789`
@@ -72,6 +73,7 @@ Parameter | Description                                                         
 `curity.admin.logging.stdout`| Flag to enable/disable extra containers that tail the logs in `var/log` folder.                                                      | `false`
 `curity.admin.logging.logs`| Array of the extra containers that will be included in the admin pod                                                                 | `[]`
 `curity.admin.logging.image`| The image that will be used to create the logging containers                                                                         | `busybox:latest`
+`curity.runtime.annotations`| Extra annotations for admin deployment                                                                                                    | `{}`
 `curity.runtime.role`| The role of the runtime servers                                                                                                      | `default`
 `curity.runtime.service.type`| The runtime service type                                                                                                             | `ClusterIP`
 `curity.runtime.service.port`| The runtime service port                                                                                                             | `8443`
