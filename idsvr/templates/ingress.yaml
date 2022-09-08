@@ -12,7 +12,7 @@ metadata:
 spec:
 {{- if or .Values.ingress.admin.secretName .Values.ingress.runtime.secretName }}
   tls:
-    {{- if and .Values.curity.config.uiEnabled ( eq .Values.curity.onlyRuntimeNodes false ) }}
+    {{- if and .Values.curity.config.uiEnabled ( not .Values.curity.onlyRuntimeNodes ) }}
     - hosts:
         - {{ .Values.ingress.admin.host}}
       secretName: {{ .Values.ingress.admin.secretName }}
@@ -36,7 +36,7 @@ spec:
                 port:
                   name: http-port
           {{- end }}
-  {{- if and .Values.curity.config.uiEnabled ( eq .Values.curity.onlyRuntimeNodes false ) }}
+  {{- if and .Values.curity.config.uiEnabled ( not .Values.curity.onlyRuntimeNodes ) }}
     - host: {{ .Values.ingress.admin.host }}
       http:
         paths:

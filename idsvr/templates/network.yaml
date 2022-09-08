@@ -1,4 +1,4 @@
-{{- if and .Values.networkpolicy.enabled ( eq .Values.curity.onlyRuntimeNodes false ) -}}
+{{- if and .Values.networkpolicy.enabled ( .Values.curity.onlyRuntimeNodes ) -}}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:

@@ -1,4 +1,4 @@
-{{- if or ( eq .Values.curity.onlyRuntimeNodes false ) .Values.curity.config.convertKeystore -}}
+{{- if or ( not .Values.curity.onlyRuntimeNodes ) .Values.curity.config.convertKeystore -}}
 apiVersion: v1
 kind: ServiceAccount
 metadata:

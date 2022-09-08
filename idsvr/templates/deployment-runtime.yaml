@@ -91,12 +91,13 @@ spec:
             successThreshold: {{ .Values.curity.runtime.readinessProbe.successThreshold }}
             periodSeconds: {{ .Values.curity.runtime.readinessProbe.periodSeconds }}
             initialDelaySeconds: {{ .Values.curity.runtime.readinessProbe.initialDelaySeconds }}
+            {{- if or .Values.curity.runtime.logging.stdout ( not .Values.curity.onlyRuntimeNodes ) .Values.curity.config.configurationSecret .Values.curity.config.configurationConfigMap .Values.curity.config.configuration }}
           volumeMounts:
             {{- if .Values.curity.runtime.logging.stdout }}
             - mountPath: /opt/idsvr/var/log/
               name: log-volume
             {{- end }}
-            {{- if eq .Values.curity.onlyRuntimeNodes false }}
+            {{- if not .Values.curity.onlyRuntimeNodes }}
             - mountPath: /opt/idsvr/etc/init/cluster.xml
               subPath: cluster.xml
               name: cluster-xml
@@ -132,6 +133,7 @@ spec:
             {{- end }}
             {{- end }}
             {{- end }}
+            {{- end }}
           resources:
                 {{- toYaml .Values.resources | nindent 12 }}
         {{- if .Values.curity.runtime.logging.stdout }}
@@ -152,12 +154,13 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.image.pullSecret}}
       {{- end }}
+      {{- if or .Values.curity.runtime.logging.stdout ( ne .Values.curity.onlyRuntimeNodes true ) .Values.curity.config.configurationSecret .Values.curity.config.configurationConfigMap .Values.curity.config.configuration }}
       volumes:
         {{- if .Values.curity.runtime.logging.stdout }}
         - name: log-volume
           emptyDir: {}
         {{- end }}
-        {{- if eq .Values.curity.onlyRuntimeNodes false }}
+        {{- if ne .Values.curity.onlyRuntimeNodes true }}
         - name: cluster-xml
           secret:
             secretName: {{ include "curity.fullname" . }}-cluster-config-xml
@@ -198,6 +201,7 @@ spec:
               - key: {{ if $confItem.key }}{{ $confItem.key }}{{ else }}{{ $confItem.path }}{{ end }}
                 path: {{ $confItem.path }}
               {{- end }}
+        {{- end }}
         {{- end }}
         {{- end }}
             {{- with .Values.nodeSelector }}

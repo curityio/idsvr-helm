@@ -1,5 +1,5 @@
 {{- $root := . -}}
-  {{- if eq .Values.curity.onlyRuntimeNodes false -}}
+  {{- if not .Values.curity.onlyRuntimeNodes -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
