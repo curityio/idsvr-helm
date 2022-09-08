@@ -200,6 +200,7 @@ spec:
               {{- end }}
         {{- end }}
         {{- end }}
+      serviceAccountName: {{ template "curity.runtime.serviceAccountName" . }}
             {{- with .Values.nodeSelector }}
       nodeSelector:
             {{- toYaml . | nindent 8 }}

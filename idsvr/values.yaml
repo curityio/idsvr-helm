@@ -68,6 +68,8 @@ curity:
       type: ClusterIP
       port: 8443
       annotations: {}
+    serviceAccount:
+      name:
     deployment:
       port: 8443
     livenessProbe:

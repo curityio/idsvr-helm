@@ -41,3 +41,10 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- define "curity.metricsPort" -}}
 {{ add .Values.curity.healthCheckPort  1 }}
 {{- end -}}
+
+{{/*
+Creates the name of the service account used by the runtime nodes.
+*/}}
+{{- define "curity.runtime.serviceAccountName" -}}
+  {{ default "default" .Values.curity.runtime.serviceAccount.name }}
+{{- end -}}
