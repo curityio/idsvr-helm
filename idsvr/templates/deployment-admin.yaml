@@ -6,12 +6,17 @@ metadata:
   labels:
     {{- include "curity.labels" . | nindent 4 }}
     role: {{ include "curity.fullname" . }}-admin
+  {{- with .Values.curity.admin.annotations }}
+  annotations:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "curity.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
+      role: {{ include "curity.fullname" . }}-admin
   template:
     metadata:
       labels:
@@ -59,7 +64,7 @@ spec:
               valueFrom: {{ $env.valueFrom | toYaml | trim | nindent 16 }}
             {{- end }}
           {{- end}}
-          {{- if ( or .Values.curity.config.environmentVariableSecret .Values.curity.config.environmentVariableConfigMap .Values.curity.config.environmentVariableSecrets .Values.curity.config.environmentVariableConfigMaps ) }}
+          {{- if ( or .Values.curity.config.environmentVariableSecret .Values.curity.config.environmentVariableConfigMap .Values.curity.config.environmentVariableSecrets .Values.curity.config.environmentVariableConfigMaps .Values.curity.config.convertKeystore ) }}
           envFrom:
           {{- range $configMap := concat .Values.curity.config.environmentVariableConfigMaps ( list .Values.curity.config.environmentVariableConfigMap ) }}
           {{- if $configMap }}
@@ -73,6 +78,10 @@ spec:
                 name: {{ $secret | quote}}
           {{- end }}
           {{- end }}
+          {{- end }}
+          {{- if .Values.curity.config.convertKeystore }}
+            - secretRef:
+                name: {{ include "curity.fullname" . }}-convert-ks-secret-envs
           {{- end }}
           ports:
             - name: config-port

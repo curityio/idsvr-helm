@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: curity.azurecr.io/curity/idsvr
-  tag: 7.0.2
+  tag: 7.2.1
   pullPolicy: IfNotPresent
   pullSecret:
 
@@ -22,6 +22,7 @@ curity:
 
   admin:
     role: admin
+    annotations: {}
     service:
       type: ClusterIP
       port: 6789
@@ -62,6 +63,7 @@ curity:
 
   runtime:
     role: default
+    annotations: {}
     service:
       type: ClusterIP
       port: 8443
@@ -129,6 +131,15 @@ curity:
 #          items:
 #            - key: cfg
 #              path: configuration.xml
+    convertKeystore: []
+#      - sourceTls:
+#          keyName: SSL_SERVER_KEY
+#          fromSecretRef: curity-local-tls
+#          cert: SSL_SERVER_CERT # optional
+#          inAlias: curity
+#          keystorePasswordSecretRef:
+#            name: curity-idsvr-secret
+#            key: KEYSTORE_PASSWORD
 
 ingress:
   enabled: false

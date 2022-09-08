@@ -1,7 +1,7 @@
 apiVersion: v1
 name: idsvr
-version: 0.10.1
-appVersion: 7.0.2
+version: 0.10.6
+appVersion: 7.3.1
 description: A Helm chart for Curity Identity Server
 keywords:
   - iam
@@ -12,4 +12,4 @@ keywords:
   - saml
   - scim
 home: https://curity.io
-icon: https://curity.io/assets/images/curity-logo-landscape.svg
+icon: https://curity.io/images/curity-logo-landscape-white.png
