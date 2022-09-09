@@ -36,6 +36,9 @@ app.kubernetes.io/name: {{ include "curity.name" . }}
 helm.sh/chart: {{ include "curity.chart" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- with .Values.labels }}
+{{- toYaml . | nindent 0 }}
+{{- end }}
 {{- end -}}
 
 {{- define "curity.metricsPort" -}}
