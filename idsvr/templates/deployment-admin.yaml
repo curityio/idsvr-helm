@@ -161,7 +161,11 @@ spec:
             {{- end }}
             {{- end }}
           resources:
-                {{- toYaml .Values.resources | nindent 12 }}
+           {{- if .Values.curity.admin.resources }}
+               {{- toYaml .Values.curity.admin.resources | nindent 12 }}
+           {{- else }}
+               {{- toYaml .Values.resources | nindent 12 }}
+           {{- end }}
         {{- if .Values.curity.admin.logging.stdout }}
         {{- range .Values.curity.admin.logging.logs }}
         - name: {{ . }}

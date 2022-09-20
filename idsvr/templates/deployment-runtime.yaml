@@ -135,7 +135,11 @@ spec:
             {{- end }}
             {{- end }}
           resources:
+            {{- if .Values.curity.runtime.resources }}
+                {{- toYaml .Values.curity.runtime.resources | nindent 12 }}
+            {{- else }}
                 {{- toYaml .Values.resources | nindent 12 }}
+            {{- end }}
         {{- if .Values.curity.runtime.logging.stdout }}
         {{- range .Values.curity.runtime.logging.logs }}
         - name: {{ . }}

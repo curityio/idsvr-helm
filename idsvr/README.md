@@ -78,6 +78,7 @@ In the table below you can find information about the parameters that are config
 | `curity.admin.logging.stdout` | Flag to enable/disable extra containers that tail the logs in `var/log` folder | `false` |
 | `curity.admin.logging.logs` | Array of the extra containers that will be included in the admin pod | `[]` |
 | `curity.admin.logging.image` | The image that will be used to create the logging containers | `busybox:latest` |
+| `curity.admin.resources` | Resource limits applied in admin deployment | `[]` |
 | `curity.runtime.role` | The role of the runtime servers | `default` |
 | `curity.runtime.service.type` | The runtime service type | `ClusterIP` |
 | `curity.runtime.service.port` | The runtime service port | `8443` |
@@ -97,6 +98,7 @@ In the table below you can find information about the parameters that are config
 | `curity.runtime.logging.stdout` | Flag to enable/disable extra containers that tail the logs in `var/log` folder. | `false` |
 | `curity.runtime.logging.logs` | Array of the extra containers that will be included in the runtime pods | `[]` |
 | `curity.runtime.logging.image` | The image that will be used to create the logging containers | `busybox:latest` |
+| `curity.runtime.resources` | Resource limits applied in runtime deployment | `[]` |
 | `curity.config.uiEnabled` | Flag to enable/disable the service for Admin UI and Admin REST API | `false` |
 | `curity.config.password` | The administrator password. Required if `curity.config.environmentVariableSecret` and `curity.config.configurationSecret` | is not set | `null` |
 | `curity.config.encryptionKey` | The configuration encryption key | `null` |
