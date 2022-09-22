@@ -109,6 +109,7 @@ curity:
     uiEnabled: false
     backup: false
     password:
+    skipInstall: false
     encryptionKey:
     environmentVariableSecrets: []
     environmentVariableConfigMaps: []

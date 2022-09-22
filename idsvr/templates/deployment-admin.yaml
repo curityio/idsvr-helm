@@ -41,13 +41,17 @@ spec:
             - name: CONFIG_ENCRYPTION_KEY
               value: {{ .Values.curity.config.encryptionKey | quote }}
             {{- end }}
+            {{- if .Values.curity.config.skipInstall }}
+            - name: SKIP_INSTALL
+              value: 1
+            {{- end }}
             - name: STATUS_CMD_PORT
               value: {{ .Values.curity.healthCheckPort | quote }}
             - name: LOGGING_LEVEL
               value: {{ .Values.curity.admin.logging.level }}
             - name: ADMIN_UI_HTTP_MODE
               value: {{ quote .Values.curity.adminUiHttp }}
-          {{- if not (or (.Values.curity.config.environmentVariableSecret) (.Values.curity.config.configurationSecret)) }}
+          {{- if not (or .Values.curity.config.skipInstall .Values.curity.config.environmentVariableSecrets .Values.curity.config.configuration) }}
             - name: PASSWORD
               value: {{ required "\n curity.config.password required! use --set curity.config.password=YOUR_PASSWORD" .Values.curity.config.password | quote }}
           {{- end }}
@@ -57,13 +61,13 @@ spec:
           {{- end }}
           {{- range $env := .Values.curity.admin.extraEnv }}
             - name: {{ $env.name }}
-            {{- if $env.value }}
+              {{- if $env.value }}
               value: {{ $env.value | quote }}
-            {{- end }}
+              {{- end }}
             {{- if $env.valueFrom }}
               valueFrom: {{ $env.valueFrom | toYaml | trim | nindent 16 }}
             {{- end }}
-          {{- end}}
+          {{- end }}
           {{- if ( or .Values.curity.config.environmentVariableSecret .Values.curity.config.environmentVariableConfigMap .Values.curity.config.environmentVariableSecrets .Values.curity.config.environmentVariableConfigMaps .Values.curity.config.convertKeystore ) }}
           envFrom:
           {{- range $configMap := concat .Values.curity.config.environmentVariableConfigMaps ( list .Values.curity.config.environmentVariableConfigMap ) }}
@@ -174,8 +178,8 @@ spec:
             - name: log-volume
               mountPath: /log
               readOnly: true
-      {{- end }}
-      {{- end }}
+        {{- end }}
+        {{- end }}
       {{- if .Values.image.pullSecret }}
       imagePullSecrets:
         - name: {{ .Values.image.pullSecret}}
