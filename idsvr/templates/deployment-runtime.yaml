@@ -36,6 +36,10 @@ spec:
                  {{- if .Values.curity.config.encryptionKey}}"-e","{{.Values.curity.config.encryptionKey}}",{{end -}}
                  "--no-admin"]
           env:
+            {{- if .Values.curity.config.encryptionKey }}
+            - name: CONFIG_ENCRYPTION_KEY
+              value: {{ .Values.curity.config.encryptionKey | quote }}
+            {{- end }}
             - name: STATUS_CMD_PORT
               value: {{ .Values.curity.healthCheckPort | quote }}
             - name: LOGGING_LEVEL
@@ -53,20 +57,20 @@ spec:
           envFrom:
           {{- range $configMap := concat .Values.curity.config.environmentVariableConfigMaps ( list .Values.curity.config.environmentVariableConfigMap ) }}
           {{- if $configMap }}
-          - configMapRef:
-              name: {{ $configMap | quote }}
+            - configMapRef:
+                name: {{ $configMap | quote }}
           {{- end }}
           {{- end }}
           {{- range $secret := concat .Values.curity.config.environmentVariableSecrets ( list .Values.curity.config.environmentVariableSecret ) }}
           {{- if $secret }}
-          - secretRef:
-              name: {{ $secret | quote }}
+            - secretRef:
+                name: {{ $secret | quote}}
           {{- end }}
           {{- end }}
           {{- end }}
           {{- if .Values.curity.config.convertKeystore }}
-          - secretRef:
-              name: {{ include "curity.fullname" . }}-convert-ks-secret-envs
+            - secretRef:
+                name: {{ include "curity.fullname" . }}-convert-ks-secret-envs
           {{- end }}
           ports:
             - name: http-port
