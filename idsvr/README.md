@@ -64,7 +64,9 @@ In the table below you can find information about the parameters that are config
 | `curity.admin.role` | The role of the admin server | `admin` |
 | `curity.admin.service.type` | The admin service type | `ClusterIP` |
 | `curity.admin.service.port` | The admin configuration port | `6789` |
+| `curity.admin.service.annotations` | Extra annotations to add to the admin service | `{}` |
 | `curity.admin.extraEnv` | Extra environment variables to provide to the admin container | `[]` |
+| `curity.admin.initContainers` | Definition of initContainers for the admin service | `[]` |
 | `curity.admin.livenessProbe.timeoutSeconds` | LivenessProbe `timeoutSeconds` for the admin deployment | `1` |
 | `curity.admin.livenessProbe.failureThreshold` | LivenessProbe `failureThreshold` for the admin deployment| `3` |
 | `curity.admin.livenessProbe.periodSeconds` | LivenessProbe `periodSeconds` for the admin deployment | `10` |
@@ -79,8 +81,11 @@ In the table below you can find information about the parameters that are config
 | `curity.admin.logging.logs` | Array of the extra containers that will be included in the admin pod | `[]` |
 | `curity.admin.logging.image` | The image that will be used to create the logging containers | `busybox:latest` |
 | `curity.runtime.role` | The role of the runtime servers | `default` |
+| `curity.runtime.annotations` | Extra annotations to add to the runtime deployment | `default` |
+| `curity.runtime.initContainers` | Definition of initContainers for the runtime service | `[]` |
 | `curity.runtime.service.type` | The runtime service type | `ClusterIP` |
 | `curity.runtime.service.port` | The runtime service port | `8443` |
+| `curity.runtime.service.annotations` | Extra annotations to add to the runtime service | `{}` |
 | `curity.runtime.deployment.port` | The runtime deployment port| `8443` |
 | `curity.runtime.extraEnv` | Extra environment variables to provide to the runtime container | `[]` |
 | `curity.runtime.serviceAccount.name`| The name of an existing service account to use on the runtime nodes. Defaults to `default` if not specified.  | `null` |
