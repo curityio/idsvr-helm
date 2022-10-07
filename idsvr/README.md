@@ -119,6 +119,12 @@ In the table below you can find information about the parameters that are config
 | `ingress.admin.host` | Hostname for the admin server (used by the Ingress resource) | `curity-admin.local` |
 | `ingress.admin.secretName` | Secret which contains the tls cert and key for the runtime TLS connection. If not set, the Ingress resource will be configured for HTTP | `null` |
 | `resources` | Resource limits applied in admin and runtime deployments | `{}` |
+| `autoscaling.enabled` |  | `false` |
+| `autoscaling.minReplicas` | Minimum number of replicas | `1` |
+| `autoscaling.maxReplicas` | Maximum number of replicas | `10` |
+| `autoscaling.targetCPUUtilizationPercentage` | CPU Utilization persentage that triggers scaling up | `80` |
+| `autoscaling.targetMemoryUtilizationPercentage` | Memory Utilization persentage that triggers scaling up | `` |
+| `autoscaling.customMetrics` | Custom metric definition | `[]` |
 | `nodeSelector` | Node selector applied in admin and runtime deployments | `{}` |
 | `tolerations` | Tolerations applied in admin and runtime deployments | `{}` |
 | `affinity` | Affinity applied in admin and runtime deployments| `{}` |
