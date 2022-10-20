@@ -104,7 +104,6 @@ curity:
 #        - confsvc
 #        - confsvc-internal
 #        - post-commit-scripts
-    resources: {}
 
   config:
     uiEnabled: false
