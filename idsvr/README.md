@@ -47,10 +47,10 @@ the [Curity Resource library](https://curity.io/resources/tutorials/getting-star
 In the table below you can find information about the parameters that are configurable in this chart.
 
 | Parameter | Description | Default |
-| --------- | ----------- | ------- |
+| --------- | ----------- |----------------------------------|
 | `replicaCount` | The number of runtime nodes to be deployed | `1` |
 | `image.repository` | Image repository | `curity.azurecr.io/curity/idsvr` |
-| `image.tag` | Image tag| `7.4.0` |
+| `image.tag` | Image tag| `7.4.2` |
 | `image.pullPolicy` | The policy to be applied in the deployment | `IfNotPresent` |
 | `image.pullSecret` | The secret that is used to fetch images from the docker registry | `null` |
 | `nameOverride` | Override the name release name used in labels and selectors. If left blank it will be `idsvr` | `""` |
@@ -80,6 +80,7 @@ In the table below you can find information about the parameters that are config
 | `curity.admin.logging.stdout` | Flag to enable/disable extra containers that tail the logs in `var/log` folder | `false` |
 | `curity.admin.logging.logs` | Array of the extra containers that will be included in the admin pod | `[]` |
 | `curity.admin.logging.image` | The image that will be used to create the logging containers | `busybox:latest` |
+| `curity.admin.resources` | Resource limits applied in admin deployment. When set overrides `resources` settings only on the admin node. | `{}` |
 | `curity.runtime.role` | The role of the runtime servers | `default` |
 | `curity.runtime.annotations` | Extra annotations to add to the runtime deployment | `default` |
 | `curity.runtime.initContainers` | Definition of initContainers for the runtime service | `[]` |
@@ -88,7 +89,7 @@ In the table below you can find information about the parameters that are config
 | `curity.runtime.service.annotations` | Extra annotations to add to the runtime service | `{}` |
 | `curity.runtime.deployment.port` | The runtime deployment port| `8443` |
 | `curity.runtime.extraEnv` | Extra environment variables to provide to the runtime container | `[]` |
-| `curity.runtime.serviceAccount.name`| The name of an existing service account to use on the runtime nodes. Defaults to `default` if not specified.  | `null` |
+| `curity.runtime.serviceAccount.name`| The name of an existing service account to use on the runtime nodes. Defaults to `default` if not specified. | `null` |
 | `curity.runtime.livenessProbe.timeoutSeconds` | LivenessProbe `timeoutSeconds` for the runtime deployment | `1` |
 | `curity.runtime.livenessProbe.failureThreshold` | LivenessProbe `failureThreshold` for the runtime deployment | `3` |
 | `curity.runtime.livenessProbe.periodSeconds` | LivenessProbe `periodSeconds` for the runtime deployment | `10` |
@@ -124,9 +125,16 @@ In the table below you can find information about the parameters that are config
 | `ingress.admin.host` | Hostname for the admin server (used by the Ingress resource) | `curity-admin.local` |
 | `ingress.admin.secretName` | Secret which contains the tls cert and key for the runtime TLS connection. If not set, the Ingress resource will be configured for HTTP | `null` |
 | `resources` | Resource limits applied in admin and runtime deployments | `{}` |
+| `autoscaling.enabled` | | `false` |
+| `autoscaling.minReplicas` | Minimum number of replicas | `1` |
+| `autoscaling.maxReplicas` | Maximum number of replicas | `10` |
+| `autoscaling.targetCPUUtilizationPercentage` | CPU Utilization persentage that triggers scaling up | `80` |
+| `autoscaling.targetMemoryUtilizationPercentage` | Memory Utilization persentage that triggers scaling up | `` |
+| `autoscaling.customMetrics` | Custom metric definition | `[]` |
 | `nodeSelector` | Node selector applied in admin and runtime deployments | `{}` |
 | `tolerations` | Tolerations applied in admin and runtime deployments | `{}` |
 | `affinity` | Affinity applied in admin and runtime deployments| `{}` |
+
 
 <b id="f1">1</b> The network policy within the cluster will not have any affect unless there is a network policy
 provider that can enforce network policies. Check out kubernetes official documentation for more guidance on how to

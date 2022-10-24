@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: curity.azurecr.io/curity/idsvr
-  tag: 7.4.0
+  tag: 7.4.2
   pullPolicy: IfNotPresent
   pullSecret:
 
@@ -61,7 +61,7 @@ curity:
 #        - confsvc
 #        - confsvc-internal
 #        - post-commit-scripts
-
+    resources: {}
 
   runtime:
     role: default
@@ -171,6 +171,21 @@ resources: {}
 #   requests:
 #     cpu: 100m
 #     memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+  customMetrics: []
+#    - type: External
+#      external:
+#        metric:
+#          name: idsvr_http_server_request_rate
+#        target:
+#          type: Value
+#          value: 100m
 
 nodeSelector: {}
 
