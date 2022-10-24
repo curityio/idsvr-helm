@@ -78,6 +78,7 @@ In the table below you can find information about the parameters that are config
 | `curity.admin.logging.stdout` | Flag to enable/disable extra containers that tail the logs in `var/log` folder | `false`                          |
 | `curity.admin.logging.logs` | Array of the extra containers that will be included in the admin pod | `[]`                             |
 | `curity.admin.logging.image` | The image that will be used to create the logging containers | `busybox:latest`                 |
+| `curity.admin.resources` | Resource limits applied in admin deployment. When set overrides `resources` settings only on the admin node. | `{}` |
 | `curity.runtime.role` | The role of the runtime servers | `default`                        |
 | `curity.runtime.service.type` | The runtime service type | `ClusterIP`                      |
 | `curity.runtime.service.port` | The runtime service port | `8443`                           |
