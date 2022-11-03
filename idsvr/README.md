@@ -131,6 +131,10 @@ In the table below you can find information about the parameters that are config
 | `autoscaling.targetCPUUtilizationPercentage` | CPU Utilization persentage that triggers scaling up | `80` |
 | `autoscaling.targetMemoryUtilizationPercentage` | Memory Utilization persentage that triggers scaling up | `` |
 | `autoscaling.customMetrics` | Custom metric definition | `[]` |
+| `postHook.enabled` | Enable post hook e.g. for to post message on slack or other | `false`|
+| `postHook.image` | Specifies which image to use for post hook container | `curlimages/curl:latest` |
+| `postHook.args` | List of arguments. Default command is _/bin/sh_| `[]` |
+| `postHook.extraEnv` | Extra environment variables to provide to the posthook container | `[]` |
 | `nodeSelector` | Node selector applied in admin and runtime deployments | `{}` |
 | `tolerations` | Tolerations applied in admin and runtime deployments | `{}` |
 | `affinity` | Affinity applied in admin and runtime deployments| `{}` |
@@ -227,6 +231,32 @@ curity:
             path: configuration.xml
 
 ```
+
+## Post hook container
+
+Enable the post hook `postHook.enabbled=true` to start a post hook container. 
+
+Example: Post message to slack.
+
+``` 
+    postHook:
+      enabled: true
+      image: nexus.hh.atg.se:17000/curlimages/curl:7.79.1
+      args:
+        - -ec
+        - curl -X POST --data-urlencode 'payload={"username":"HelmRelease","text":"`$(APP_NAME)`, version `$(APP_VERSION)` (`$(CHART_NAME)` ) in `$(RELEASE_NAMESPACE)` has been deployed"}' "$(SLACK_WEBHOOK_URL)"
+      extraEnv:
+        - name: SLACK_WEBHOOK_URL
+          valueFrom:
+            secretKeyRef:
+              key: SLACK_WEBHOOK_URL
+              name: curity-idsvr-secret
+```
+Built in variables are that are exposed as environment variables in post hook container :
+- `APP_NAME` - Curity fullname
+- `APP_VERSION` - Image tag
+- `CHART_NAME` - Chart name and version
+- `RELEASE_NAMESPACE` - Target namespace
 
 ## More Information
 

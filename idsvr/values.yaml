@@ -187,6 +187,19 @@ autoscaling:
 #          type: Value
 #          value: 100m
 
+postHook:
+  enabled: false
+  image: curlimages/curl:latest
+  args: []
+#    - -ec
+#    - curl -X POST --data-urlencode 'payload={"username":"HelmRelease","text":"`$(APP_NAME)`, version `$(APP_VERSION)` (`$(CHART_NAME)` ) in `$(RELEASE_NAMESPACE)` has been deployed"}' "$(SLACK_WEBHOOK_URL)"
+  extraEnv: []
+#    - name: SLACK_WEBHOOK_URL
+#      valueFrom:
+#        secretKeyRef:
+#          key: SLACK_WEBHOOK_URL
+#          name: curity-idsvr-secret
+
 nodeSelector: {}
 
 tolerations: []
