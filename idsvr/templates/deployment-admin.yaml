@@ -43,7 +43,7 @@ spec:
             {{- end }}
             {{- if .Values.curity.config.skipInstall }}
             - name: SKIP_INSTALL
-              value: 1
+              value: "1"
             {{- end }}
             - name: STATUS_CMD_PORT
               value: {{ .Values.curity.healthCheckPort | quote }}
