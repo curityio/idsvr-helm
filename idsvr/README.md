@@ -61,12 +61,16 @@ In the table below you can find information about the parameters that are config
 | `curity.adminUiPort` | The admin UI and API port. Ignored if `curity.config.uiEnabled=false` | `6749` |
 | `curity.adminUiHttp` | Controls if admin UI will be on http or https mode after installation if enabled. Ignored if `curity.config.uiEnabled=false` | `false` |
 | `curity.admin.annotations` | Extra annotations to add to the admin deployment | `{}` |
+| `curity.admin.podLabels` | Extra labels to add to the admin pod | `{}` |
+| `curity.admin.podAnnotations` | Extra annotations to add to the admin pod | `{}` |
 | `curity.admin.role` | The role of the admin server | `admin` |
 | `curity.admin.service.type` | The admin service type | `ClusterIP` |
 | `curity.admin.service.port` | The admin configuration port | `6789` |
 | `curity.admin.service.annotations` | Extra annotations to add to the admin service | `{}` |
 | `curity.admin.extraEnv` | Extra environment variables to provide to the admin container | `[]` |
 | `curity.admin.initContainers` | Definition of initContainers for the admin service | `[]` |
+| `curity.admin.extraVolumes` | Extra volumes to add to the admin pod | `[]` |
+| `curity.admin.extraVolumeMounts` | Extra volumes to mount in the admin container | `[]` |
 | `curity.admin.livenessProbe.timeoutSeconds` | LivenessProbe `timeoutSeconds` for the admin deployment | `1` |
 | `curity.admin.livenessProbe.failureThreshold` | LivenessProbe `failureThreshold` for the admin deployment| `3` |
 | `curity.admin.livenessProbe.periodSeconds` | LivenessProbe `periodSeconds` for the admin deployment | `10` |
@@ -83,7 +87,11 @@ In the table below you can find information about the parameters that are config
 | `curity.admin.resources` | Resource limits applied in admin deployment. When set overrides `resources` settings only on the admin node. | `{}` |
 | `curity.runtime.role` | The role of the runtime servers | `default` |
 | `curity.runtime.annotations` | Extra annotations to add to the runtime deployment | `default` |
+| `curity.runtime.podLabels` | Extra labels to add to the runtime pod | `{}` |
+| `curity.runtime.podAnnotations` | Extra annotations to add to the runtime pod | `{}` |
 | `curity.runtime.initContainers` | Definition of initContainers for the runtime service | `[]` |
+| `curity.runtime.extraVolumes` | Extra volumes to add to the runtime pod | `[]` |
+| `curity.runtime.extraVolumeMounts` | Extra volumes to mount in the runtime container | `[]` |
 | `curity.runtime.service.type` | The runtime service type | `ClusterIP` |
 | `curity.runtime.service.port` | The runtime service port | `8443` |
 | `curity.runtime.service.annotations` | Extra annotations to add to the runtime service | `{}` |
