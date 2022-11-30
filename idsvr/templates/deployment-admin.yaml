@@ -21,11 +21,17 @@ spec:
     metadata:
       labels:
         {{- include "curity.labels" . | nindent 8 }}
+        {{- if .Values.curity.admin.podLabels }}
+              {{- .Values.curity.admin.podLabels | toYaml | nindent 8 }}
+        {{- end }}
         role: {{ include "curity.fullname" . }}-admin
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/path: /metrics
         prometheus.io/port: {{ include "curity.metricsPort" . | quote }}
+        {{- if .Values.curity.admin.podAnnotations }}
+              {{- .Values.curity.admin.podAnnotations | toYaml | nindent 8 }}
+        {{- end }}
     spec:
       containers:
         - name: {{ .Chart.Name }}-admin
@@ -164,6 +170,9 @@ spec:
             {{- end }}
             {{- end }}
             {{- end }}
+            {{- if .Values.curity.admin.extraVolumeMounts }}
+                    {{- .Values.curity.admin.extraVolumeMounts | toYaml | nindent 12 }}
+            {{- end }}
           resources:
            {{- if .Values.curity.admin.resources }}
                {{- toYaml .Values.curity.admin.resources | nindent 12 }}
@@ -242,6 +251,9 @@ spec:
                 path: {{ $confItem.path }}
               {{- end }}
         {{- end }}
+        {{- end }}
+        {{- if .Values.curity.admin.extraVolumes }}
+              {{- .Values.curity.admin.extraVolumes | toYaml | nindent 8 }}
         {{- end }}
       {{- if .Values.curity.config.backup }}
       serviceAccountName: {{ include "curity.fullname" . }}-service-account
