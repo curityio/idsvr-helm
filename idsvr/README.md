@@ -134,6 +134,7 @@ In the table below you can find information about the parameters that are config
 | `postHook.enabled` | Enable post hook e.g. for to post message on slack or other | `false`|
 | `postHook.image` | Specifies which image to use for post hook container | `curlimages/curl:latest` |
 | `postHook.args` | List of arguments. Default command is _/bin/sh_| `[]` |
+| `postHook.command` | The command for the posthook container | `/bin/sh` |
 | `postHook.extraEnv` | Extra environment variables to provide to the posthook container | `[]` |
 | `nodeSelector` | Node selector applied in admin and runtime deployments | `{}` |
 | `tolerations` | Tolerations applied in admin and runtime deployments | `{}` |
@@ -234,7 +235,7 @@ curity:
 
 ## Post hook container
 
-Enable the post hook `postHook.enabbled=true` to start a post hook container. 
+Enable the post hook `postHook.enabled=true` to start a post hook container. 
 
 Example: Post message to slack.
 
