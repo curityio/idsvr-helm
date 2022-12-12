@@ -1,0 +1,53 @@
+{{- if .Values.postHook.enabled -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "curity.fullname" . }}-post-hook
+  labels:
+    chart: {{ include "curity.chart" . }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "10"
+spec:
+  backoffLimit: 1
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: {{ include "curity.fullname" . }}-post-hook
+          image: {{ .Values.postHook.image }}
+        {{- if hasKey .Values.postHook "command" }}
+          command:
+          {{- range .Values.postHook.command }}
+            - {{ . }}
+          {{- end }}
+        {{- else }}
+          command:
+            - /bin/sh
+        {{- end }}
+          args:
+        {{- if hasKey .Values.postHook "args" }}
+          {{- range .Values.postHook.args }}
+            - {{ . }}
+          {{- end }}
+        {{- end }}
+          env:
+            - name: APP_NAME
+              value: {{ include "curity.fullname" . }}
+            - name: APP_VERSION
+              value: {{ .Values.image.tag }}
+            - name: CHART_NAME
+              value: {{ include "curity.chart" . }}
+            - name: RELEASE_NAMESPACE
+              value: {{ .Release.Namespace }}
+        {{- range $env := .Values.postHook.extraEnv }}
+            - name: {{ $env.name }}
+          {{- if $env.value }}
+              value: {{ $env.value | quote }}
+          {{- end }}
+          {{- if $env.valueFrom }}
+              valueFrom: {{ $env.valueFrom | toYaml | trim | nindent 16 }}
+          {{- end }}
+        {{- end }}
+{{- end }}
