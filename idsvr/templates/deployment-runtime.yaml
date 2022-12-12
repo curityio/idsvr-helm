@@ -21,11 +21,17 @@ spec:
     metadata:
       labels:
         {{- include "curity.labels" . | nindent 8 }}
+        {{- if .Values.curity.runtime.podLabels }}
+              {{- .Values.curity.runtime.podLabels | toYaml | nindent 8 }}
+        {{- end }}
         role: {{ include "curity.fullname" . }}-runtime
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/path: /metrics
         prometheus.io/port: {{ include "curity.metricsPort" . | quote }}
+        {{- if .Values.curity.runtime.podAnnotations }}
+              {{- .Values.curity.runtime.podAnnotations | toYaml | nindent 8 }}
+        {{- end }}
     spec:
       containers:
         - name: {{ .Chart.Name }}-runtime
@@ -138,6 +144,9 @@ spec:
             {{- end }}
             {{- end }}
             {{- end }}
+            {{- if .Values.curity.runtime.extraVolumeMounts }}
+                    {{- .Values.curity.runtime.extraVolumeMounts | toYaml | nindent 12 }}
+            {{- end }}
           resources:
                 {{- toYaml .Values.resources | nindent 12 }}
         {{- if .Values.curity.runtime.logging.stdout }}
@@ -203,6 +212,9 @@ spec:
                 path: {{ $confItem.path }}
               {{- end }}
         {{- end }}
+        {{- end }}
+        {{- if .Values.curity.runtime.extraVolumes }}
+              {{- .Values.curity.runtime.extraVolumes | toYaml | nindent 8 }}
         {{- end }}
       serviceAccountName: {{ template "curity.runtime.serviceAccountName" . }}
       {{- with .Values.curity.runtime.initContainers }}
