@@ -14,7 +14,11 @@ spec:
   tls:
     {{- if .Values.ingress.runtime.secretName }}
     - hosts:
+      {{- if .Values.ingress.runtime.tlsHost }}
+        - {{ .Values.ingress.runtime.tlsHost | quote }}
+      {{- else }}
         - {{ .Values.ingress.runtime.host }}
+      {{- end }}
       secretName: {{ .Values.ingress.runtime.secretName }}
     {{- end }}
 {{- end }}
@@ -48,7 +52,11 @@ spec:
   tls:
     {{- if .Values.ingress.admin.secretName }}
     - hosts:
+      {{- if .Values.ingress.admin.tlsHost }}
+        - {{ .Values.ingress.admin.tlsHost | quote }}
+      {{- else }}
         - {{ .Values.ingress.admin.host}}
+      {{- end }}
       secretName: {{ .Values.ingress.admin.secretName }}
     {{- end }}
 {{- end }}
