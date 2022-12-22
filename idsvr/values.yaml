@@ -15,6 +15,9 @@ fullnameOverride: ""
 labels: {}
 networkpolicy:
   enabled: true
+  postgresql:
+    enabled: false
+    cidr: []
 
 curity:
   healthCheckPort: 4465

@@ -9,6 +9,9 @@ spec:
       role: {{ include "curity.fullname" . }}-admin
   policyTypes:
     - Ingress
+  {{- if .Values.networkpolicy.postgresql.enabled }}
+    - Egress
+  {{- end }}
   ingress:
     - from:
         - podSelector:
@@ -17,4 +20,37 @@ spec:
       ports:
         - protocol: TCP
           port: {{ .Values.curity.admin.service.port }}
+  {{- if .Values.networkpolicy.postgresql.enabled }}
+  egress:
+    - to
+    {{- range .Values.networkpolicy.postgresql.cidr }}
+      - ipBlock:
+          cidr: {{ . }}
+    {{- end }}
+      ports:
+        - protocol: TCP
+          port: 5432
+  {{- end }}
+{{- if .Values.networkpolicy.postgresql.enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "curity.fullname" . }}-network-policy-runtime
+spec:
+  podSelector:
+    matchLabels:
+      role: {{ include "curity.fullname" . }}-runtime
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+    {{- range .Values.networkpolicy.postgresql.cidr }}
+      - ipBlock:
+          cidr: {{ . }}
+    {{- end }}
+      ports:
+        - protocol: TCP
+          port: 5432
+{{- end }}
 {{- end }}
