@@ -81,6 +81,9 @@ curity:
       annotations: {}
     serviceAccount:
       name:
+    podDisruptionBudget:
+      minAvailable: 1
+      # maxUnavailable: 1
     deployment:
       port: 8443
     livenessProbe:
