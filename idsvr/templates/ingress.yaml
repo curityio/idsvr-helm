@@ -5,10 +5,18 @@ metadata:
   name: {{ include "curity.fullname" . }}-ingress
   labels:
         {{- include "curity.labels" . | nindent 4 }}
-        {{- with .Values.ingress.annotations }}
+    {{- if or .Values.ingress.runtime.annotations .Values.ingress.annotations }}
   annotations:
+      {{- if .Values.ingress.runtime.annotations }}
+        {{- with .Values.ingress.runtime.annotations }}
         {{- toYaml . | nindent 4 }}
         {{- end }}
+      {{- else }}
+        {{- with .Values.ingress.annotations }}
+        {{- toYaml . | nindent 4 }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
 spec:
 {{- if .Values.ingress.runtime.secretName }}
   tls:
@@ -43,10 +51,18 @@ metadata:
   name: {{ include "curity.fullname" . }}-ingress-admin
   labels:
         {{- include "curity.labels" . | nindent 4 }}
-        {{- with .Values.ingress.annotations }}
+    {{- if or .Values.ingress.admin.annotations .Values.ingress.annotations }}
   annotations:
+      {{- if .Values.ingress.admin.annotations }}
+        {{- with .Values.ingress.admin.annotations }}
         {{- toYaml . | nindent 4 }}
         {{- end }}
+      {{- else }}
+        {{- with .Values.ingress.annotations }}
+        {{- toYaml . | nindent 4 }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
 spec:
 {{- if .Values.ingress.admin.secretName }}
   tls:
