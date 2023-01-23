@@ -1,4 +1,4 @@
-# Curity Helm ChartChart7
+# Curity Helm
 
 ## Introduction
 
