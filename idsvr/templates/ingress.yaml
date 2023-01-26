@@ -1,4 +1,4 @@
-{{- if .Values.ingress.enabled -}}
+{{- if .Values.ingress.runtime.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -8,13 +8,9 @@ metadata:
     {{- if or .Values.ingress.runtime.annotations .Values.ingress.annotations }}
   annotations:
       {{- if .Values.ingress.runtime.annotations }}
-        {{- with .Values.ingress.runtime.annotations }}
-        {{- toYaml . | nindent 4 }}
-        {{- end }}
+        {{- toYaml .Values.ingress.runtime.annotations | nindent 4}}
       {{- else }}
-        {{- with .Values.ingress.annotations }}
-        {{- toYaml . | nindent 4 }}
-        {{- end }}
+        {{- toYaml .Values.ingress.annotations | nindent 4 }}
       {{- end }}
     {{- end }}
 spec:
@@ -23,7 +19,7 @@ spec:
     {{- if .Values.ingress.runtime.secretName }}
     - hosts:
       {{- if .Values.ingress.runtime.tlsHost }}
-        - {{ .Values.ingress.runtime.tlsHost | quote }}
+        - {{ .Values.ingress.runtime.tlsHost }}
       {{- else }}
         - {{ .Values.ingress.runtime.host }}
       {{- end }}
@@ -36,14 +32,15 @@ spec:
         paths:
           {{- range .Values.ingress.runtime.paths }}
           - path: {{ . }}
-            pathType: ImplementationSpecific
+            pathType: {{ .Values.ingress.runtime.pathType }}
             backend:
               service:
                 name: {{ include "curity.fullname" $ }}-runtime-svc
                 port:
                   name: http-port
           {{- end }}
-{{- if .Values.curity.config.uiEnabled }}
+{{- end }}
+{{- if .Values.ingress.admin.enabled }}
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -54,13 +51,9 @@ metadata:
     {{- if or .Values.ingress.admin.annotations .Values.ingress.annotations }}
   annotations:
       {{- if .Values.ingress.admin.annotations }}
-        {{- with .Values.ingress.admin.annotations }}
-        {{- toYaml . | nindent 4 }}
-        {{- end }}
+        {{- toYaml .Values.ingress.admin.annotations | nindent 4 }}
       {{- else }}
-        {{- with .Values.ingress.annotations }}
-        {{- toYaml . | nindent 4 }}
-        {{- end }}
+        {{- toYaml .Values.ingress.annotations | nindent 4 }}
       {{- end }}
     {{- end }}
 spec:
@@ -69,7 +62,7 @@ spec:
     {{- if .Values.ingress.admin.secretName }}
     - hosts:
       {{- if .Values.ingress.admin.tlsHost }}
-        - {{ .Values.ingress.admin.tlsHost | quote }}
+        - {{ .Values.ingress.admin.tlsHost }}
       {{- else }}
         - {{ .Values.ingress.admin.host}}
       {{- end }}
@@ -81,11 +74,10 @@ spec:
       http:
         paths:
           - path: /
-            pathType: ImplementationSpecific
+            pathType: {{ .Values.ingress.admin.pathType }}
             backend:
               service:
                 name: {{ include "curity.fullname" . }}-admin-svc
                 port:
                   name: admin-ui
-{{- end }}
 {{- end }}

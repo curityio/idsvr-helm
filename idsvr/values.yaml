@@ -155,21 +155,29 @@ curity:
 #            key: KEYSTORE_PASSWORD
 
 ingress:
-  enabled: false
   annotations: {}
 #     kubernetes.io/ingress.class: nginx
 #     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 #     kubernetes.io/tls-acme: "true"
   runtime:
+    enabled: false
+    tlsHost:
     host: curity.local
+    annotations: {}
     secretName:
     paths:
       - /
-    # annotations: {}
+    pathType: ImplementationSpecific
+
   admin:
+    enabled: false
+    tlsHost:
     host: curity-admin.local
+    annotations: {}
     secretName:
-    # annotations: {}
+    paths:
+      - /
+    pathType: ImplementationSpecific
 
 logging:
   resources: {}
