@@ -90,6 +90,8 @@ In the table below you can find information about the parameters that are config
 | `curity.runtime.annotations` | Extra annotations to add to the runtime deployment | `default` |
 | `curity.runtime.podLabels` | Extra labels to add to the runtime pod | `{}` |
 | `curity.runtime.podAnnotations` | Extra annotations to add to the runtime pod | `{}` |
+| `curity.podDisruptionBudget.minAvailable` | Number of pods from that set that must still be available after the eviction, can be either an absolute number or a percentage. | `` |
+| `curity.podDisruptionBudget.maxUnavailable` | Number of runtime pods that can be unavailable after the eviction, can be either an absolute number or a percentage. | `` |
 | `curity.runtime.initContainers` | Definition of initContainers for the runtime service | `[]` |
 | `curity.runtime.extraVolumes` | Extra volumes to add to the runtime pod | `[]` |
 | `curity.runtime.extraVolumeMounts` | Extra volumes to mount in the runtime container | `[]` |

@@ -1,3 +1,4 @@
+{{- if or .Values.curity.runtime.podDisruptionBudget.maxUnavailable .Values.curity.runtime.podDisruptionBudget.minAvailable }}
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:

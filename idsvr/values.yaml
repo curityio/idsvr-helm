@@ -82,8 +82,8 @@ curity:
     serviceAccount:
       name:
     podDisruptionBudget:
-      minAvailable: 1
-      # maxUnavailable: 1
+      minAvailable:
+      maxUnavailable:
     deployment:
       port: 8443
     livenessProbe:
