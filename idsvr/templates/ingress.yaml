@@ -5,21 +5,28 @@ metadata:
   name: {{ include "curity.fullname" . }}-ingress
   labels:
         {{- include "curity.labels" . | nindent 4 }}
-        {{- with .Values.ingress.annotations }}
+    {{- if or .Values.ingress.runtime.annotations .Values.ingress.annotations }}
   annotations:
+      {{- if .Values.ingress.runtime.annotations }}
+        {{- with .Values.ingress.runtime.annotations }}
         {{- toYaml . | nindent 4 }}
         {{- end }}
-spec:
-{{- if or .Values.ingress.admin.secretName .Values.ingress.runtime.secretName }}
-  tls:
-    {{- if .Values.ingress.admin.secretName }}
-    - hosts:
-        - {{ .Values.ingress.admin.host}}
-      secretName: {{ .Values.ingress.admin.secretName }}
+      {{- else }}
+        {{- with .Values.ingress.annotations }}
+        {{- toYaml . | nindent 4 }}
+        {{- end }}
+      {{- end }}
     {{- end }}
+spec:
+{{- if .Values.ingress.runtime.secretName }}
+  tls:
     {{- if .Values.ingress.runtime.secretName }}
     - hosts:
-        - {{ .Values.ingress.runtime.host}}
+      {{- if .Values.ingress.runtime.tlsHost }}
+        - {{ .Values.ingress.runtime.tlsHost | quote }}
+      {{- else }}
+        - {{ .Values.ingress.runtime.host }}
+      {{- end }}
       secretName: {{ .Values.ingress.runtime.secretName }}
     {{- end }}
 {{- end }}
@@ -36,7 +43,40 @@ spec:
                 port:
                   name: http-port
           {{- end }}
-  {{- if .Values.curity.config.uiEnabled }}
+{{- if .Values.curity.config.uiEnabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "curity.fullname" . }}-ingress-admin
+  labels:
+        {{- include "curity.labels" . | nindent 4 }}
+    {{- if or .Values.ingress.admin.annotations .Values.ingress.annotations }}
+  annotations:
+      {{- if .Values.ingress.admin.annotations }}
+        {{- with .Values.ingress.admin.annotations }}
+        {{- toYaml . | nindent 4 }}
+        {{- end }}
+      {{- else }}
+        {{- with .Values.ingress.annotations }}
+        {{- toYaml . | nindent 4 }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+spec:
+{{- if .Values.ingress.admin.secretName }}
+  tls:
+    {{- if .Values.ingress.admin.secretName }}
+    - hosts:
+      {{- if .Values.ingress.admin.tlsHost }}
+        - {{ .Values.ingress.admin.tlsHost | quote }}
+      {{- else }}
+        - {{ .Values.ingress.admin.host}}
+      {{- end }}
+      secretName: {{ .Values.ingress.admin.secretName }}
+    {{- end }}
+{{- end }}
+  rules:
     - host: {{ .Values.ingress.admin.host }}
       http:
         paths:
@@ -47,5 +87,5 @@ spec:
                 name: {{ include "curity.fullname" . }}-admin-svc
                 port:
                   name: admin-ui
-  {{- end }}
+{{- end }}
 {{- end }}

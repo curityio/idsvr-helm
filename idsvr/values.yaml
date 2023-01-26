@@ -165,9 +165,11 @@ ingress:
     secretName:
     paths:
       - /
+    # annotations: {}
   admin:
     host: curity-admin.local
     secretName:
+    # annotations: {}
 
 logging:
   resources: {}
