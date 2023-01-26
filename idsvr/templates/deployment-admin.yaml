@@ -191,6 +191,8 @@ spec:
             - name: log-volume
               mountPath: /log
               readOnly: true
+          resources:
+                {{- toYaml $root.Values.logging.resources | nindent 12 }}
         {{- end }}
         {{- end }}
       {{- if .Values.image.pullSecret }}
