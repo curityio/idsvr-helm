@@ -1,0 +1,19 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "curity.fullname" . }}-runtime
+  labels:
+    {{- include "curity.labels" . | nindent 4 }}
+    role: {{ include "curity.fullname" . }}-runtime
+spec:
+  {{- if .Values.curity.runtime.podDisruptionBudget.maxUnavailable }}
+  maxUnavailable: {{ .Values.curity.runtime.podDisruptionBudget.maxUnavailable }}
+  {{- end }}
+  {{- if .Values.curity.runtime.podDisruptionBudget.minAvailable }}
+  minAvailable: {{ .Values.curity.runtime.podDisruptionBudget.minAvailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "curity.labels" . | nindent 6 }}
+      role: {{ include "curity.fullname" . }}-runtime
+{{- end }}
