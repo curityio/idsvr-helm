@@ -192,7 +192,11 @@ spec:
               mountPath: /log
               readOnly: true
           resources:
-                {{- toYaml $root.Values.logging.resources | nindent 12 }}
+           {{- if .Values.curity.admin.logging.resources }}
+               {{- toYaml .Values.curity.admin.logging.resources | nindent 12 }}
+           {{- else }}
+               {{- toYaml .Values.logging.resources | nindent 12 }}
+           {{- end }}
         {{- end }}
         {{- end }}
       {{- if .Values.image.pullSecret }}

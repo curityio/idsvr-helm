@@ -84,6 +84,7 @@ In the table below you can find information about the parameters that are config
 | `curity.admin.logging.stdout` | Flag to enable/disable extra containers that tail the logs in `var/log` folder | `false` |
 | `curity.admin.logging.logs` | Array of the extra containers that will be included in the admin pod | `[]` |
 | `curity.admin.logging.image` | The image that will be used to create the logging containers | `busybox:latest` |
+| `curity.admin.logging.resources` | Resource limits applied in logging containers. When set overrides `logging.resources` settings only on the admin node. | `{}` |
 | `curity.admin.resources` | Resource limits applied in admin deployment. When set overrides `resources` settings only on the admin node. | `{}` |
 | `curity.runtime.role` | The role of the runtime servers | `default` |
 | `curity.runtime.annotations` | Extra annotations to add to the runtime deployment | `default` |
@@ -111,6 +112,7 @@ In the table below you can find information about the parameters that are config
 | `curity.runtime.logging.stdout` | Flag to enable/disable extra containers that tail the logs in `var/log` folder. | `false` |
 | `curity.runtime.logging.logs` | Array of the extra containers that will be included in the runtime pods | `[]` |
 | `curity.runtime.logging.image` | The image that will be used to create the logging containers | `busybox:latest` |
+| `curity.runtime.logging.resources` | Resource limits applied in logging containers. When set overrides `logging.resources` settings only on the runtime nodes. | `{}` |
 | `curity.config.uiEnabled` | Flag to enable/disable the service for Admin UI and Admin REST API | `false` |
 | `curity.config.password` | The administrator password. Required if `curity.config.skipInstall` is `true` or `curity.config.environmentVariableSecrets` and `curity.config.configuration`is not set | `null` |
 | `curity.config.skipInstall` | If set to `true` the installer script will not run<sup>[3](#f3)</sup> | `false`|
@@ -133,6 +135,7 @@ In the table below you can find information about the parameters that are config
 | `ingress.admin.host` | Hostname for the admin server (used by the Ingress resource) | `curity-admin.local` |
 | `ingress.admin.secretName` | Secret which contains the tls cert and key for the runtime TLS connection. If not set, the Ingress resource will be configured for HTTP | `null` |
 | `resources` | Resource limits applied in admin and runtime deployments | `{}` |
+| `logging.resources` | Resource limits applied in admin and runtime deployments logging containers | `{}` |
 | `autoscaling.enabled` | | `false` |
 | `autoscaling.minReplicas` | Minimum number of replicas | `1` |
 | `autoscaling.maxReplicas` | Maximum number of replicas | `10` |
