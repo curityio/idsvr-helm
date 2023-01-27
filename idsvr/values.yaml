@@ -15,8 +15,9 @@ fullnameOverride: ""
 labels: {}
 networkpolicy:
   enabled: true
-  postgresql:
+  database:
     enabled: false
+    ports: []
     cidr: []
 
 curity:
