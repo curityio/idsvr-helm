@@ -9,9 +9,6 @@ spec:
       role: {{ include "curity.fullname" . }}-admin
   policyTypes:
     - Ingress
-  {{- if .Values.networkpolicy.database.enabled }}
-    - Egress
-  {{- end }}
   ingress:
     - from:
         - podSelector:
@@ -20,19 +17,6 @@ spec:
       ports:
         - protocol: TCP
           port: {{ .Values.curity.admin.service.port }}
-  {{- if .Values.networkpolicy.database.enabled }}
-  egress:
-    - to
-    {{- range .Values.networkpolicy.database.cidr }}
-      - ipBlock:
-          cidr: {{ . }}
-    {{- end }}
-    {{- range .Values.networkpolicy.database.ports }}
-      ports:
-        - protocol: TCP
-          port: {{ . }}
-    {{- end }}
-  {{- end }}
 {{- if .Values.networkpolicy.database.enabled }}
 ---
 apiVersion: networking.k8s.io/v1
