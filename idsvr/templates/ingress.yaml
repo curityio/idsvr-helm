@@ -32,7 +32,7 @@ spec:
         paths:
           {{- range .Values.ingress.runtime.paths }}
           - path: {{ . }}
-            pathType: {{ .Values.ingress.runtime.pathType }}
+            pathType: {{ $.Values.ingress.runtime.pathType }}
             backend:
               service:
                 name: {{ include "curity.fullname" $ }}-runtime-svc
