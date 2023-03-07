@@ -59,6 +59,7 @@ spec:
       containers:
         - name: {{ include "curity.fullname" . }}-cluster-conf-job
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["sh",  "/opt/idsvr/bin/createConfigSecret.sh"]
           env:
             - name: CONFIG_SERVICE_HOST
