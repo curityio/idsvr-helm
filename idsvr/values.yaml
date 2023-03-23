@@ -22,6 +22,7 @@ curity:
   adminUiHttp: false
 
   admin:
+    enabled: true
     role: admin
     annotations: {}
     podLabels: {}

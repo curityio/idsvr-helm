@@ -1,3 +1,4 @@
+{{- if .Values.curity.admin.enabled }}
 {{- $root := . -}}
 apiVersion: apps/v1
 kind: Deployment
@@ -103,7 +104,7 @@ spec:
             - name: metrics
               containerPort: {{ include "curity.metricsPort" . }}
               protocol: TCP
-          {{- if or .Values.curity.config.uiEnabled .Values.ingress.admin.enabled }}
+          {{- if or .Values.curity.config.uiEnabled (and .Values.ingress.admin.enabled .Values.ingress.admin.enabled) }}
             - name: admin-ui
               containerPort: {{ .Values.curity.adminUiPort }}
               protocol: TCP
@@ -280,3 +281,4 @@ spec:
       tolerations:
             {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end }}

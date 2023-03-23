@@ -60,6 +60,7 @@ In the table below you can find information about the parameters that are config
 | `curity.healthCheckPort` | The port to use for the status server| `4465` |
 | `curity.adminUiPort` | The admin UI and API port. Ignored if `curity.config.uiEnabled=false` and `ingress.admin.enabled=false` | `6749` |
 | `curity.adminUiHttp` | Controls if admin UI will be on http or https mode after installation if enabled. Ignored if `curity.config.uiEnabled=false` | `false` |
+| `curity.admin.enabled` | Whether to have an admin deployment | `{}` |
 | `curity.admin.annotations` | Extra annotations to add to the admin deployment | `{}` |
 | `curity.admin.podLabels` | Extra labels to add to the admin pod | `{}` |
 | `curity.admin.podAnnotations` | Extra annotations to add to the admin pod | `{}` |

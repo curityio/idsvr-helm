@@ -40,7 +40,7 @@ spec:
                   name: http-port
           {{- end }}
 {{- end }}
-{{- if .Values.ingress.admin.enabled }}
+{{- if and .Values.curity.admin.enabled .Values.ingress.admin.enabled }}
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

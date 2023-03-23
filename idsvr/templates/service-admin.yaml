@@ -24,7 +24,7 @@ spec:
       targetPort: metrics
       protocol: TCP
       name: metrics
-    {{- if or .Values.curity.config.uiEnabled .Values.ingress.admin.enabled }}
+    {{- if or .Values.curity.config.uiEnabled (and .Values.curity.admin.enabled .Values.ingress.admin.enabled) }}
     - port: {{ .Values.curity.adminUiPort }}
       targetPort: admin-ui
       protocol: TCP
