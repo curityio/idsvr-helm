@@ -115,6 +115,7 @@ In the table below you can find information about the parameters that are config
 | `curity.runtime.logging.logs` | Array of the extra containers that will be included in the runtime pods | `[]` |
 | `curity.runtime.logging.image` | The image that will be used to create the logging containers | `busybox:latest` |
 | `curity.runtime.logging.resources` | Resource limits applied in logging containers. When set overrides `logging.resources` settings only on the runtime nodes. | `{}` |
+| `curity.runtime.resources` | Resource limits applied in runtime deployment. When set overrides `resources` settings only on the runtime nodes. | `{}` |
 | `curity.config.uiEnabled` | Flag to enable/disable the service for Admin UI and Admin REST API, ignored if `ingress.admin.enabled=true` | `false` |
 | `curity.config.password` | The administrator password. Required if `curity.config.skipInstall` is `true` or `curity.config.environmentVariableSecrets` and `curity.config.configuration`is not set | `null` |
 | `curity.config.skipInstall` | If set to `true` the installer script will not run<sup>[3](#f3)</sup> | `false`|
