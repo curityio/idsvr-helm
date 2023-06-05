@@ -49,6 +49,7 @@ In the table below you can find information about the parameters that are config
 | Parameter | Description | Default |
 | --------- | ----------- |----------------------------------|
 | `replicaCount` | The number of runtime nodes to be deployed | `1` |
+| `revisionHistoryLimit` | The number of old ReplicaSets to retain to allow rollback | `10` |
 | `image.repository` | Image repository | `curity.azurecr.io/curity/idsvr` |
 | `image.tag` | Image tag | `8.2.1` |
 | `image.pullPolicy` | The policy to be applied in the deployment | `IfNotPresent` |
