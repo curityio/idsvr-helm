@@ -3,9 +3,9 @@ entries:
   idsvr:
     - apiVersion: v1
       appVersion: 8.3.0
-      created: "2023-06-16T14:03:12.500742+02:00"
+      created: "2023-06-16T16:56:42.252933+02:00"
       description: A Helm chart for Curity Identity Server
-      digest: 5dd27de572404a0bcf462499eff8bdc21cb846bf01e1a7a73e59ff3b7dc1a62b
+      digest: 8c02ac8199d9584d35479263846ddbf9bac8d30b69a916553bf868f4a0e17fda
       home: https://curity.io
       icon: https://curity.io/images/curity-logo-landscape-white.png
       keywords:
