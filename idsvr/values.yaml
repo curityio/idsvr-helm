@@ -5,6 +5,9 @@
 replicaCount: 1
 revisionHistoryLimit: 10
 
+# Additional annotations of the ServiceAccount.
+serviceAccountAnnotations: {}
+
 image:
   repository: curity.azurecr.io/curity/idsvr
   tag: 8.4.1
