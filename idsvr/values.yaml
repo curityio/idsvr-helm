@@ -161,6 +161,12 @@ curity:
 #            name: curity-idsvr-secret
 #            key: KEYSTORE_PASSWORD
 
+  # WARNING: Adding "custom script" in the post-commit-scripts can break the admin UI, if this work takes a meaningful amount of time (more than 10 or 15 seconds)
+  CustomBackupConfig:
+    enabled: false 
+    # customscript: |
+    #   #!/bin/bash
+
 ingress:
   annotations: {}
 #     kubernetes.io/ingress.class: nginx

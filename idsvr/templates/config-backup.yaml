@@ -14,7 +14,10 @@ metadata:
   labels:
         {{- include "curity.labels" . | nindent 4 }}
 data:
-  backupConfig.sh: |
+  backupConfig.sh: |-
+    {{- if and .Values.curity.CustomBackupConfig.enabled }}
+      {{- .Values.curity.CustomBackupConfig.customscript | indent 4 }}
+    {{- else }}
     #!/bin/bash
 
     CA_CERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
@@ -49,7 +52,5 @@ data:
     EOF
     fi
 
-
+    {{- end }}
 {{- end -}}
-
-
