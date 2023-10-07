@@ -14,10 +14,7 @@ metadata:
   labels:
         {{- include "curity.labels" . | nindent 4 }}
 data:
-  backupConfig.sh: |-
-    {{- if and .Values.curity.CustomBackupConfig.enabled }}
-      {{- .Values.curity.CustomBackupConfig.customscript | indent 4 }}
-    {{- else }}
+  backupConfig.sh: |
     #!/bin/bash
 
     CA_CERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
@@ -52,5 +49,21 @@ data:
     EOF
     fi
 
-    {{- end }}
 {{- end -}}
+
+{{- if .Values.curity.config.configuration }}
+{{- range $conf := .Values.curity.config.configuration }}
+{{- if $conf.postCommit }}
+{{- range $postCommit := $conf.postCommit }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "curity.fullname" . }}-config-script-{{ $postCommit.name }}
+data:
+  script: |
+{{ $postCommit.script | nindent 4 }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
