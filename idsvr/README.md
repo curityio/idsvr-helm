@@ -256,6 +256,32 @@ curity:
 
 ```
 
+## Mount custom script from postCommit
+
+Use the `curity.config.configuration` to mount several files from postCommit into `post-commit-scripts/` folder.
+
+Example:
+
+```
+curity:
+  config:
+    configuration:
+     - secretRef:
+         name: curity-idsvr-config-backup
+         items:
+           - key: latest.xml
+             path: latest.xml
+     - postCommit:
+        - name: custom-script-name-1
+          script: |
+              #!/bin/bash
+     - postCommit:
+        - name: custom-script-name-2
+          script: |
+              #!/bin/bash
+              echo "Run cutom script"
+```
+
 ## Post hook container
 
 Enable the post hook `postHook.enabled=true` to start a post hook container. 

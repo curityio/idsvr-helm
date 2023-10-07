@@ -59,10 +59,11 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "curity.fullname" . }}-config-script-{{ $postCommit.name }}
+  name: config-script-{{ $postCommit.name }}
 data:
   script: |
 {{ $postCommit.script | nindent 4 }}
+---
 {{- end }}
 {{- end }}
 {{- end }}
