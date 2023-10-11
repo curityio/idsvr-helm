@@ -144,7 +144,7 @@ spec:
             {{- range $postCommitItem := .Values.curity.config.postCommitScripts }}
             - mountPath: /opt/idsvr/usr/bin/post-commit-scripts/{{ $postCommitItem.name }}.sh
               subPath: {{ $postCommitItem.name }}.sh
-              name: config-script-{{ $postCommitItem.name }}
+              name: post-commit-script-{{ $postCommitItem.name }}
               readOnly: false
             {{- end }}
             {{- if .Values.curity.config.configurationSecret }}
@@ -239,9 +239,9 @@ spec:
                 path: backupConfig.sh
         {{- end -}}
         {{- range $postCommitItem := .Values.curity.config.postCommitScripts }}
-        - name: config-script-{{ $postCommitItem.name }}
+        - name: post-commit-script-{{ $postCommitItem.name }}
           configMap:
-            name: config-script-{{ $postCommitItem.name }}
+            name: post-commit-script-{{ $postCommitItem.name }}
             defaultMode: 0555
             items:
               - key: script
