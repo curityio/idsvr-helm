@@ -131,6 +131,13 @@ curity:
     encryptionKey:
     environmentVariableSecrets: []
     environmentVariableConfigMaps: []
+    postCommitScripts: []
+# WARNING: Adding "custom postCommit script" in the post-commit-scripts can break the admin UI, if this work takes a meaningful amount of time (more than 10 or 15 seconds)
+      # - name: custom-script-name
+      #   script: |
+      #       #!/bin/bash
+      #       echo "Custom Script"
+
     configuration: []
 #      - configMapRef:
 #          name: cfg-configmap-name
@@ -151,13 +158,6 @@ curity:
 #         items:
 #           - key: cfg
 #             path: configuration.xml
-
-# WARNING: Adding "custom postCommit script" in the post-commit-scripts can break the admin UI, if this work takes a meaningful amount of time (more than 10 or 15 seconds)
-#     - postCommit:
-#        - name: custom-script-name
-#          script: |
-#              #!/bin/bash
-#              echo "Custom Script"
 
     convertKeystore: []
 #      - sourceTls:

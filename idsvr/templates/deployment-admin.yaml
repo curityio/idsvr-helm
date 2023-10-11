@@ -141,15 +141,11 @@ spec:
               name: backup-config-script
               readOnly: false
             {{- end }}
-            {{- range $conf := .Values.curity.config.configuration }}
-            {{- if $conf.postCommit }}
-            {{- range $postCommitItem := $conf.postCommit }}
+            {{- range $postCommitItem := .Values.curity.config.postCommitScripts }}
             - mountPath: /opt/idsvr/usr/bin/post-commit-scripts/{{ $postCommitItem.name }}.sh
               subPath: {{ $postCommitItem.name }}.sh
               name: config-script-{{ $postCommitItem.name }}
               readOnly: false
-            {{- end }}
-            {{- end }}
             {{- end }}
             {{- if .Values.curity.config.configurationSecret }}
             - mountPath: /opt/idsvr/etc/init/config.xml
@@ -242,9 +238,7 @@ spec:
               - key: backupConfig.sh
                 path: backupConfig.sh
         {{- end -}}
-        {{- range $conf := .Values.curity.config.configuration }}
-        {{- if $conf.postCommit }}
-        {{- range $postCommitItem := $conf.postCommit }}
+        {{- range $postCommitItem := .Values.curity.config.postCommitScripts }}
         - name: config-script-{{ $postCommitItem.name }}
           configMap:
             name: config-script-{{ $postCommitItem.name }}
@@ -252,8 +246,6 @@ spec:
             items:
               - key: script
                 path: {{ $postCommitItem.name }}.sh
-        {{- end }}
-        {{- end }}
         {{- end }}
         {{- if .Values.curity.config.configurationConfigMap }}
         - name: configmap-config

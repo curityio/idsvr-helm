@@ -51,20 +51,13 @@ data:
 
 {{- end -}}
 
-{{- if .Values.curity.config.configuration }}
-{{- range $conf := .Values.curity.config.configuration }}
-{{- if $conf.postCommit }}
-{{- range $postCommit := $conf.postCommit }}
+{{- range $postCommitScript := .Values.curity.config.postCommitScripts }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: config-script-{{ $postCommit.name }}
+  name: post-commit-script-{{ $postCommitScript.name }}
 data:
   script: |
-{{ $postCommit.script | nindent 4 }}
----
-{{- end }}
-{{- end }}
-{{- end }}
+{{ $postCommitScript.script | nindent 4 }}
 {{- end }}
