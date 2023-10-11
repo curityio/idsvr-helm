@@ -146,11 +146,19 @@ curity:
 #              path: scrt-1.xml
 #            - key: scrt-2
 #              path: scrt-2.xml
-#      - secretRef:
-#          name: cfg-secret-2
-#          items:
-#            - key: cfg
-#              path: configuration.xml
+#     - secretRef:
+#         name: cfg-secret-2
+#         items:
+#           - key: cfg
+#             path: configuration.xml
+
+# WARNING: Adding "custom postCommit script" in the post-commit-scripts can break the admin UI, if this work takes a meaningful amount of time (more than 10 or 15 seconds)
+#     - postCommit:
+#        - name: custom-script-name
+#          script: |
+#              #!/bin/bash
+#              echo "Custom Script"
+
     convertKeystore: []
 #      - sourceTls:
 #          keyName: SSL_SERVER_KEY
@@ -160,6 +168,7 @@ curity:
 #          keystorePasswordSecretRef:
 #            name: curity-idsvr-secret
 #            key: KEYSTORE_PASSWORD
+
 
 ingress:
   annotations: {}

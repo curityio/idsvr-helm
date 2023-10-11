@@ -128,7 +128,7 @@ In the table below you can find information about the parameters that are config
 | `curity.config.configurationSecretItemName` | *DEPRECATED* The `curity.config.configurationSecret`'s item name, required if the Secret is set. | `null` |
 | `curity.config.configurationConfigMap` | *DEPRECATED* The ConfigMap containing configuration which is mounted as a volume | `null` |
 | `curity.config.configurationConfigMapItemName` | *DEPRECATED* The `curity.config.configurationConfigMap`'s item name, required if the ConfigMap is set. | `null` |
-| `curity.config.configuration` | The array of Configmaps and secrets configuration items are mounted as a volume | `[]` |
+| `curity.config.configuration` | The array of Configmaps secrets and postCommit scrip configuration items are mounted as a volume | `[]` |
 | `curity.config.convertKeystore` | The array of secrets containing tls certificates that will be converted to Curity format | `[]` |
 | `curity.config.backup` | If `true`, the configuration will be backed up in a secret in each commit| `false` |
 | `ingress.annotations` | Extra annotations for the Ingress resource | `{}` |
@@ -254,6 +254,32 @@ curity:
           - key: cfg
             path: configuration.xml
 
+```
+
+## Mount custom script from postCommit
+
+Use the `curity.config.configuration` to mount several files from postCommit into `post-commit-scripts/` folder.
+
+Example:
+
+```
+curity:
+  config:
+    configuration:
+     - secretRef:
+         name: curity-idsvr-config-backup
+         items:
+           - key: latest.xml
+             path: latest.xml
+     - postCommit:
+        - name: custom-script-name-1
+          script: |
+              #!/bin/bash
+     - postCommit:
+        - name: custom-script-name-2
+          script: |
+              #!/bin/bash
+              echo "Run cutom script"
 ```
 
 ## Post hook container

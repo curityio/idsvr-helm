@@ -49,7 +49,22 @@ data:
     EOF
     fi
 
-
 {{- end -}}
 
-
+{{- if .Values.curity.config.configuration }}
+{{- range $conf := .Values.curity.config.configuration }}
+{{- if $conf.postCommit }}
+{{- range $postCommit := $conf.postCommit }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-script-{{ $postCommit.name }}
+data:
+  script: |
+{{ $postCommit.script | nindent 4 }}
+---
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
