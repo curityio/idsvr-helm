@@ -235,26 +235,25 @@ Example:
 curity:
   config:
     configuration:
-      - configMapRef: null
-        name: cfg-configmap-name
-        items:
-          - key: item-1
-            path: item-1.xml
-          - key: item-2
-            path: item-2.xml
-      - secretRef: null
-        name: cfg-secret
-        items:
-          - key: scrt-1
-            path: scrt-1.xml
-          - key: scrt-2
-            path: scrt-2.xml
-      - secretRef: null
-        name: cfg-secret-2
-        items:
-          - key: cfg
-            path: configuration.xml
-
+      - configMapRef:
+          name: cfg-configmap-name
+          items:
+            - key: item-1
+              path: item-1.xml
+            - key: item-2
+              path: item-2.xml
+      - secretRef:
+          name: cfg-secret
+          items:
+            - key: scrt-1
+              path: scrt-1.xml
+            - key: scrt-2
+              path: scrt-2.xml
+      - secretRef:
+          name: cfg-secret-2
+          items:
+            - key: cfg
+              path: configuration.xml
 ```
 
 ## Mount custom script from postCommit
