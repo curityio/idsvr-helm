@@ -51,7 +51,7 @@ In the table below you can find information about the parameters that are config
 | `replicaCount` | The number of runtime nodes to be deployed | `1` |
 | `revisionHistoryLimit` | The number of old ReplicaSets to retain to allow rollback | `10` |
 | `image.repository` | Image repository | `curity.azurecr.io/curity/idsvr` |
-| `image.tag` | Image tag | `8.6.0` |
+| `image.tag` | Image tag | `8.6.1` |
 | `image.pullPolicy` | The policy to be applied in the deployment | `IfNotPresent` |
 | `image.pullSecret` | The secret that is used to fetch images from the docker registry | `null` |
 | `nameOverride` | Override the name release name used in labels and selectors. If left blank it will be `idsvr` | `""` |
