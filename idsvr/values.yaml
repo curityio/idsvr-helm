@@ -101,6 +101,24 @@ curity:
       successThreshold: 3
       periodSeconds: 10
       initialDelaySeconds: 30
+# Ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
+#     lifecycle:
+#       preStop:
+#         exec:
+#           command:
+#             - /bin/sh
+#             - -c
+#             - "sleep 30"
+# Sets the termination grace period for pods spawned by the Kubernetes Deployment.
+# Ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
+    terminationGracePeriodSeconds: 30
+# Affinity for pod assignment
+# Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+#   affinity: {}
+
+# Topology spread constraints for pod assignment (requires Kubernetes >= 1.19)
+# Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+#   topologySpreadConstraints: []
 # extraEnv provides additional environment variables
 #    extraEnv:
 #      - name: SOME_EXTRA_VARIABLE

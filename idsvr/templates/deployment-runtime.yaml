@@ -108,6 +108,10 @@ spec:
             successThreshold: {{ .Values.curity.runtime.readinessProbe.successThreshold }}
             periodSeconds: {{ .Values.curity.runtime.readinessProbe.periodSeconds }}
             initialDelaySeconds: {{ .Values.curity.runtime.readinessProbe.initialDelaySeconds }}
+          {{- with .Values.curity.runtime.lifecycle }}
+          lifecycle:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           volumeMounts:
             {{- if .Values.curity.runtime.logging.stdout }}
             - mountPath: /opt/idsvr/var/log/
@@ -179,6 +183,15 @@ spec:
       {{- if .Values.image.pullSecret }}
       imagePullSecrets:
         - name: {{ .Values.image.pullSecret}}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.curity.runtime.terminationGracePeriodSeconds }}
+      {{- with .Values.curity.runtime.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.curity.runtime.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
         {{- if .Values.curity.runtime.logging.stdout }}
