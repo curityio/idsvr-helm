@@ -117,7 +117,7 @@ In the table below you can find information about the parameters that are config
 | `curity.runtime.logging.image` | The image that will be used to create the logging containers | `busybox:latest` |
 | `curity.runtime.logging.resources` | Resource limits applied in logging containers. When set overrides `logging.resources` settings only on the runtime nodes. | `{}` |
 | `curity.runtime.resources` | Resource limits applied in runtime deployment. When set overrides `resources` settings only on the runtime nodes. | `{}` |
-| `curity.runtime.lifecycle` | hese options include settings for startup, shutdown, and other lifecycle events. | `[]` |
+| `curity.runtime.lifecycle` | These options include settings for startup, shutdown, and other lifecycle events. | `[]` |
 | `curity.runtime.terminationGracePeriodSeconds` | Sets the termination grace period for runtime pods spawned by the Kubernetes Deployment. | `30` |
 | `curity.runtime.affinity` | Affinity for runtime pod assignment. | `{}` |
 | `curity.runtime.topologySpreadConstraints` | Topology spread constraints for runtime pod assignment (requires Kubernetes >= 1.19). | `[]` |
