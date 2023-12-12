@@ -38,11 +38,13 @@ curity:
       port: 6789
       annotations: {}
     livenessProbe:
+      path: /
       timeoutSeconds: 1
       failureThreshold: 3
       periodSeconds: 10
       initialDelaySeconds: 30
     readinessProbe:
+      path: /
       timeoutSeconds: 1
       failureThreshold: 3
       successThreshold: 3
@@ -91,11 +93,13 @@ curity:
     deployment:
       port: 8443
     livenessProbe:
+      path: /
       timeoutSeconds: 1
       failureThreshold: 3
       periodSeconds: 10
       initialDelaySeconds: 30
     readinessProbe:
+      path: /
       timeoutSeconds: 1
       failureThreshold: 3
       successThreshold: 3

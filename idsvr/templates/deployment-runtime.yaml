@@ -93,7 +93,7 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: {{ .Values.curity.runtime.livenessProbe.path }}
               port: health-check
             timeoutSeconds:  {{ .Values.curity.runtime.livenessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.curity.runtime.livenessProbe.failureThreshold }}
@@ -101,7 +101,7 @@ spec:
             initialDelaySeconds: {{ .Values.curity.runtime.livenessProbe.initialDelaySeconds }}
           readinessProbe:
             httpGet:
-              path: /
+              path: {{ .Values.curity.runtime.readinessProbe.path }}
               port: health-check
             timeoutSeconds:  {{ .Values.curity.runtime.readinessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.curity.runtime.readinessProbe.failureThreshold }}
