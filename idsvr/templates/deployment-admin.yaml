@@ -111,7 +111,7 @@ spec:
           {{- end }}
           livenessProbe:
             httpGet:
-              path: /
+              path: {{ .Values.curity.admin.livenessProbe.path }}
               port: health-check
             timeoutSeconds:  {{ .Values.curity.admin.livenessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.curity.admin.livenessProbe.failureThreshold }}
@@ -119,7 +119,7 @@ spec:
             initialDelaySeconds: {{ .Values.curity.admin.livenessProbe.initialDelaySeconds }}
           readinessProbe:
             httpGet:
-              path: /
+              path: {{ .Values.curity.admin.readinessProbe.path }}
               port: health-check
             timeoutSeconds:  {{ .Values.curity.admin.readinessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.curity.admin.readinessProbe.failureThreshold }}

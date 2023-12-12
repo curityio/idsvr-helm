@@ -72,10 +72,12 @@ In the table below you can find information about the parameters that are config
 | `curity.admin.initContainers` | Definition of initContainers for the admin service | `[]` |
 | `curity.admin.extraVolumes` | Extra volumes to add to the admin pod | `[]` |
 | `curity.admin.extraVolumeMounts` | Extra volumes to mount in the admin container | `[]` |
+| `curity.admin.livenessProbe.path` | LivenessProbe `path` for the admin deployment | `1` |
 | `curity.admin.livenessProbe.timeoutSeconds` | LivenessProbe `timeoutSeconds` for the admin deployment | `1` |
 | `curity.admin.livenessProbe.failureThreshold` | LivenessProbe `failureThreshold` for the admin deployment| `3` |
 | `curity.admin.livenessProbe.periodSeconds` | LivenessProbe `periodSeconds` for the admin deployment | `10` |
 | `curity.admin.livenessProbe.initialDelaySeconds` | The admin `initialDelaySeconds` port | `30` |
+| `curity.admin.readinessProbe.path` | ReadinessProbe `path` for the admin deployment | `1` |
 | `curity.admin.readinessProbe.timeoutSeconds` | ReadinessProbe `timeoutSeconds` for the admin deployment | `1` |
 | `curity.admin.readinessProbe.failureThreshold` | ReadinessProbe `failureThreshold` for the admin deployment | `3` |
 | `curity.admin.readinessProbe.successThreshold` | ReadinessProbe `successThreshold` for the admin deployment | `3` |
@@ -102,10 +104,12 @@ In the table below you can find information about the parameters that are config
 | `curity.runtime.deployment.port` | The runtime deployment port| `8443` |
 | `curity.runtime.extraEnv` | Extra environment variables to provide to the runtime container | `[]` |
 | `curity.runtime.serviceAccount.name`| The name of an existing service account to use on the runtime nodes. Defaults to `default` if not specified. | `null` |
+| `curity.runtime.livenessProbe.path` | LivenessProbe `path` for the runtime deployment | `1` |
 | `curity.runtime.livenessProbe.timeoutSeconds` | LivenessProbe `timeoutSeconds` for the runtime deployment | `1` |
 | `curity.runtime.livenessProbe.failureThreshold` | LivenessProbe `failureThreshold` for the runtime deployment | `3` |
 | `curity.runtime.livenessProbe.periodSeconds` | LivenessProbe `periodSeconds` for the runtime deployment | `10` |
 | `curity.runtime.livenessProbe.initialDelaySeconds` | The admin `initialDelaySeconds` port | `30` |
+| `curity.runtime.readinessProbe.path` | ReadinessProbe `path` for the runtime deployment | `1` |
 | `curity.runtime.readinessProbe.timeoutSeconds` | ReadinessProbe `timeoutSeconds` for the runtime deployment | `1` |
 | `curity.runtime.readinessProbe.failureThreshold` | ReadinessProbe `failureThreshold` for the runtime deployment | `3` |
 | `curity.runtime.readinessProbe.successThreshold` | ReadinessProbe `successThreshold` for the runtime deployment | `3` |
