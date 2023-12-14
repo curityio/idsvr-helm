@@ -171,7 +171,7 @@ In the table below you can find information about the parameters that are config
 | `nodeSelector` | Node selector applied in admin and runtime deployments | `{}` |
 | `tolerations` | Tolerations applied in admin and runtime deployments | `{}` |
 | `affinity` | Affinity applied in admin and runtime deployments| `{}` |
-
+| `ingress.ingressClassName` | IngressClassName is the name of an IngressClass cluster resource. Ingress controller use this field to know whether they should be serving this Ingress resource. | `null` |
 
 <b id="f1">1</b> The network policy within the cluster will not have any affect unless there is a network policy
 provider that can enforce network policies. Check out kubernetes official documentation for more guidance on how to
