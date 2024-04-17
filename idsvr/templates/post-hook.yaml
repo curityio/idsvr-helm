@@ -9,12 +9,14 @@ metadata:
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
     "helm.sh/hook-weight": "10"
-    {{- if .Values.postHook.annotations }}
-          {{- .Values.postHook.annotations | toYaml | nindent 4 }}
-    {{- end }}
 spec:
   backoffLimit: 1
   template:
+    metadata:
+      annotations:
+        {{- if .Values.postHook.annotations }}
+          {{- .Values.postHook.annotations | toYaml | nindent 8 }}
+        {{- end }}
     spec:
       restartPolicy: Never
       containers:
