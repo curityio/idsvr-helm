@@ -24,6 +24,7 @@ curity:
   healthCheckPort: 4465
   adminUiPort: 6749
   adminUiHttp: false
+  jobsAnnotations: {}
 
   admin:
     role: admin
@@ -250,6 +251,7 @@ autoscaling:
 
 postHook:
   enabled: false
+  annotations: {}
   image: curlimages/curl:latest
   args: []
 #    - -ec

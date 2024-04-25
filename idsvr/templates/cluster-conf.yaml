@@ -55,6 +55,11 @@ metadata:
 spec:
   ttlSecondsAfterFinished: 60
   template:
+    metadata:
+      annotations:
+        {{- if .Values.curity.jobsAnnotations }}
+          {{- .Values.curity.jobsAnnotations | toYaml | nindent 8 }}
+        {{- end }}
     spec:
       containers:
         - name: {{ include "curity.fullname" . }}-cluster-conf-job
