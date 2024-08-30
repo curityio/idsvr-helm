@@ -61,6 +61,10 @@ spec:
           {{- .Values.curity.jobsAnnotations | toYaml | nindent 8 }}
         {{- end }}
     spec:
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ include "curity.fullname" . }}-cluster-conf-job
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
