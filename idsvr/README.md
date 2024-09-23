@@ -70,6 +70,7 @@ In the table below you can find information about the parameters that are config
 | `curity.admin.service.port` | The admin configuration port | `6789` |
 | `curity.admin.service.annotations` | Extra annotations to add to the admin service | `{}` |
 | `curity.admin.extraEnv` | Extra environment variables to provide to the admin container | `[]` |
+| `curity.admin.serviceAccount.name`| The name of an existing service account to use on the admin nodes. Defaults to `default` if not specified. <sup>[4](#f4)</sup> | `null` |
 | `curity.admin.initContainers` | Definition of initContainers for the admin service | `[]` |
 | `curity.admin.extraVolumes` | Extra volumes to add to the admin pod | `[]` |
 | `curity.admin.extraVolumeMounts` | Extra volumes to mount in the admin container | `[]` |
@@ -190,6 +191,8 @@ paths:
 ```
 
 <b id="f3">3</b> The `unattendedinstall` script runs by default on the admin node if an admin `PASSWORD` is set, either by the value or some other environment variable. The installer creates default keys and enables the Admin UI so this configuration option shall be used if that config is either not necessary or loaded in some other way (i.e using `curity.config.configuration` or embedded in the docker image used).
+
+<b id="f4">5</b> If `curity.config.backup` is enabled, the assigned service account must have access to update secrets.
 
 ## Examples
 

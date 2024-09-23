@@ -51,3 +51,13 @@ Creates the name of the service account used by the runtime nodes.
 {{- define "curity.runtime.serviceAccountName" -}}
   {{ default "default" .Values.curity.runtime.serviceAccount.name }}
 {{- end -}}
+
+{{- define "curity.admin.serviceAccountName" -}}
+{{- if .Values.curity.admin.serviceAccount.name -}}
+{{.Values.curity.admin.serviceAccount.name}}
+{{- else if .Values.curity.config.backup -}}
+{{ include "curity.fullname" . }}-service-account
+{{- else -}}
+default
+{{- end -}}
+{{- end }}

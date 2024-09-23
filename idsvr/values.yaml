@@ -38,6 +38,8 @@ curity:
       type: ClusterIP
       port: 6789
       annotations: {}
+    serviceAccount:
+      name:
     livenessProbe:
       path: /
       timeoutSeconds: 1
