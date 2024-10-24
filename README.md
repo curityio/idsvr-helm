@@ -3,7 +3,7 @@
 [![Quality](https://img.shields.io/badge/quality-test-yellow)](https://curity.io/resources/code-examples/status/)
 [![Availability](https://img.shields.io/badge/availability-source-blue)](https://curity.io/resources/code-examples/status/)
 
-This repository contains the Curity Identity Server helm chart source code. 
+This repository contains the Curity Identity Server helm chart source code.
 
 For more information on Curity and its capabilities, click [here](https://curity.io).
 

@@ -34,4 +34,3 @@ spec:
     app.kubernetes.io/name: {{ include "curity.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     role: {{ include "curity.fullname" . }}-admin
-    

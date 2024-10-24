@@ -222,12 +222,11 @@ curity:
             items:
             - key: <DATE>-<TRANSACTION_ID>.xml
               path: config-backup.xml
-        
 ```
 
 ```shell script
 helm upgrade <release-name> curity/idsvr -f myValues.xml
-``` 
+```
 
 ## Sending all logs to stdout
 
@@ -294,11 +293,11 @@ curity:
 
 ## Post hook container
 
-Enable the post hook `postHook.enabled=true` to start a post hook container. 
+Enable the post hook `postHook.enabled=true` to start a post hook container.
 
 Example: Post message to slack.
 
-``` 
+```
     postHook:
       enabled: true
       image: nexus.hh.atg.se:17000/curlimages/curl:7.79.1
