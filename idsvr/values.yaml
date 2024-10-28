@@ -31,6 +31,10 @@ curity:
     annotations: {}
     podLabels: {}
     podAnnotations: {}
+    securityContext:
+      runAsUser: 10001
+      runAsGroup: 10000
+      fsGroup: 10000
     initContainers: []
     extraVolumes: []
     extraVolumeMounts: []
@@ -81,6 +85,10 @@ curity:
     annotations: {}
     podLabels: {}
     podAnnotations: {}
+    securityContext:
+      runAsUser: 10001
+      runAsGroup: 10000
+      fsGroup: 10000
     initContainers: []
     extraVolumes: []
     extraVolumeMounts: []
@@ -153,6 +161,12 @@ curity:
     backup: false
     password:
     skipInstall: false
+    persistentConfigVolume:
+      enabled: true
+      storageClass: "default"
+      existingClaim: ""
+      accessMode: ReadWriteOnce
+      size: 800Mi
     encryptionKey:
     environmentVariableSecrets: []
     environmentVariableConfigMaps: []

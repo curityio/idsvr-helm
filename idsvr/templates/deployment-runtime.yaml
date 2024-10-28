@@ -36,6 +36,10 @@ spec:
               {{- .Values.curity.runtime.podAnnotations | toYaml | nindent 8 }}
         {{- end }}
     spec:
+      securityContext:
+        runAsUser: {{ .Values.curity.runtime.securityContext.runAsUser }}
+        runAsGroup: {{ .Values.curity.runtime.securityContext.runAsGroup }}
+        fsGroup: {{ .Values.curity.runtime.securityContext.fsGroup }}
       containers:
         - name: {{ .Chart.Name }}-runtime
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -202,7 +206,7 @@ spec:
           secret:
             secretName: {{ include "curity.fullname" . }}-cluster-config-xml
             items:
-              - key: cluster-{{ .Release.Revision }}.xml
+              - key: cluster-{{ ternary "1" .Release.Revision .Values.curity.config.persistentConfigVolume.enabled }}.xml
                 path: cluster.xml
         {{- if .Values.curity.config.configurationSecret }}
         - name: config
