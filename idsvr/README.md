@@ -150,11 +150,13 @@ In the table below you can find information about the parameters that are config
 | `ingress.runtime.paths` | Paths of the runtime servers that can be accessed externally | `{/}`<sup>[2](#f2)</sup> |
 | `ingress.runtime.pathType` | PathTpe for the paths defined in `ingress.runtime.paths` | `ImplementationSpecific` |
 | `ingress.runtime.secretName` | Secret which contains the tls cert and key for the runtime TLS connection. If not set, the Ingress will be configured for HTTP | `null` |
+| `ingress.runtime.tlsEnabled` | Enables TLS for the ingress when set to `true`. **NOTE:** if set to `false` TLS will still be configured if `ingress.runtime.secretName` is set, this is to keep the old logic and avoid breaking changes | `false` |
 | `ingress.admin.enabled` | Flag to enable/disable an Ingress resource for the admin node | `false` |
 | `ingress.admin.annotations` | Extra annotations for the Ingress resource for the admin node, overrides `ingress.annotations` if set | `{}` |
 | `ingress.admin.host` | Hostname for the admin server (used by the Ingress resource) | `curity-admin.local` |
 | `ingress.admin.tlsHost` | Hostname for the admin server (used by the Ingress resource) to be able to use wildcard as host | `` |
 | `ingress.admin.secretName` | Secret which contains the tls cert and key for the runtime TLS connection. If not set, the Ingress resource will be configured for HTTP | `null` |
+| `ingress.admin.tlsEnabled` | Enables TLS for the ingress when set to `true`. **NOTE:** if set to `false` TLS will still be configured if `ingress.runtime.secretName` is set, this is to keep the old logic and avoid breaking changes | `false` |
 | `ingress.admin.paths` | Paths of the admin node that can be accessed externally | `{/}`<sup>[2](#f2)</sup> |
 | `ingress.admin.pathType` | PathTpe for the paths defined in `ingress.admin.paths` | `ImplementationSpecific` |
 | `resources` | Resource limits applied in admin and runtime deployments | `{}` |

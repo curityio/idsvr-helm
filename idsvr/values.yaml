@@ -203,6 +203,7 @@ ingress:
   ingressClassName:
   runtime:
     enabled: false
+    tlsEnabled: false
     tlsHost:
     host: curity.local
     annotations: {}
@@ -213,6 +214,7 @@ ingress:
 
   admin:
     enabled: false
+    tlsEnabled: false
     tlsHost:
     host: curity-admin.local
     annotations: {}

@@ -17,9 +17,21 @@ spec:
 {{- if .Values.ingress.ingressClassName }}
   ingressClassName: {{ .Values.ingress.ingressClassName }}
 {{- end }}
-{{- if .Values.ingress.runtime.secretName }}
+{{- if .Values.ingress.runtime.tlsEnabled }}
   tls:
+    - hosts:
+      {{- if .Values.ingress.runtime.tlsHost }}
+        - {{ .Values.ingress.runtime.tlsHost }}
+      {{- else }}
+        - {{ .Values.ingress.runtime.host }}
+      {{- end }}
     {{- if .Values.ingress.runtime.secretName }}
+      secretName: {{ .Values.ingress.runtime.secretName }}
+    {{- end }}
+{{- else -}}
+  {{/* Legacy handling if not tlsEnabled is applied */}}
+  {{- if .Values.ingress.runtime.secretName }}
+  tls:
     - hosts:
       {{- if .Values.ingress.runtime.tlsHost }}
         - {{ .Values.ingress.runtime.tlsHost }}
@@ -27,7 +39,7 @@ spec:
         - {{ .Values.ingress.runtime.host }}
       {{- end }}
       secretName: {{ .Values.ingress.runtime.secretName }}
-    {{- end }}
+  {{- end }}
 {{- end }}
   rules:
     - host: {{ .Values.ingress.runtime.host }}
@@ -63,9 +75,21 @@ spec:
 {{- if .Values.ingress.ingressClassName }}
   ingressClassName: {{ .Values.ingress.ingressClassName }}
 {{- end }}
-{{- if .Values.ingress.admin.secretName }}
+{{- if .Values.ingress.admin.tlsEnabled }}
   tls:
+    - hosts:
+      {{- if .Values.ingress.admin.tlsHost }}
+        - {{ .Values.ingress.admin.tlsHost }}
+      {{- else }}
+        - {{ .Values.ingress.admin.host }}
+      {{- end }}
     {{- if .Values.ingress.admin.secretName }}
+      secretName: {{ .Values.ingress.admin.secretName }}
+    {{- end }}
+{{- else -}}
+  {{/* Legacy handling if not tlsEnabled is applied */}}
+  {{- if .Values.ingress.runtime.secretName }}
+  tls:
     - hosts:
       {{- if .Values.ingress.admin.tlsHost }}
         - {{ .Values.ingress.admin.tlsHost }}
@@ -73,7 +97,7 @@ spec:
         - {{ .Values.ingress.admin.host}}
       {{- end }}
       secretName: {{ .Values.ingress.admin.secretName }}
-    {{- end }}
+  {{- end }}
 {{- end }}
   rules:
     - host: {{ .Values.ingress.admin.host }}
