@@ -162,7 +162,7 @@ curity:
     password:
     skipInstall: false
     persistentConfigVolume:
-      enabled: true
+      enabled: false
       storageClass: "default"
       existingClaim: ""
       accessMode: ReadWriteOnce
