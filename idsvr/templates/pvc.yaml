@@ -1,0 +1,15 @@
+{{- if and .Values.curity.config.persistentConfigVolume.enabled (not .Values.curity.config.persistentConfigVolume.existingClaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "curity.fullname" . }}
+  labels:
+   {{- include "curity.labels" . | nindent 4 }}
+spec:
+  storageClassName: {{ .Values.curity.config.persistentConfigVolume.storageClass }}
+  accessModes:
+    - {{ .Values.curity.config.persistentConfigVolume.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.curity.config.persistentConfigVolume.size | quote }}
+ {{- end }}

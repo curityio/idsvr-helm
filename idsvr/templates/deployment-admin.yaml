@@ -34,6 +34,10 @@ spec:
               {{- .Values.curity.admin.podAnnotations | toYaml | nindent 8 }}
         {{- end }}
     spec:
+      securityContext:
+        runAsUser: {{ .Values.curity.admin.securityContext.runAsUser }}
+        runAsGroup: {{ .Values.curity.admin.securityContext.runAsGroup }}
+        fsGroup: {{ .Values.curity.admin.securityContext.fsGroup }}
       containers:
         - name: {{ .Chart.Name }}-admin
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -127,14 +131,20 @@ spec:
             periodSeconds: {{ .Values.curity.admin.readinessProbe.periodSeconds }}
             initialDelaySeconds: {{ .Values.curity.admin.readinessProbe.initialDelaySeconds }}
           volumeMounts:
+            {{- if .Values.curity.config.persistentConfigVolume.enabled }}
+            - mountPath: /opt/idsvr/var/cdb
+              name: persistent-config
+            {{- end }}
             {{- if .Values.curity.admin.logging.stdout }}
             - mountPath: /opt/idsvr/var/log/
               name: log-volume
             {{- end }}
+            {{- if or (not .Values.curity.config.persistentConfigVolume.enabled) (eq .Release.Revision 1) }}
             - mountPath: /opt/idsvr/etc/init/cluster.xml
               subPath: cluster.xml
               name: cluster-xml
               readOnly: true
+            {{- end  }}
             {{- if .Values.curity.config.backup }}
             - mountPath: /opt/idsvr/usr/bin/post-commit-scripts/backupConfig.sh
               subPath: backupConfig.sh
@@ -211,16 +221,23 @@ spec:
         - name: {{ .Values.image.pullSecret}}
       {{- end }}
       volumes:
+        {{- if .Values.curity.config.persistentConfigVolume.enabled }}
+        - name: persistent-config
+          persistentVolumeClaim:
+            claimName: {{ .Values.curity.config.persistentConfigVolume.existingClaim | default (include "curity.fullname" .) }}
+        {{- end }}
         {{- if .Values.curity.admin.logging.stdout }}
         - name: log-volume
           emptyDir: {}
         {{- end }}
+        {{- if or (not .Values.curity.config.persistentConfigVolume.enabled) (eq .Release.Revision 1) }}
         - name: cluster-xml
           secret:
             secretName: {{ include "curity.fullname" . }}-cluster-config-xml
             items:
               - key: cluster-{{ .Release.Revision }}.xml
                 path: cluster.xml
+        {{- end }}
         {{- if .Values.curity.config.configurationSecret }}
         - name: config
           secret:
