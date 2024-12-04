@@ -16,7 +16,7 @@ spec:
       targetPort: config-port
       protocol: TCP
       name: config-port
-    - port: {{ add .Values.curity.admin.service.port 1 }}
+    - port: {{ add1 .Values.curity.admin.service.port }}
       targetPort: ds-port
       protocol: TCP
       name: ds-port

@@ -18,5 +18,5 @@ spec:
         - protocol: TCP
           port: {{ .Values.curity.admin.service.port }}
         - protocol: TCP
-          port: {{ add .Values.curity.admin.service.port 1 }}
+          port: {{ add1 .Values.curity.admin.service.port }}
 {{- end }}
