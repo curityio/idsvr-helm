@@ -98,6 +98,9 @@ spec:
             - name: config-port
               containerPort: {{ .Values.curity.admin.service.port }}
               protocol: TCP
+            - name: ds-port
+              containerPort: {{ add .Values.curity.admin.service.port 1 }}
+              protocol: TCP
             - name: health-check
               containerPort: {{ .Values.curity.healthCheckPort }}
               protocol: TCP
