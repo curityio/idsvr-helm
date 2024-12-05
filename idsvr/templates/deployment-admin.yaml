@@ -99,7 +99,7 @@ spec:
               containerPort: {{ .Values.curity.admin.service.port }}
               protocol: TCP
             - name: ds-port
-              containerPort: {{ add1 .Values.curity.admin.service.port }}
+              containerPort: {{ .Values.curity.admin.distributedService.port }}
               protocol: TCP
             - name: health-check
               containerPort: {{ .Values.curity.healthCheckPort }}
