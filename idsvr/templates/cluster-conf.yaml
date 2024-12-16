@@ -1,3 +1,4 @@
+{{- if eq .Release.Revision 1 }}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -41,8 +42,9 @@ data:
 
     $REQUEST_CONTENT
     EOF
-
+{{- end }}
 ---
+{{- if or (not .Values.curity.config.persistentConfigVolume.enabled) (eq .Release.Revision 1) }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -97,3 +99,4 @@ spec:
             name: {{ include "curity.fullname" . }}-cluster-conf-map
       serviceAccountName: {{ include "curity.fullname" . }}-service-account
       restartPolicy: Never
+  {{- end }}

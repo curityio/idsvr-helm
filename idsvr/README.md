@@ -91,6 +91,9 @@ In the table below you can find information about the parameters that are config
 | `curity.admin.logging.image` | The image that will be used to create the logging containers | `busybox:latest` |
 | `curity.admin.logging.resources` | Resource limits applied in logging containers. When set overrides `logging.resources` settings only on the admin node. | `{}` |
 | `curity.admin.resources` | Resource limits applied in admin deployment. When set overrides `resources` settings only on the admin node. | `{}` |
+| `curity.admin.securityContext.runAsUser` | The user the container in the pod will run as. | `10001` |
+| `curity.admin.securityContext.runAsGroup` | The group the container in the pod will run as. | `10000` |
+| `curity.admin.securityContext.runAsUser` | The file system group for mounted volumes. | `10000` |
 | `curity.runtime.role` | The role of the runtime servers | `default` |
 | `curity.runtime.annotations` | Extra annotations to add to the runtime deployment | `default` |
 | `curity.runtime.podLabels` | Extra labels to add to the runtime pod | `{}` |
@@ -127,6 +130,9 @@ In the table below you can find information about the parameters that are config
 | `curity.runtime.terminationGracePeriodSeconds` | Sets the termination grace period for runtime pods spawned by the Kubernetes Deployment. | `30` |
 | `curity.runtime.affinity` | Affinity for runtime pod assignment. | `{}` |
 | `curity.runtime.topologySpreadConstraints` | Topology spread constraints for runtime pod assignment (requires Kubernetes >= 1.19). | `[]` |
+| `curity.runtime.securityContext.runAsUser` | The user the container in the pod will run as. | `10001` |
+| `curity.runtime.securityContext.runAsGroup` | The group the container in the pod will run as. | `10000` |
+| `curity.runtime.securityContext.runAsUser` | The file system group for mounted volumes. | `10000` |
 | `curity.config.uiEnabled` | Flag to enable/disable the service for Admin UI and Admin REST API, ignored if `ingress.admin.enabled=true` | `false` |
 | `curity.config.password` | The administrator password. Required if `curity.config.skipInstall` is `true` or `curity.config.environmentVariableSecrets` and `curity.config.configuration`is not set | `null` |
 | `curity.config.skipInstall` | If set to `true` the installer script will not run<sup>[3](#f3)</sup> | `false`|
@@ -142,6 +148,11 @@ In the table below you can find information about the parameters that are config
 | `curity.config.postCommitScripts` | The array of post-commit scripts are mounted as a volume | `[]` |
 | `curity.config.convertKeystore` | The array of secrets containing tls certificates that will be converted to Curity format | `[]` |
 | `curity.config.backup` | If `true`, the configuration will be backed up in a secret in each commit| `false` |
+| `curity.config.persistentConfigVolume.enabled` | If `true` a persisted volume will be mounted in the admin node to persist config during deployment upgrades | `false` |
+| `curity.config.persistentConfigVolume.storageClass` | The `StorageClass` of the volume | `default` | 
+| `curity.config.persistentConfigVolume.existingClaim` | If set, an existing persisted volume claim will be used instead of a new one beeing generated. | `""` |
+| `curity.config.persistentConfigVolume.accessMode` | The access mode of the volume | `ReadWriteOnce` |
+| `curity.config.persistentConfigVolume.size` | The size of the persisted volume | `800Mi` |
 | `ingress.annotations` | Extra annotations for the Ingress resource | `{}` |
 | `ingress.runtime.enabled` | Flag to enable/disable the Ingress resource for runtime nodes | `false` |
 | `ingress.runtime.annotations` | Extra annotations for the Ingress resource for the runtime nodes, overrides `ingress.annotations` if set | `{}` |
@@ -232,6 +243,17 @@ curity:
 ```shell script
 helm upgrade <release-name> curity/idsvr -f myValues.xml
 ```
+
+## Enabling the persistent configuration volume 
+
+It is possible to set the `curity.config.persistentConfigVolume.enabled` which will create a `PersistedVolumeClaim` using the defined `storageClass`, `accessMode` and `size`. 
+The volume will be mounted to the admin Pod under `/opt/idsvr/var/cdb`. 
+
+When this is enabled, the cluster keys are not rotated between deployment upgrades. Instead only a single key is generated during installation and will be kept for the lifetime of the deployment. 
+Also, any configuration that is stored in `/opt/idsvr/etc/init` either by `curity.config.configuration` or by included files in the image will be ignored for subsequent upgrades except the first installation. 
+
+Although enabling this setting is perfect for experimenting with the Curity Identity Server, it is not something that we suggest to be used in production as it can lead to issues that are difficult to overcome.
+
 
 ## Sending all logs to stdout
 
