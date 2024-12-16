@@ -243,9 +243,9 @@ curity:
 helm upgrade <release-name> curity/idsvr -f myValues.xml
 ``` 
 
-## Enabling the peristed configuration volume 
+## Enabling the persistent configuration volume 
 
-It is possible to set the `curity.config.persistentConfigVolume.enabled` which will create a `PersistedVolumeClaim` using the defined `StorageClass`, `AccessMode` and `size`. 
+It is possible to set the `curity.config.persistentConfigVolume.enabled` which will create a `PersistedVolumeClaim` using the defined `storageClass`, `accessMode` and `size`. 
 The volume will be mounted to the admin Pod under `/opt/idsvr/var/cdb`. 
 
 When this is enabled, the cluster keys are not rotated between deployment upgrades. Instead only a single key is generated during installation and will be kept for the lifetime of the deployment. 
