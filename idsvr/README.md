@@ -66,6 +66,7 @@ In the table below you can find information about the parameters that are config
 | `curity.admin.podLabels` | Extra labels to add to the admin pod | `{}` |
 | `curity.admin.podAnnotations` | Extra annotations to add to the admin pod | `{}` |
 | `curity.admin.role` | The role of the admin server | `admin` |
+| `curity.admin.distributedService.port` | The port used for the distributed service communication | `6790` |
 | `curity.admin.service.type` | The admin service type | `ClusterIP` |
 | `curity.admin.service.port` | The admin configuration port | `6789` |
 | `curity.admin.service.annotations` | Extra annotations to add to the admin service | `{}` |

@@ -38,6 +38,8 @@ curity:
     initContainers: []
     extraVolumes: []
     extraVolumeMounts: []
+    distributedService:
+      port: 6790
     service:
       type: ClusterIP
       port: 6789

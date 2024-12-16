@@ -16,6 +16,10 @@ spec:
       targetPort: config-port
       protocol: TCP
       name: config-port
+    - port: {{ .Values.curity.admin.distributedService.port }}
+      targetPort: ds-port
+      protocol: TCP
+      name: ds-port
     - port: {{ .Values.curity.healthCheckPort }}
       targetPort: health-check
       protocol: TCP
