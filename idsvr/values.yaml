@@ -19,6 +19,7 @@ fullnameOverride: ""
 labels: {}
 networkpolicy:
   enabled: true
+  apigatewayNamespace: default
 
 curity:
   healthCheckPort: 4465
