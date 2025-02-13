@@ -19,4 +19,13 @@ spec:
           port: {{ .Values.curity.admin.service.port }}
         - protocol: TCP
           port: {{ .Values.curity.admin.distributedService.port }}
+  {{- if .Values.curity.config.uiEnabled }}
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: {{ .Values.networkpolicy.apigatewayNamespace }} 
+      ports:
+        - protocol: TCP
+          port: {{ .Values.curity.adminUiPort }}
+  {{- end }}
 {{- end }}
