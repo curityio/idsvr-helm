@@ -159,6 +159,15 @@ curity:
 #        - post-commit-scripts
       resources: {}
 
+  clusterConfJob:
+    podAnnotations: {}
+    podLabels: {}
+    resources: {}
+    securityContext:
+      runAsUser: 10001
+      runAsGroup: 10000
+      fsGroup: 10000
+
   config:
     uiEnabled: false
     backup: false

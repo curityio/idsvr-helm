@@ -24,9 +24,9 @@ data:
   createConfigSecret.sh: |
     #!/bin/bash
 
-    CA_CERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-    TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
-    NAMESPACE=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
+    CA_CERT=/var/run/secrets/tokens/ca.crt
+    TOKEN=$(cat /var/run/secrets/tokens/token)
+    NAMESPACE=$(cat /var/run/secrets/tokens/namespace)
 
     CLUSTER_XML=$(/opt/idsvr/bin/genclust -c ${CONFIG_SERVICE_HOST} -p ${CONFIG_SERVICE_PORT} | base64 -w 0)
 
@@ -42,6 +42,7 @@ data:
 
     $REQUEST_CONTENT
     EOF
+    
 ---
 apiVersion: batch/v1
 kind: Job
@@ -57,10 +58,15 @@ spec:
   template:
     metadata:
       annotations:
-        {{- if .Values.curity.jobsAnnotations }}
-          {{- .Values.curity.jobsAnnotations | toYaml | nindent 8 }}
+        {{- if .Values.curity.clusterConfJob.podAnnotations }}
+          {{- .Values.curity.clusterConfJob.podAnnotations | toYaml | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- if .Values.curity.clusterConfJob.podLabels }}
+          {{- .Values.curity.clusterConfJob.podLabels | toYaml | nindent 8 }}
         {{- end }}
     spec:
+      automountServiceAccountToken: false
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -69,10 +75,18 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      securityContext:
+        runAsUser: {{ .Values.curity.clusterConfJob.securityContext.runAsUser }}
+        runAsGroup: {{ .Values.curity.clusterConfJob.securityContext.runAsGroup }}
+        fsGroup: {{ .Values.curity.clusterConfJob.securityContext.fsGroup }}
       containers:
         - name: {{ include "curity.fullname" . }}-cluster-conf-job
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.curity.clusterConfJob.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           command: ["sh",  "/opt/idsvr/bin/createConfigSecret.sh"]
           env:
             - name: CONFIG_SERVICE_HOST
@@ -91,6 +105,9 @@ spec:
             - name: entrypoint-volume
               mountPath: /opt/idsvr/bin/createConfigSecret.sh
               subPath: createConfigSecret.sh
+            - name: kube-api-access
+              mountPath: /var/run/secrets/tokens
+              readOnly: true
       {{- if .Values.image.pullSecret }}
       imagePullSecrets:
         - name: {{ .Values.image.pullSecret}}
@@ -99,6 +116,22 @@ spec:
         - name: entrypoint-volume
           configMap:
             name: {{ include "curity.fullname" . }}-cluster-conf-map
+        - name: kube-api-access
+          projected:
+            sources:
+            - serviceAccountToken:
+                path: token
+                expirationSeconds: 3600
+            - configMap:
+                name: kube-root-ca.crt
+                items:
+                  - key: ca.crt
+                    path: ca.crt
+            - downwardAPI:
+                items:
+                  - path: "namespace"
+                    fieldRef:
+                      fieldPath: metadata.namespace
       serviceAccountName: {{ include "curity.fullname" . }}-service-account
       restartPolicy: Never
 {{- end }}
