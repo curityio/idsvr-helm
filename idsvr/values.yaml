@@ -160,8 +160,6 @@ curity:
       resources: {}
 
   clusterConfJob:
-    podAnnotations: {}
-    podLabels: {}
     resources: {}
     securityContext: {}
 
