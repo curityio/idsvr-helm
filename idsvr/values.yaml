@@ -281,7 +281,7 @@ autoscaling:
 #          value: 100m
 
 postHook:
-  enabled: true
+  enabled: false
   annotations: {}
   image: curlimages/curl:latest
   args: []
