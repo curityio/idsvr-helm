@@ -163,10 +163,11 @@ curity:
     podAnnotations: {}
     podLabels: {}
     resources: {}
-    securityContext:
-      runAsUser: 10001
-      runAsGroup: 10000
-      fsGroup: 10000
+    securityContext: {}
+
+  convertKeystoreConfJob:
+    resources: {}
+    securityContext: {}
 
   config:
     uiEnabled: false
@@ -280,7 +281,7 @@ autoscaling:
 #          value: 100m
 
 postHook:
-  enabled: false
+  enabled: true
   annotations: {}
   image: curlimages/curl:latest
   args: []
@@ -292,6 +293,9 @@ postHook:
 #        secretKeyRef:
 #          key: SLACK_WEBHOOK_URL
 #          name: curity-idsvr-secret
+
+  resources: {}
+  securityContext: {}
 
 nodeSelector: {}
 

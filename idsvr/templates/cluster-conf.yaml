@@ -58,12 +58,8 @@ spec:
   template:
     metadata:
       annotations:
-        {{- if .Values.curity.clusterConfJob.podAnnotations }}
-          {{- .Values.curity.clusterConfJob.podAnnotations | toYaml | nindent 8 }}
-        {{- end }}
-      labels:
-        {{- if .Values.curity.clusterConfJob.podLabels }}
-          {{- .Values.curity.clusterConfJob.podLabels | toYaml | nindent 8 }}
+        {{- if $.Values.curity.jobsAnnotations }}
+          {{- $.Values.curity.jobsAnnotations | toYaml | nindent 8 }}
         {{- end }}
     spec:
       automountServiceAccountToken: false
@@ -75,10 +71,10 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.curity.clusterConfJob.securityContext }}
       securityContext:
-        runAsUser: {{ .Values.curity.clusterConfJob.securityContext.runAsUser }}
-        runAsGroup: {{ .Values.curity.clusterConfJob.securityContext.runAsGroup }}
-        fsGroup: {{ .Values.curity.clusterConfJob.securityContext.fsGroup }}
+        {{- .Values.curity.clusterConfJob.securityContext | toYaml | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ include "curity.fullname" . }}-cluster-conf-job
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
