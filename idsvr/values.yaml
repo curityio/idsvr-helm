@@ -159,6 +159,14 @@ curity:
 #        - post-commit-scripts
       resources: {}
 
+  clusterConfJob:
+    resources: {}
+    securityContext: {}
+
+  convertKeystoreConfJob:
+    resources: {}
+    securityContext: {}
+
   config:
     uiEnabled: false
     backup: false
@@ -283,6 +291,9 @@ postHook:
 #        secretKeyRef:
 #          key: SLACK_WEBHOOK_URL
 #          name: curity-idsvr-secret
+
+  resources: {}
+  securityContext: {}
 
 nodeSelector: {}
 
