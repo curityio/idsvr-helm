@@ -58,8 +58,8 @@ spec:
   template:
     metadata:
       annotations:
-        {{- if $.Values.curity.jobsAnnotations }}
-          {{- $.Values.curity.jobsAnnotations | toYaml | nindent 8 }}
+        {{- if .Values.curity.jobsAnnotations }}
+          {{- .Values.curity.jobsAnnotations | toYaml | nindent 8 }}
         {{- end }}
     spec:
       automountServiceAccountToken: false
