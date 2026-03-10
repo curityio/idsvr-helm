@@ -82,6 +82,9 @@ curity:
 #        - confsvc-internal
 #        - post-commit-scripts
     resources: {}
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
 
   runtime:
     role: default
@@ -130,13 +133,14 @@ curity:
 # Sets the termination grace period for pods spawned by the Kubernetes Deployment.
 # Ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
     terminationGracePeriodSeconds: 30
+    nodeSelector: {}
+    tolerations: []
 # Affinity for pod assignment
 # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-#    affinity: {}
-
+    affinity: {}
 # Topology spread constraints for pod assignment (requires Kubernetes >= 1.19)
 # Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
-#    topologySpreadConstraints: []
+    topologySpreadConstraints: []
 # extraEnv provides additional environment variables
 #    extraEnv:
 #      - name: SOME_EXTRA_VARIABLE

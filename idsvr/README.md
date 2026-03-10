@@ -93,6 +93,9 @@ In the table below you can find information about the parameters that are config
 | `curity.admin.logging.image` | The image that will be used to create the logging containers | `busybox:latest` |
 | `curity.admin.logging.resources` | Resource limits applied in logging containers. When set overrides `logging.resources` settings only on the admin node. | `{}` |
 | `curity.admin.resources` | Resource limits applied in admin deployment. When set overrides `resources` settings only on the admin node. | `{}` |
+| `curity.admin.nodeSelector` | Node selector for the admin deployment. When set overrides `nodeSelector` settings only on the admin node. | `{}` |
+| `curity.admin.tolerations` | Tolerations for the admin deployment. When set overrides `tolerations` settings only on the admin node. | `[]` |
+| `curity.admin.affinity` | Affinity for the admin deployment. When set overrides `affinity` settings only on the admin node. | `{}` |
 | `curity.admin.securityContext.runAsUser` | The user the container in the pod will run as. | `10001` |
 | `curity.admin.securityContext.runAsGroup` | The group the container in the pod will run as. | `10000` |
 | `curity.admin.securityContext.runAsUser` | The file system group for mounted volumes. | `10000` |
@@ -130,7 +133,9 @@ In the table below you can find information about the parameters that are config
 | `curity.runtime.resources` | Resource limits applied in runtime deployment. When set overrides `resources` settings only on the runtime nodes. | `{}` |
 | `curity.runtime.lifecycle` | These options include settings for startup, shutdown, and other lifecycle events. | `[]` |
 | `curity.runtime.terminationGracePeriodSeconds` | Sets the termination grace period for runtime pods spawned by the Kubernetes Deployment. | `30` |
-| `curity.runtime.affinity` | Affinity for runtime pod assignment. | `{}` |
+| `curity.runtime.nodeSelector` | Node selector for the runtime deployment. When set overrides `nodeSelector` settings only on the runtime nodes. | `{}` |
+| `curity.runtime.tolerations` | Tolerations for the runtime deployment. When set overrides `tolerations` settings only on the runtime nodes. | `[]` |
+| `curity.runtime.affinity` | Affinity for the runtime deployment. When set overrides `affinity` settings only on the runtime nodes. | `{}` |
 | `curity.runtime.topologySpreadConstraints` | Topology spread constraints for runtime pod assignment (requires Kubernetes >= 1.19). | `[]` |
 | `curity.runtime.securityContext.runAsUser` | The user the container in the pod will run as. | `10001` |
 | `curity.runtime.securityContext.runAsGroup` | The group the container in the pod will run as. | `10000` |
@@ -186,9 +191,9 @@ In the table below you can find information about the parameters that are config
 | `postHook.args` | List of arguments. Default command is _/bin/sh_| `[]` |
 | `postHook.command` | The command for the posthook container | `/bin/sh` |
 | `postHook.extraEnv` | Extra environment variables to provide to the posthook container | `[]` |
-| `nodeSelector` | Node selector applied in admin and runtime deployments | `{}` |
-| `tolerations` | Tolerations applied in admin and runtime deployments | `{}` |
-| `affinity` | Affinity applied in admin and runtime deployments| `{}` |
+| `nodeSelector` | Default node selector applied to all deployments and jobs. Can be overridden per deployment with `curity.admin.nodeSelector` and `curity.runtime.nodeSelector`. | `{}` |
+| `tolerations` | Default tolerations applied to all deployments and jobs. Can be overridden per deployment with `curity.admin.tolerations` and `curity.runtime.tolerations`. | `[]` |
+| `affinity` | Default affinity applied to all deployments and jobs. Can be overridden per deployment with `curity.admin.affinity` and `curity.runtime.affinity`. | `{}` |
 | `ingress.ingressClassName` | IngressClassName is the name of an IngressClass cluster resource. Ingress controller use this field to know whether they should be serving this Ingress resource. | `null` |
 
 <b id="f1">1</b> The network policy within the cluster will not have any affect unless there is a network policy
