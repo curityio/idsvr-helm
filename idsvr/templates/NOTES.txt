@@ -1,5 +1,5 @@
 Get the application URL by running these commands:
-{{- if .Values.ingress.enabled }}
+{{- if and .Values.curity.admin.enabled .Values.ingress.enabled }}
   Curity: http{{ if .Values.ingress.runtime.secretName }}s{{ end }}://{{ .Values.ingress.runtime.host}}
   {{- if .Values.curity.config.uiEnabled }}
   Admin UI: http{{ if .Values.ingress.admin.secretName }}s{{ end }}://{{ .Values.ingress.admin.host}}/admin

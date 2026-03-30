@@ -1,3 +1,4 @@
+{{- if .Values.curity.admin.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -38,3 +39,4 @@ spec:
     app.kubernetes.io/name: {{ include "curity.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     role: {{ include "curity.fullname" . }}-admin
+  {{- end }}

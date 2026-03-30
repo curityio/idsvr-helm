@@ -28,6 +28,7 @@ curity:
   jobsAnnotations: {}
 
   admin:
+    enabled: true
     role: admin
     annotations: {}
     podLabels: {}

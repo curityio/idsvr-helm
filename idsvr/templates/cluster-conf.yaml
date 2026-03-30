@@ -1,4 +1,4 @@
-{{- if or (not .Values.curity.config.persistentConfigVolume.enabled) (eq .Release.Revision 1) }}
+{{- if and .Values.curity.admin.enabled (or (not .Values.curity.config.persistentConfigVolume.enabled) (eq .Release.Revision 1)) }}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -42,7 +42,6 @@ data:
 
     $REQUEST_CONTENT
     EOF
-    
 ---
 apiVersion: batch/v1
 kind: Job
@@ -115,19 +114,19 @@ spec:
         - name: kube-api-access
           projected:
             sources:
-            - serviceAccountToken:
-                path: token
-                expirationSeconds: 3600
-            - configMap:
-                name: kube-root-ca.crt
-                items:
-                  - key: ca.crt
-                    path: ca.crt
-            - downwardAPI:
-                items:
-                  - path: "namespace"
-                    fieldRef:
-                      fieldPath: metadata.namespace
+              - serviceAccountToken:
+                  path: token
+                  expirationSeconds: 3600
+              - configMap:
+                  name: kube-root-ca.crt
+                  items:
+                    - key: ca.crt
+                      path: ca.crt
+              - downwardAPI:
+                  items:
+                    - path: "namespace"
+                      fieldRef:
+                        fieldPath: metadata.namespace
       serviceAccountName: {{ include "curity.fullname" . }}-service-account
       restartPolicy: Never
 {{- end }}
