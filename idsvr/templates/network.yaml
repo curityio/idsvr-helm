@@ -1,4 +1,4 @@
-{{- if .Values.networkpolicy.enabled -}}
+{{- if and .Values.curity.admin.enabled .Values.networkpolicy.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -23,7 +23,7 @@ spec:
     - from:
         - namespaceSelector:
             matchLabels:
-              name: {{ .Values.networkpolicy.apigatewayNamespace }} 
+              name: {{ .Values.networkpolicy.apigatewayNamespace }}
       ports:
         - protocol: TCP
           port: {{ .Values.curity.adminUiPort }}

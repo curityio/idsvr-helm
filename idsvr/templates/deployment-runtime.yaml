@@ -121,10 +121,12 @@ spec:
             - mountPath: /opt/idsvr/var/log/
               name: log-volume
             {{- end }}
+           {{- if and .Values.curity.admin.enabled (or (not .Values.curity.config.persistentConfigVolume.enabled) (eq .Release.Revision 1)) }}
             - mountPath: /opt/idsvr/etc/init/cluster.xml
               subPath: cluster.xml
               name: cluster-xml
               readOnly: true
+           {{- end }}
             {{- if .Values.curity.config.configurationSecret }}
             - mountPath: /opt/idsvr/etc/init/config.xml
               subPath: config.xml

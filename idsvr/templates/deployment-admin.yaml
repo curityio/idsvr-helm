@@ -1,3 +1,4 @@
+{{- if .Values.curity.admin.enabled -}}
 {{- $root := . -}}
 apiVersion: apps/v1
 kind: Deployment
@@ -314,3 +315,4 @@ spec:
       tolerations:
             {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end -}}

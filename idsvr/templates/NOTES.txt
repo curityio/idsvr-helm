@@ -1,7 +1,7 @@
 Get the application URL by running these commands:
 {{- if .Values.ingress.enabled }}
   Curity: http{{ if .Values.ingress.runtime.secretName }}s{{ end }}://{{ .Values.ingress.runtime.host}}
-  {{- if .Values.curity.config.uiEnabled }}
+  {{- if and .Values.curity.admin.enabled .Values.curity.config.uiEnabled }}
   Admin UI: http{{ if .Values.ingress.admin.secretName }}s{{ end }}://{{ .Values.ingress.admin.host}}/admin
   {{- end }}
 {{- else if contains "NodePort" .Values.curity.runtime.service.type }}
