@@ -142,6 +142,7 @@ In the table below you can find information about the parameters that are config
 | `curity.runtime.securityContext.runAsUser`           | The user the container in the pod will run as.                                                                                                                                                            | `10001`                          |
 | `curity.runtime.securityContext.runAsGroup`          | The group the container in the pod will run as.                                                                                                                                                           | `10000`                          |
 | `curity.runtime.securityContext.runAsUser`           | The file system group for mounted volumes.                                                                                                                                                                | `10000`                          |
+| `curity.config.disableClusterConfigJob`              | Flag to enable/disable the creation of the Job that generates the cluster xml. When set to `true` clustering configuration should be provided in other means.                                             | `false`                          |
 | `curity.config.uiEnabled`                            | Flag to enable/disable the service for Admin UI and Admin REST API, ignored if `ingress.admin.enabled=true` or `curity.admin.enabled=false`                                                               | `false`                          |
 | `curity.config.password`                             | The administrator password. Required if `curity.config.skipInstall` is `true` or `curity.config.environmentVariableSecrets` and `curity.config.configuration`is not set                                   | `null`                           |
 | `curity.config.skipInstall`                          | If set to `true` the installer script will not run<sup>[3](#f3)</sup>                                                                                                                                     | `false`                          |
@@ -212,7 +213,10 @@ paths:
 - /bar
 ```
 
-<b id="f3">3</b> The `unattendedinstall` script runs by default on the admin node if an admin `PASSWORD` is set, either by the value or some other environment variable. The installer creates default keys and enables the Admin UI so this configuration option shall be used if that config is either not necessary or loaded in some other way (i.e using `curity.config.configuration` or embedded in the docker image used).
+<b id="f3">3</b> The `unattendedinstall` script runs by default on the admin node if an admin `PASSWORD` is set, either
+by the value or some other environment variable. The installer creates default keys and enables the Admin UI so this
+configuration option shall be used if that config is either not necessary or loaded in some other way (i.e using
+`curity.config.configuration` or embedded in the docker image used).
 
 <b id="f4">5</b> If `curity.config.backup` is enabled, the assigned service account must have access to update secrets.
 
@@ -237,7 +241,9 @@ configuration
 (minus the clustering configuration which is handled by this chart) and adds it to a secret which by default has the
 name`{{ include "curity.fullname" . }}-config-backup`. The key for the configuration is `<DATE>-<TRANSACTION_ID>.xml`.
 
-So, in order to update your deployment and use a previous backup of the configuration, you need to reference it in `curity.config.configuration`:
+So, in order to update your deployment and use a previous backup of the configuration, you need to reference it in
+`curity.config.configuration`:
+
 ```shell script
 curity:
     config:
@@ -255,14 +261,17 @@ helm upgrade <release-name> curity/idsvr -f myValues.xml
 
 ## Enabling the persistent configuration volume
 
-It is possible to set the `curity.config.persistentConfigVolume.enabled` which will create a `PersistedVolumeClaim` using the defined `storageClass`, `accessMode` and `size`.
+It is possible to set the `curity.config.persistentConfigVolume.enabled` which will create a `PersistedVolumeClaim`
+using the defined `storageClass`, `accessMode` and `size`.
 The volume will be mounted to the admin Pod under `/opt/idsvr/var/cdb`.
 
-When this is enabled, the cluster keys are not rotated between deployment upgrades. Instead only a single key is generated during installation and will be kept for the lifetime of the deployment.
-Also, any configuration that is stored in `/opt/idsvr/etc/init` either by `curity.config.configuration` or by included files in the image will be ignored for subsequent upgrades except the first installation.
+When this is enabled, the cluster keys are not rotated between deployment upgrades. Instead only a single key is
+generated during installation and will be kept for the lifetime of the deployment.
+Also, any configuration that is stored in `/opt/idsvr/etc/init` either by `curity.config.configuration` or by included
+files in the image will be ignored for subsequent upgrades except the first installation.
 
-Although enabling this setting is perfect for experimenting with the Curity Identity Server, it is not something that we suggest to be used in production as it can lead to issues that are difficult to overcome.
-
+Although enabling this setting is perfect for experimenting with the Curity Identity Server, it is not something that we
+suggest to be used in production as it can lead to issues that are difficult to overcome.
 
 ## Sending all logs to stdout
 
@@ -347,7 +356,9 @@ Example: Post message to slack.
               key: SLACK_WEBHOOK_URL
               name: curity-idsvr-secret
 ```
+
 Built in variables are that are exposed as environment variables in post hook container :
+
 - `APP_NAME` - Curity fullname
 - `APP_VERSION` - Image tag
 - `CHART_NAME` - Chart name and version

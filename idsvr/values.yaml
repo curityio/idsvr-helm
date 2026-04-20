@@ -173,6 +173,7 @@ curity:
     securityContext: {}
 
   config:
+    disableClusterConfigJob: false
     uiEnabled: false
     backup: false
     password:

@@ -1,3 +1,4 @@
+{{- if or (and (not .Values.curity.config.disableClusterConfigJob) .Values.curity.admin.enabled) .Values.curity.config.convertKeystore }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -44,3 +45,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "curity.fullname" . }}-service-account
+{{- end }}
