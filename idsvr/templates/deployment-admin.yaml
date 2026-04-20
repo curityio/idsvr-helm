@@ -303,15 +303,15 @@ spec:
       initContainers:
             {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.nodeSelector }}
+      {{- with (.Values.curity.admin.nodeSelector | default .Values.nodeSelector) }}
       nodeSelector:
             {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with (.Values.curity.admin.affinity | default .Values.affinity) }}
       affinity:
             {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with (.Values.curity.admin.tolerations | default .Values.tolerations) }}
       tolerations:
             {{- toYaml . | nindent 8 }}
       {{- end }}
