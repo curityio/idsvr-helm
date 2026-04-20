@@ -1,4 +1,4 @@
-{{- if .Values.curity.config.backup -}}
+{{- if and .Values.curity.admin.enabled .Values.curity.config.backup -}}
 apiVersion: v1
 kind: Secret
 metadata:
