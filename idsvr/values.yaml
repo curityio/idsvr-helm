@@ -10,7 +10,7 @@ serviceAccountAnnotations: {}
 
 image:
   repository: curity.azurecr.io/curity/idsvr
-  tag: 11.1
+  tag: 11.2
   pullPolicy: IfNotPresent
   pullSecret:
 
