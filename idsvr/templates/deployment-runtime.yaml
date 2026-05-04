@@ -121,7 +121,7 @@ spec:
             - mountPath: /opt/idsvr/var/log/
               name: log-volume
             {{- end }}
-           {{- if and .Values.curity.admin.enabled (or (not .Values.curity.config.persistentConfigVolume.enabled) (eq .Release.Revision 1)) }}
+           {{- if and .Values.curity.admin.enabled (not .Values.curity.config.disableClusterConfigJob) (or (not .Values.curity.config.persistentConfigVolume.enabled) (eq .Release.Revision 1)) }}
             - mountPath: /opt/idsvr/etc/init/cluster.xml
               subPath: cluster.xml
               name: cluster-xml
@@ -200,12 +200,14 @@ spec:
         - name: log-volume
           emptyDir: {}
         {{- end }}
+        {{- if and .Values.curity.admin.enabled (not .Values.curity.config.disableClusterConfigJob) (or (not .Values.curity.config.persistentConfigVolume.enabled) (eq .Release.Revision 1)) }}
         - name: cluster-xml
           secret:
             secretName: {{ include "curity.fullname" . }}-cluster-config-xml
             items:
               - key: cluster-{{ ternary "1" .Release.Revision .Values.curity.config.persistentConfigVolume.enabled }}.xml
                 path: cluster.xml
+        {{- end }}
         {{- if .Values.curity.config.configurationSecret }}
         - name: config
           secret:
