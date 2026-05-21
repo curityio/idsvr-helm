@@ -1,6 +1,6 @@
 {{- if .Values.curity.dbSchemaManagementJob.enabled -}}
 {{- if and (not .Values.curity.dbSchemaManagementJob.jdbcConnectionString) (not .Values.curity.dbSchemaManagementJob.environmentVariableSecrets) -}}
-{{- fail "curity.dbSchemaManagementJob.enabled is true but JDBC_CONNECTION_STRING is not provided. Set curity.dbSchemaManagementJob.jdbcConnectionString, or supply it via a secret listed in curity.dbSchemaManagementJob.environmentVariableSecrets." -}}
+{{- fail "curity.dbSchemaManagementJob.enabled is true but JDBC_URL is not provided. Set curity.dbSchemaManagementJob.jdbcConnectionString, or supply it via a secret listed in curity.dbSchemaManagementJob.environmentVariableSecrets." -}}
 {{- end }}
 apiVersion: batch/v1
 kind: Job
