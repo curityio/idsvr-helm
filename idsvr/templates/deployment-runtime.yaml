@@ -166,6 +166,10 @@ spec:
             {{- else }}
               {{- toYaml .Values.resources | nindent 12 }}
             {{- end }}
+          {{- with .Values.curity.runtime.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
         {{- if .Values.curity.runtime.logging.stdout }}
         {{- range .Values.curity.runtime.logging.logs }}
         - name: {{ . }}
@@ -184,6 +188,10 @@ spec:
             {{- else }}
               {{- toYaml $root.Values.logging.resources | nindent 12 }}
             {{- end }}
+          {{- with $root.Values.curity.runtime.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- end }}
       {{- if .Values.image.pullSecret }}
