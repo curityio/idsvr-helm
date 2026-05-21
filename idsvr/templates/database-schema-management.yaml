@@ -1,0 +1,76 @@
+{{- if .Values.curity.dbSchemaManagementJob.enabled -}}
+{{- if and (not .Values.curity.dbSchemaManagementJob.jdbcConnectionString) (not (join "" (default (list) .Values.curity.dbSchemaManagementJob.environmentVariableSecrets))) -}}
+{{- fail "curity.dbSchemaManagementJob.enabled is true but JDBC_URL is not provided. Set curity.dbSchemaManagementJob.jdbcConnectionString, or supply it via a secret listed in curity.dbSchemaManagementJob.environmentVariableSecrets." -}}
+{{- end }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "curity.fullname" . }}-{{ .Release.Revision }}-db-mgmt-job
+  labels:
+        {{- include "curity.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  ttlSecondsAfterFinished: 3600
+  backoffLimit: 2
+  template:
+    metadata:
+      {{- with .Values.curity.jobsAnnotations }}
+      annotations:
+          {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.curity.dbSchemaManagementJob.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      automountServiceAccountToken: false
+      containers:
+        - name: {{ include "curity.fullname" . }}-db-mgmt-job
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.curity.dbSchemaManagementJob.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          command: ["/opt/idsvr/bin/idsvr", "-I"]
+          env:
+            {{- if .Values.curity.dbSchemaManagementJob.jdbcConnectionString }}
+            - name: JDBC_URL
+              value: {{ .Values.curity.dbSchemaManagementJob.jdbcConnectionString | quote }}
+            {{- end}}
+            {{- if .Values.curity.dbSchemaManagementJob.jdbcUsername }}
+            - name: JDBC_USERNAME
+              value: {{ .Values.curity.dbSchemaManagementJob.jdbcUsername | quote }}
+            {{- end }}
+            {{- if .Values.curity.dbSchemaManagementJob.jdbcPassword }}
+            - name: JDBC_PASSWORD
+              value: {{ .Values.curity.dbSchemaManagementJob.jdbcPassword | quote }}
+            {{- end }}
+          {{- with .Values.curity.dbSchemaManagementJob.environmentVariableSecrets }}
+          envFrom:
+          {{- range $secret := . }}
+            {{- if $secret }}
+            - secretRef:
+                name: {{ $secret | quote }}
+            {{- end }}
+          {{- end }}
+          {{- end }}
+
+      {{- if .Values.image.pullSecret }}
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecret }}
+      {{- end }}
+      serviceAccountName: {{ .Values.curity.dbSchemaManagementJob.serviceAccount.name | quote }}
+      restartPolicy: Never
+{{- end }}

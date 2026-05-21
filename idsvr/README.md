@@ -142,6 +142,14 @@ In the table below you can find information about the parameters that are config
 | `curity.runtime.securityContext.runAsUser`           | The user the container in the pod will run as.                                                                                                                                                            | `10001`                          |
 | `curity.runtime.securityContext.runAsGroup`          | The group the container in the pod will run as.                                                                                                                                                           | `10000`                          |
 | `curity.runtime.securityContext.runAsUser`           | The file system group for mounted volumes.                                                                                                                                                                | `10000`                          |
+| `curity.dbSchemaManagementJob.enabled`               | Flag to enable/disable the pre-install/pre-upgrade Job that runs `idsvr -I` to create or update the Curity database schema. When `true`, either `jdbcConnectionString` or a secret in `environmentVariableSecrets` providing `JDBC_URL` must be set.                                                                                                                          | `false`                          |
+| `curity.dbSchemaManagementJob.jdbcConnectionString`  | The JDBC URL the Job uses to connect to the database. Rendered into the `JDBC_URL` env var. Leave unset and provide it via `environmentVariableSecrets` to keep it out of the rendered manifest.                                                                                                                                                                            | `null`                           |
+| `curity.dbSchemaManagementJob.jdbcUsername`          | Username for the database connection. Rendered into the `JDBC_USERNAME` env var. Omit if the connection string already encodes credentials or if authentication is handled out-of-band.                                                                                                                                                                                      | `null`                           |
+| `curity.dbSchemaManagementJob.jdbcPassword`          | Password for the database connection. Rendered into the `JDBC_PASSWORD` env var. Prefer supplying this through `environmentVariableSecrets` rather than inline.                                                                                                                                                                                                              | `null`                           |
+| `curity.dbSchemaManagementJob.environmentVariableSecrets` | Array of Secret names whose keys are mounted as environment variables on the Job (via `envFrom`). Use this to inject `JDBC_URL`, `JDBC_USERNAME`, or `JDBC_PASSWORD` from Secrets instead of plain values.                                                                                                                                                              | `[]`                             |
+| `curity.dbSchemaManagementJob.serviceAccount.name`   | Service account used by the Job pod. The Job does not need to call the Kubernetes API.                                                                                                                                                                                                                                                                                       | `default`                        |
+| `curity.dbSchemaManagementJob.resources`             | Resource requests and limits applied to the Job container.                                                                                                                                                                                                                                                                                                                   | `{}`                             |
+| `curity.dbSchemaManagementJob.securityContext`       | Pod-level securityContext applied to the Job.                                                                                                                                                                                                                                                                                                                                | `{}`                             |
 | `curity.config.disableClusterConfigJob`              | Flag to enable/disable the creation of the Job that generates the cluster xml. When set to `true` clustering configuration should be provided in other means.                                             | `false`                          |
 | `curity.config.uiEnabled`                            | Flag to enable/disable the service for Admin UI and Admin REST API, ignored if `ingress.admin.enabled=true` or `curity.admin.enabled=false`                                                               | `false`                          |
 | `curity.config.password`                             | The administrator password. Required if `curity.config.skipInstall` is `true` or `curity.config.environmentVariableSecrets` and `curity.config.configuration`is not set                                   | `null`                           |
@@ -231,6 +239,54 @@ $ helm repo add curity https://curityio.github.io/idsvr-helm/
 $ helm repo update
 $ helm install <release-name> curity/idsvr --set curity.config.password=<admin_user_password>
 ```
+
+## Database schema management
+
+When Curity is configured with a JDBC data source, the database schema can be managed by the helm chart. The chart can run a one-shot Job that invokes `idsvr -I` against the configured database to create or update the schema. The Job runs as a `pre-install,pre-upgrade` hook and exits as soon as schema management completes.
+
+To enable it, set `curity.dbSchemaManagementJob.enabled` to `true` and provide a JDBC URL. The simplest form:
+
+```shell
+helm install <release-name> curity/idsvr \
+  --set curity.config.password=<admin_password> \
+  --set curity.dbSchemaManagementJob.enabled=true \
+  --set curity.dbSchemaManagementJob.jdbcConnectionString=<jdbc-url> \
+  --set curity.dbSchemaManagementJob.jdbcUsername=<db-user> \
+  --set curity.dbSchemaManagementJob.jdbcPassword=<db-password>
+```
+
+If `enabled` is `true` but no connection string is provided (neither inline nor via a Secret), `helm install`/`upgrade` aborts at render time with an error.
+
+### Providing connection details via a Secret
+
+Inline values land in the rendered manifest in plain text. To keep credentials out of release manifests and Helm history, put `JDBC_URL`, `JDBC_USERNAME`, and `JDBC_PASSWORD` in a Kubernetes Secret and reference it in `environmentVariableSecrets`:
+
+```shell
+kubectl create secret generic idsvr-db-credentials \
+  --from-literal=JDBC_URL='jdbc:postgresql://db.example.com:5432/idsvr' \
+  --from-literal=JDBC_USERNAME='<username>' \
+  --from-literal=JDBC_PASSWORD='<password>'
+```
+
+```yaml
+curity:
+  dbSchemaManagementJob:
+    enabled: true
+    environmentVariableSecrets:
+      - idsvr-db-credentials
+```
+
+You can mix the two: inline values from `jdbcConnectionString` / `jdbcUsername` / `jdbcPassword` are emitted as `env:` entries and will take precedence over the same keys coming from `envFrom:` Secrets per Kubernetes semantics.
+
+### Inspecting Job output
+
+The Job sets `ttlSecondsAfterFinished: 3600`, so it stays around for an hour after completion. To see what `idsvr -I` did:
+
+```shell
+kubectl logs -l job-name=<release-name>-<revision>-db-mgmt-job -n <namespace>
+```
+
+After the TTL expires the Job and its pod are garbage collected by Kubernetes.
 
 ## Using configuration Backup
 

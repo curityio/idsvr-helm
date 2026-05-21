@@ -172,6 +172,17 @@ curity:
     resources: {}
     securityContext: {}
 
+  dbSchemaManagementJob:
+    enabled: false
+    jdbcConnectionString:
+    environmentVariableSecrets: []
+    jdbcUsername:
+    jdbcPassword:
+    serviceAccount:
+      name: default
+    resources: {}
+    securityContext: {}
+
   config:
     disableClusterConfigJob: false
     uiEnabled: false
