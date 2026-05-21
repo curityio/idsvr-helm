@@ -169,10 +169,12 @@ curity:
   clusterConfJob:
     resources: {}
     securityContext: {}
+    containerSecurityContext: {}
 
   convertKeystoreConfJob:
     resources: {}
     securityContext: {}
+    containerSecurityContext: {}
 
   config:
     disableClusterConfigJob: false
@@ -302,6 +304,7 @@ postHook:
 
   resources: {}
   securityContext: {}
+  containerSecurityContext: {}
 
 nodeSelector: {}
 
