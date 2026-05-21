@@ -47,11 +47,14 @@ data:
     STATUS=$(printf '%s\n' "$RESPONSE" | grep -m1 '^HTTP/' | awk '{print $2}')
     echo "PATCH secret/$SECRET_NAME -> HTTP $STATUS"
 
-    if [ "${STATUS:0:1}" != "2" ]; then
-      # error body is safe to log (no secret data, just a Status object)
-      printf '%s\n' "$RESPONSE" | sed -n '/^$/,$p' >&2
-      exit 1
-    fi
+    case "$STATUS" in
+      2*) ;;
+      *)
+        # error body is safe to log (no secret data, just a Status object)
+        printf '%s\n' "$RESPONSE" | sed -n '/^$/,$p' >&2
+        exit 1
+        ;;
+    esac
 
 ---
 apiVersion: batch/v1
