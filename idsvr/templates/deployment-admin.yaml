@@ -200,6 +200,10 @@ spec:
            {{- else }}
                {{- toYaml .Values.resources | nindent 12 }}
            {{- end }}
+          {{- with .Values.curity.admin.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
         {{- if .Values.curity.admin.logging.stdout }}
         {{- range .Values.curity.admin.logging.logs }}
         - name: {{ . }}
@@ -218,6 +222,10 @@ spec:
            {{- else }}
                {{- toYaml $root.Values.logging.resources | nindent 12 }}
            {{- end }}
+          {{- with $root.Values.curity.admin.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- end }}
       {{- if .Values.image.pullSecret }}
