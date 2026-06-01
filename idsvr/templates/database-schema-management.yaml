@@ -43,6 +43,10 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- with .Values.curity.dbSchemaManagementJob.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           command: ["/opt/idsvr/bin/idsvr", "-I"]
           env:
             {{- if .Values.curity.dbSchemaManagementJob.jdbcConnectionString }}

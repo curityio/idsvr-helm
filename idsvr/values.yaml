@@ -186,6 +186,7 @@ curity:
       name: default
     resources: {}
     securityContext: {}
+    containerSecurityContext: {}
 
   config:
     disableClusterConfigJob: false
