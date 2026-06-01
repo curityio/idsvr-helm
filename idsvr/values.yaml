@@ -37,6 +37,7 @@ curity:
       runAsUser: 10001
       runAsGroup: 10000
       fsGroup: 10000
+    containerSecurityContext: {}
     initContainers: []
     extraVolumes: []
     extraVolumeMounts: []
@@ -96,6 +97,7 @@ curity:
       runAsUser: 10001
       runAsGroup: 10000
       fsGroup: 10000
+    containerSecurityContext: {}
     initContainers: []
     extraVolumes: []
     extraVolumeMounts: []
@@ -167,10 +169,12 @@ curity:
   clusterConfJob:
     resources: {}
     securityContext: {}
+    containerSecurityContext: {}
 
   convertKeystoreConfJob:
     resources: {}
     securityContext: {}
+    containerSecurityContext: {}
 
   config:
     disableClusterConfigJob: false
@@ -300,6 +304,7 @@ postHook:
 
   resources: {}
   securityContext: {}
+  containerSecurityContext: {}
 
 nodeSelector: {}
 
