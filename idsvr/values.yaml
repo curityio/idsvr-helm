@@ -176,6 +176,18 @@ curity:
     securityContext: {}
     containerSecurityContext: {}
 
+  dbSchemaManagementJob:
+    enabled: false
+    jdbcConnectionString:
+    environmentVariableSecrets: []
+    jdbcUsername:
+    jdbcPassword:
+    serviceAccount:
+      name: default
+    resources: {}
+    securityContext: {}
+    containerSecurityContext: {}
+
   config:
     disableClusterConfigJob: false
     uiEnabled: false
