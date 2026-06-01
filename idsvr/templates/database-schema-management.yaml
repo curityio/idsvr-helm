@@ -48,11 +48,12 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           command: ["/opt/idsvr/bin/idsvr", "-I"]
+          {{- if or .Values.curity.dbSchemaManagementJob.jdbcConnectionString .Values.curity.dbSchemaManagementJob.jdbcUsername .Values.curity.dbSchemaManagementJob.jdbcPassword }}
           env:
             {{- if .Values.curity.dbSchemaManagementJob.jdbcConnectionString }}
             - name: JDBC_URL
               value: {{ .Values.curity.dbSchemaManagementJob.jdbcConnectionString | quote }}
-            {{- end}}
+            {{- end }}
             {{- if .Values.curity.dbSchemaManagementJob.jdbcUsername }}
             - name: JDBC_USERNAME
               value: {{ .Values.curity.dbSchemaManagementJob.jdbcUsername | quote }}
@@ -62,6 +63,7 @@ spec:
               value: {{ .Values.curity.dbSchemaManagementJob.jdbcPassword | quote }}
             {{- end }}
           {{- with .Values.curity.dbSchemaManagementJob.environmentVariableSecrets }}
+          {{- end }}
           envFrom:
           {{- range $secret := . }}
             {{- if $secret }}
