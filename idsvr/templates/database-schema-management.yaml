@@ -62,8 +62,8 @@ spec:
             - name: JDBC_PASSWORD
               value: {{ .Values.curity.dbSchemaManagementJob.jdbcPassword | quote }}
             {{- end }}
-          {{- with .Values.curity.dbSchemaManagementJob.environmentVariableSecrets }}
           {{- end }}
+          {{- with .Values.curity.dbSchemaManagementJob.environmentVariableSecrets }}
           envFrom:
           {{- range $secret := . }}
             {{- if $secret }}
