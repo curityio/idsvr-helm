@@ -46,6 +46,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args: ["/opt/idsvr/bin/idsvr",
                  "-s", "{{ .Values.curity.runtime.role }}",
+                 {{- if .Values.curity.config.fipsMode}}"--fips-mode",{{end -}}
                  {{- if .Values.curity.config.encryptionKey}}"-e","{{.Values.curity.config.encryptionKey}}",{{end -}}
                  "--no-admin"]
           env:

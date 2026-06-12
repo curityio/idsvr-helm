@@ -190,6 +190,7 @@ curity:
 
   config:
     disableClusterConfigJob: false
+    fipsMode: false
     uiEnabled: false
     backup: false
     password:
