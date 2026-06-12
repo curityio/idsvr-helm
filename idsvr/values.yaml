@@ -187,7 +187,9 @@ curity:
     resources: {}
     securityContext: {}
     containerSecurityContext: {}
-
+    #repository: curity.azurecr.io/curity/idsvr
+    #tag: 11.2
+    
   config:
     disableClusterConfigJob: false
     uiEnabled: false

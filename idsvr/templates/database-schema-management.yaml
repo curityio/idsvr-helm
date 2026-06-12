@@ -2,6 +2,10 @@
 {{- if and (not .Values.curity.dbSchemaManagementJob.jdbcConnectionString) (not (join "" (default (list) .Values.curity.dbSchemaManagementJob.environmentVariableSecrets))) -}}
 {{- fail "curity.dbSchemaManagementJob.enabled is true but JDBC_URL is not provided. Set curity.dbSchemaManagementJob.jdbcConnectionString, or supply it via a secret listed in curity.dbSchemaManagementJob.environmentVariableSecrets." -}}
 {{- end }}
+
+{{- $repository := default .Values.image.repository .Values.curity.dbSchemaManagementJob.repository -}}
+{{- $tag := default .Values.image.tag .Values.curity.dbSchemaManagementJob.tag -}}
+
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -37,7 +41,7 @@ spec:
       automountServiceAccountToken: false
       containers:
         - name: {{ include "curity.fullname" . }}-db-mgmt-job
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ $repository }}:{{ $tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- with .Values.curity.dbSchemaManagementJob.resources }}
           resources:
