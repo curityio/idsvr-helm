@@ -88,6 +88,10 @@ In the table below you can find information about the parameters that are config
 | `curity.admin.readinessProbe.successThreshold`            | ReadinessProbe `successThreshold` for the admin deployment                                                                                                                                                                                           | `3`                              |
 | `curity.admin.readinessProbe.periodSeconds`               | ReadinessProbe `periodSeconds` for the admin deployment                                                                                                                                                                                              | `10`                             |
 | `curity.admin.readinessProbe.initialDelaySeconds`         | ReadinessProbe `initialDelaySeconds` for the admin deployment                                                                                                                                                                                        | `30`                             |
+| `curity.admin.startupProbe.path`                          | StartupProbe `path` for the admin deployment<sup>[5](#f5)</sup>                                                                                                                                                                                     | ``                               |
+| `curity.admin.startupProbe.timeoutSeconds`                | StartupProbe `timeoutSeconds` for the admin deployment                                                                                                                                                                                              | ``                               |
+| `curity.admin.startupProbe.failureThreshold`              | StartupProbe `failureThreshold` for the admin deployment                                                                                                                                                                                            | ``                               |
+| `curity.admin.startupProbe.periodSeconds`                 | StartupProbe `periodSeconds` for the admin deployment                                                                                                                                                                                               | ``                               |
 | `curity.admin.logging.level`                              | The logging level of the admin pod                                                                                                                                                                                                                   | `INFO`                           |
 | `curity.admin.logging.stdout`                             | Flag to enable/disable extra containers that tail the logs in `var/log` folder                                                                                                                                                                       | `false`                          |
 | `curity.admin.logging.logs`                               | Array of the extra containers that will be included in the admin pod                                                                                                                                                                                 | `[]`                             |
@@ -127,6 +131,10 @@ In the table below you can find information about the parameters that are config
 | `curity.runtime.readinessProbe.successThreshold`          | ReadinessProbe `successThreshold` for the runtime deployment                                                                                                                                                                                         | `3`                              |
 | `curity.runtime.readinessProbe.periodSeconds`             | ReadinessProbe `periodSeconds` for the runtime deployment                                                                                                                                                                                            | `10`                             |
 | `curity.runtime.readinessProbe.initialDelaySeconds`       | ReadinessProbe `initialDelaySeconds` for the runtime deployment                                                                                                                                                                                      | `30`                             |
+| `curity.runtime.startupProbe.path`                        | StartupProbe `path` for the runtime deployment<sup>[5](#f5)</sup>                                                                                                                                                                                  | ``                               |
+| `curity.runtime.startupProbe.timeoutSeconds`              | StartupProbe `timeoutSeconds` for the runtime deployment                                                                                                                                                                                            | ``                               |
+| `curity.runtime.startupProbe.failureThreshold`            | StartupProbe `failureThreshold` for the runtime deployment                                                                                                                                                                                          | ``                               |
+| `curity.runtime.startupProbe.periodSeconds`               | StartupProbe `periodSeconds` for the runtime deployment                                                                                                                                                                                             | ``                               |
 | `curity.runtime.logging.level`                            | The logging level of the runtime pod                                                                                                                                                                                                                 | `INFO`                           |
 | `curity.runtime.logging.stdout`                           | Flag to enable/disable extra containers that tail the logs in `var/log` folder.                                                                                                                                                                      | `false`                          |
 | `curity.runtime.logging.logs`                             | Array of the extra containers that will be included in the runtime pods                                                                                                                                                                              | `[]`                             |
@@ -172,7 +180,7 @@ In the table below you can find information about the parameters that are config
 | `curity.config.convertKeystore`                           | The array of secrets containing tls certificates that will be converted to Curity format                                                                                                                                                             | `[]`                             |
 | `curity.config.backup`                                    | If `true`, the configuration will be backed up in a secret in each commit, ignored if `curity.admin.enabled=false`                                                                                                                                   | `false`                          |
 | `curity.config.persistentConfigVolume.enabled`            | If `true` a persisted volume will be mounted in the admin node to persist config during deployment upgrades, ignored if `curity.admin.enabled=false`                                                                                                 | `false`                          |
-| `curity.config.persistentConfigVolume.storageClass`       | The `StorageClass` of the volume                                                                                                                                                                                                                     | `default`                        | 
+| `curity.config.persistentConfigVolume.storageClass`       | The `StorageClass` of the volume                                                                                                                                                                                                                     | `default`                        |
 | `curity.config.persistentConfigVolume.existingClaim`      | If set, an existing persisted volume claim will be used instead of a new one beeing generated.                                                                                                                                                       | `""`                             |
 | `curity.config.persistentConfigVolume.accessMode`         | The access mode of the volume                                                                                                                                                                                                                        | `ReadWriteOnce`                  |
 | `curity.config.persistentConfigVolume.size`               | The size of the persisted volume                                                                                                                                                                                                                     | `800Mi`                          |
@@ -232,7 +240,9 @@ by the value or some other environment variable. The installer creates default k
 configuration option shall be used if that config is either not necessary or loaded in some other way (i.e using
 `curity.config.configuration` or embedded in the docker image used).
 
-<b id="f4">5</b> If `curity.config.backup` is enabled, the assigned service account must have access to update secrets.
+<b id="f4">4</b> If `curity.config.backup` is enabled, the assigned service account must have access to update secrets.
+
+<b id="f5">5</b> **StartupProbe is optional and disabled by default.** To enable, uncomment and configure the `startupProbe` block in your values for either `curity.admin` or `curity.runtime`. The `failureThreshold` determines how long the pod will wait for the application to become ready during startup. With `periodSeconds: 2` and `failureThreshold: 30`, the pod allows up to 60 seconds for startup before failing. Adjust these values based on your environment's Curity startup time. Once enabled, the startup probe will exit automatically once readiness is achieved. Liveness and readiness probes remain active during normal operation.
 
 ## Examples
 
@@ -432,6 +442,34 @@ Built in variables are that are exposed as environment variables in post hook co
 - `APP_VERSION` - Image tag
 - `CHART_NAME` - Chart name and version
 - `RELEASE_NAMESPACE` - Target namespace
+
+## Startup Probe
+
+To reduce the time Kubernetes waits before detecting that a pod is ready to serve traffic, you can enable a startup
+probe. This is useful in environments with slow or variable JVM startup times. With the example below, the pod is
+given up to 60 seconds to become ready before failing.
+
+```yaml
+curity:
+  runtime:
+    startupProbe:
+      path: /
+      timeoutSeconds: 1
+      failureThreshold: 30  # ~60s total (failureThreshold x periodSeconds)
+      periodSeconds: 2
+```
+
+The admin node can be configured in the same way:
+
+```yaml
+curity:
+  admin:
+    startupProbe:
+      path: /
+      timeoutSeconds: 1
+      failureThreshold: 30
+      periodSeconds: 2
+```
 
 ## More Information
 

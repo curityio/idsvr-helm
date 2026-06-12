@@ -134,6 +134,15 @@ spec:
             successThreshold: {{ .Values.curity.admin.readinessProbe.successThreshold }}
             periodSeconds: {{ .Values.curity.admin.readinessProbe.periodSeconds }}
             initialDelaySeconds: {{ .Values.curity.admin.readinessProbe.initialDelaySeconds }}
+          {{- if .Values.curity.admin.startupProbe }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.curity.admin.startupProbe.path }}
+              port: health-check
+            timeoutSeconds: {{ .Values.curity.admin.startupProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.curity.admin.startupProbe.failureThreshold }}
+            periodSeconds: {{ .Values.curity.admin.startupProbe.periodSeconds }}
+          {{- end }}
           volumeMounts:
             {{- if .Values.curity.config.persistentConfigVolume.enabled }}
             - mountPath: /opt/idsvr/var/cdb
