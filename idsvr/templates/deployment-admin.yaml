@@ -46,6 +46,7 @@ spec:
           args: ["/opt/idsvr/bin/idsvr",
                  "-s", "{{ .Values.curity.admin.role }}",
                  "-N", "{{ .Chart.Name }}-admin",
+                 {{- if .Values.curity.config.fipsMode}}"--fips-mode",{{end -}}
                  {{- if .Values.curity.config.encryptionKey}}"-e","{{.Values.curity.config.encryptionKey}}",{{end -}}
                  "--admin"]
           env:
