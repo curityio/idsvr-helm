@@ -113,6 +113,15 @@ spec:
             successThreshold: {{ .Values.curity.runtime.readinessProbe.successThreshold }}
             periodSeconds: {{ .Values.curity.runtime.readinessProbe.periodSeconds }}
             initialDelaySeconds: {{ .Values.curity.runtime.readinessProbe.initialDelaySeconds }}
+          {{- if .Values.curity.runtime.startupProbe }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.curity.runtime.startupProbe.path }}
+              port: health-check
+            timeoutSeconds: {{ .Values.curity.runtime.startupProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.curity.runtime.startupProbe.failureThreshold }}
+            periodSeconds: {{ .Values.curity.runtime.startupProbe.periodSeconds }}
+          {{- end }}
           {{- with .Values.curity.runtime.lifecycle }}
           lifecycle:
             {{- toYaml . | nindent 12 }}

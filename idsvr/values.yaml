@@ -62,6 +62,12 @@ curity:
       successThreshold: 3
       periodSeconds: 10
       initialDelaySeconds: 30
+# startupProbe is optional. When enabled, liveness and readiness probes will not start until the startupProbe succeeds.
+#    startupProbe:
+#      path: /
+#      timeoutSeconds: 1
+#      failureThreshold: 30  # ~60s total (failureThreshold x periodSeconds)
+#      periodSeconds: 10
 # extraEnv provides additional environment variables
 #    extraEnv:
 #      - name: SOME_EXTRA_VARIABLE
@@ -125,6 +131,12 @@ curity:
       successThreshold: 3
       periodSeconds: 10
       initialDelaySeconds: 30
+# startupProbe is optional. When enabled, liveness and readiness probes will not start until the startupProbe succeeds.
+#    startupProbe:
+#      path: /
+#      timeoutSeconds: 1
+#      failureThreshold: 30  # ~60s total (failureThreshold x periodSeconds)
+#      periodSeconds: 10
 # Ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
 #     lifecycle:
 #       preStop:
