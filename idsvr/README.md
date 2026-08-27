@@ -353,6 +353,12 @@ files in the image will be ignored for subsequent upgrades except the first inst
 Although enabling this setting is perfect for experimenting with the Curity Identity Server, it is not something that we
 suggest to be used in production as it can lead to issues that are difficult to overcome.
 
+> **This setting must be enabled at install time.** The cluster configuration Job only runs when the release revision is
+> `1`, so enabling `curity.config.persistentConfigVolume.enabled` on an already installed release (revision 2 or higher)
+> will not generate a `cluster.xml`. The admin Pod will start without one and the runtime Pods will keep using the
+> `cluster.xml` that was generated during the very first installation. To switch an existing deployment over to a
+> persistent configuration volume, uninstall the release and install it again with the setting enabled.
+
 ## Sending all logs to stdout
 
 If `curity.admin.logging.stdout` is `true`, the Chart will add extra containers in the pods, that will tail any
