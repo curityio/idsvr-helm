@@ -45,7 +45,7 @@ spec:
         {{- if hasKey .Values.postHook "command" }}
           command:
           {{- range .Values.postHook.command }}
-            - {{ . }}
+            - {{ . | quote }}
           {{- end }}
         {{- else }}
           command:
@@ -54,7 +54,7 @@ spec:
           args:
         {{- if hasKey .Values.postHook "args" }}
           {{- range .Values.postHook.args }}
-            - {{ . }}
+            - {{ . | quote }}
           {{- end }}
         {{- end }}
           env:
