@@ -1,15 +1,35 @@
-{{- if and .Values.curity.admin.enabled (not .Values.curity.config.disableClusterConfigJob) (or (not .Values.curity.config.persistentConfigVolume.enabled) (eq .Release.Revision 1)) }}
+{{- if and .Values.curity.config.clusterKey.existingSecret .Values.curity.config.clusterKey.generation -}}
+{{- fail "clusterKey.existingSecret and clusterKey.generation are mutually exclusive" -}}
+{{- end -}}
+{{- if and .Values.curity.config.clusterKey.generation (or (not .Values.curity.admin.enabled) .Values.curity.config.disableClusterConfigJob .Values.curity.config.persistentConfigVolume.enabled) -}}
+{{- fail "clusterKey.generation requires admin and cluster job enabled and persistentConfigVolume disabled" -}}
+{{- end -}}
+{{- if and .Values.curity.admin.enabled (not .Values.curity.config.disableClusterConfigJob) (not .Values.curity.config.clusterKey.existingSecret) (or (not .Values.curity.config.persistentConfigVolume.enabled) (eq .Release.Revision 1)) }}
+{{- $secretName := include "curity.clusterSecretName" . -}}
+{{- $secretKey := include "curity.clusterSecretKey" . -}}
+{{- $existing := dict -}}
+{{- if .Values.curity.config.clusterKey.generation -}}
+{{- $existing = lookup "v1" "Secret" .Release.Namespace $secretName | default dict -}}
+{{- end -}}
+{{- $reuse := and (hasKey $existing "data") (not (empty (get (get $existing "data") $secretKey))) -}}
+{{- if not $existing }}
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ include "curity.fullname" . }}-cluster-config-xml
+  name: {{ $secretName }}
   annotations:
+    {{- if .Values.curity.config.clusterKey.generation }}
     "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/resource-policy": keep
+    {{- else }}
+    "helm.sh/hook": pre-install,pre-upgrade
+    {{- end }}
     "helm.sh/hook-weight": "-5"
 type: Opaque
 data:
   placeholder: Y3VyaXR5
 ---
+{{- end }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -17,20 +37,30 @@ metadata:
   labels:
         {{- include "curity.labels" . | nindent 4 }}
   annotations:
+    {{- if .Values.curity.config.clusterKey.generation }}
+    "helm.sh/hook": pre-install,pre-upgrade
+    {{- else }}
     "helm.sh/hook": pre-install,pre-upgrade,pre-rollback
+    {{- end }}
     "helm.sh/hook-weight": "-5"
 
 data:
   createConfigSecret.sh: |
     #!/bin/bash
+    set -euo pipefail
+
+    if [ "$REUSE_CLUSTER_KEY" = "true" ]; then
+      echo "Reusing existing cluster key generation"
+      exit 0
+    fi
 
     CA_CERT=/var/run/secrets/tokens/ca.crt
     TOKEN=$(cat /var/run/secrets/tokens/token)
     NAMESPACE=$(cat /var/run/secrets/tokens/namespace)
 
-    CLUSTER_XML=$(/opt/idsvr/bin/genclust -c ${CONFIG_SERVICE_HOST} -p ${CONFIG_SERVICE_PORT} | base64 -w 0)
+    CLUSTER_XML=$(/opt/idsvr/bin/genclust -c "${CONFIG_SERVICE_HOST}" -p "${CONFIG_SERVICE_PORT}" | base64 -w 0)
 
-    REQUEST_CONTENT="[{\"op\": \"add\", \"path\": \"/data/cluster-$REVISION.xml\", \"value\": \"$CLUSTER_XML\"}]"
+    REQUEST_CONTENT="[{\"op\": \"add\", \"path\": \"/data/$CLUSTER_SECRET_KEY\", \"value\": \"$CLUSTER_XML\"}]"
     RESPONSE=$(openssl s_client -CAfile "$CA_CERT" -quiet -connect kubernetes.default:443 2>/dev/null <<EOF
     PATCH /api/v1/namespaces/$NAMESPACE/secrets/$SECRET_NAME HTTP/1.1
     Host: kubernetes.default
@@ -44,14 +74,14 @@ data:
     EOF
     )
 
-    STATUS=$(printf '%s\n' "$RESPONSE" | grep -m1 '^HTTP/' | awk '{print $2}')
+    STATUS_LINE=${RESPONSE%%$'\n'*}
+    STATUS=$(printf '%s\n' "$STATUS_LINE" | awk '{print $2}')
     echo "PATCH secret/$SECRET_NAME -> HTTP $STATUS"
 
     case "$STATUS" in
       2*) ;;
       *)
-        # error body is safe to log (no secret data, just a Status object)
-        printf '%s\n' "$RESPONSE" | sed -n '/^$/,$p' >&2
+        echo "Unable to store cluster input; response body suppressed to protect key material" >&2
         exit 1
         ;;
     esac
@@ -64,7 +94,11 @@ metadata:
   labels:
         {{- include "curity.labels" . | nindent 4 }}
   annotations:
+    {{- if .Values.curity.config.clusterKey.generation }}
+    "helm.sh/hook": pre-install,pre-upgrade
+    {{- else }}
     "helm.sh/hook": pre-install,pre-upgrade,pre-rollback
+    {{- end }}
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 spec:
   ttlSecondsAfterFinished: 60
@@ -100,14 +134,18 @@ spec:
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          command: ["sh",  "/opt/idsvr/bin/createConfigSecret.sh"]
+          command: ["bash",  "/opt/idsvr/bin/createConfigSecret.sh"]
           env:
             - name: CONFIG_SERVICE_HOST
               value: {{ include "curity.fullname" . }}-admin-svc
             - name: CONFIG_SERVICE_PORT
               value: {{ .Values.curity.admin.service.port | quote }}
             - name: SECRET_NAME
-              value: {{ include "curity.fullname" . }}-cluster-config-xml
+              value: {{ $secretName }}
+            - name: CLUSTER_SECRET_KEY
+              value: {{ $secretKey | quote }}
+            - name: REUSE_CLUSTER_KEY
+              value: {{ $reuse | quote }}
             - name: REVISION
               value: {{ .Release.Revision | quote }}
             {{ if .Values.curity.config.encryptionKey }}

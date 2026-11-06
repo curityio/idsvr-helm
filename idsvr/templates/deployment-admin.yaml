@@ -153,7 +153,7 @@ spec:
             - mountPath: /opt/idsvr/var/log/
               name: log-volume
             {{- end }}
-            {{- if and (not .Values.curity.config.disableClusterConfigJob) (or (not .Values.curity.config.persistentConfigVolume.enabled) (eq .Release.Revision 1)) }}
+            {{- if or .Values.curity.config.clusterKey.existingSecret (and (not .Values.curity.config.disableClusterConfigJob) (or .Values.curity.config.clusterKey.generation (not .Values.curity.config.persistentConfigVolume.enabled) (eq .Release.Revision 1))) }}
             - mountPath: /opt/idsvr/etc/init/cluster.xml
               subPath: cluster.xml
               name: cluster-xml
@@ -252,12 +252,12 @@ spec:
         - name: log-volume
           emptyDir: {}
         {{- end }}
-        {{- if and (not .Values.curity.config.disableClusterConfigJob) (or (not .Values.curity.config.persistentConfigVolume.enabled) (eq .Release.Revision 1)) }}
+        {{- if or .Values.curity.config.clusterKey.existingSecret (and (not .Values.curity.config.disableClusterConfigJob) (or .Values.curity.config.clusterKey.generation (not .Values.curity.config.persistentConfigVolume.enabled) (eq .Release.Revision 1))) }}
         - name: cluster-xml
           secret:
-            secretName: {{ include "curity.fullname" . }}-cluster-config-xml
+            secretName: {{ include "curity.clusterSecretName" . }}
             items:
-              - key: cluster-{{ .Release.Revision }}.xml
+              - key: {{ include "curity.clusterSecretKey" . }}
                 path: cluster.xml
         {{- end }}
         {{- if .Values.curity.config.configurationSecret }}

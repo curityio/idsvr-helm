@@ -41,6 +41,28 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 {{- end -}}
 
+{{- define "curity.clusterSecretName" -}}
+{{- if .Values.curity.config.clusterKey.existingSecret -}}
+{{- .Values.curity.config.clusterKey.existingSecret -}}
+{{- else if .Values.curity.config.clusterKey.generation -}}
+{{- printf "%s-cluster-%s" (include "curity.fullname" . | trunc 42 | trimSuffix "-") (.Values.curity.config.clusterKey.generation | sha256sum | trunc 12) -}}
+{{- else -}}
+{{- printf "%s-cluster-config-xml" (include "curity.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "curity.clusterSecretKey" -}}
+{{- if or .Values.curity.config.clusterKey.existingSecret .Values.curity.config.clusterKey.generation -}}
+{{- $key := required "curity.config.clusterKey.secretKey must not be empty" .Values.curity.config.clusterKey.secretKey -}}
+{{- if not (regexMatch "^[A-Za-z0-9._-]+$" $key) -}}
+{{- fail "curity.config.clusterKey.secretKey must be a valid Secret data key" -}}
+{{- end -}}
+{{- $key -}}
+{{- else -}}
+{{- printf "cluster-%v.xml" (ternary "1" .Release.Revision .Values.curity.config.persistentConfigVolume.enabled) -}}
+{{- end -}}
+{{- end -}}
+
 {{- define "curity.metricsPort" -}}
 {{ add .Values.curity.healthCheckPort  1 }}
 {{- end -}}
@@ -49,7 +71,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Creates the name of the service account used by the runtime nodes.
 */}}
 {{- define "curity.runtime.serviceAccountName" -}}
-  {{ default "default" .Values.curity.runtime.serviceAccount.name }}
+	{{ default "default" .Values.curity.runtime.serviceAccount.name }}
 {{- end -}}
 
 {{- define "curity.admin.serviceAccountName" -}}
