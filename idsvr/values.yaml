@@ -202,6 +202,10 @@ curity:
 
   config:
     disableClusterConfigJob: false
+    clusterKey:
+      existingSecret: ""
+      secretKey: cluster.xml
+      generation: ""
     fipsMode: false
     uiEnabled: false
     backup: false
